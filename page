@@ -1,0 +1,1595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ritual Learn — Build AI dApps Without Code</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Grotesk:wght@300;400;500;600&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#040608;--surface:#080C11;--card:#0C1119;--card2:#101722;--border:#182033;--border2:#1F2C42;
+  --green:#00FF8C;--green2:#00CC70;--teal:#00E5CC;--amber:#FFAD00;--purple:#9D6FFF;--crimson:#FF3D6B;
+  --text:#E8EDF5;--muted:#3D5070;--soft:#7A8FAD;--mid:#4A6080;
+  --glow-green:rgba(0,255,140,.15);--glow-teal:rgba(0,229,204,.1);--glow-purple:rgba(157,111,255,.1);
+  --font-head:'Syne',sans-serif;--font-body:'Space Grotesk',sans-serif;--font-mono:'JetBrains Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);overflow-x:hidden;min-height:100vh}
+a{color:inherit;text-decoration:none}
+
+/* GRAIN OVERLAY */
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");pointer-events:none;z-index:9998;opacity:.5}
+
+/* GLOBAL GRADIENT ORBS */
+.orb{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0;opacity:.18}
+.orb-1{width:600px;height:600px;background:radial-gradient(circle,var(--green) 0%,transparent 70%);top:-200px;right:-100px}
+.orb-2{width:500px;height:500px;background:radial-gradient(circle,var(--purple) 0%,transparent 70%);bottom:200px;left:-150px}
+.orb-3{width:400px;height:400px;background:radial-gradient(circle,var(--teal) 0%,transparent 70%);top:50%;right:20%}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 56px;height:60px;background:rgba(4,6,8,.85);backdrop-filter:blur(24px) saturate(180%);border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:10px;user-select:none}
+.logo-img{width:30px;height:30px;flex-shrink:0}
+.logo-text{font-family:var(--font-head);font-size:16px;font-weight:800;letter-spacing:-0.3px;color:var(--text)}
+.logo-text span{color:var(--green)}
+.nav-links{display:flex;gap:28px}
+.nav-link{font-size:13px;color:var(--soft);font-weight:500;transition:color .2s;letter-spacing:.2px}
+.nav-link:hover{color:var(--text)}
+.nav-right{display:flex;align-items:center;gap:10px}
+
+/* LANG SELECTOR */
+.lang-select{position:relative}
+.lang-current{display:flex;align-items:center;gap:6px;padding:6px 12px;background:var(--surface);border:1px solid var(--border);border-radius:6px;font-family:var(--font-mono);font-size:11px;color:var(--soft);cursor:pointer;transition:all .2s;user-select:none}
+.lang-current:hover{border-color:var(--border2);color:var(--text)}
+.lang-flag{font-size:13px}
+.lang-dropdown{position:absolute;top:calc(100% + 8px);right:0;background:var(--card2);border:1px solid var(--border2);border-radius:10px;padding:6px;min-width:160px;z-index:600;display:none;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.lang-select.open .lang-dropdown{display:block}
+.lang-opt{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:6px;font-size:13px;cursor:pointer;transition:background .15s}
+.lang-opt:hover{background:rgba(255,255,255,.04)}
+.lang-opt.active{color:var(--green)}
+.lang-opt-flag{font-size:15px}
+.lang-opt-name{font-weight:500}
+.lang-opt-code{font-family:var(--font-mono);font-size:10px;color:var(--muted);margin-left:auto}
+
+.nav-cta{font-family:var(--font-mono);font-size:11px;padding:8px 18px;background:var(--green);color:#000;border:none;border-radius:6px;cursor:pointer;font-weight:600;letter-spacing:.5px;transition:all .2s;white-space:nowrap}
+.nav-cta:hover{background:var(--green2);box-shadow:0 0 24px rgba(0,255,140,.3);transform:translateY(-1px)}
+
+/* RESOURCE BAR */
+.rbar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:8px 56px;background:rgba(0,255,140,.02);border-bottom:1px solid rgba(0,255,140,.06);position:sticky;top:60px;z-index:499;backdrop-filter:blur(20px)}
+.rbar-label{font-family:var(--font-mono);font-size:9px;color:var(--muted);letter-spacing:2.5px;margin-right:6px;text-transform:uppercase}
+.rbar-link{font-family:var(--font-mono);font-size:11px;padding:4px 12px;border-radius:4px;transition:all .15s;border:1px solid transparent;display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.rbar-g{color:var(--green);border-color:rgba(0,255,140,.18);background:rgba(0,255,140,.04)}
+.rbar-g:hover{background:rgba(0,255,140,.1);border-color:rgba(0,255,140,.35)}
+.rbar-t{color:var(--teal);border-color:rgba(0,229,204,.18);background:rgba(0,229,204,.04)}
+.rbar-t:hover{background:rgba(0,229,204,.1)}
+.rbar-m{color:var(--soft);border-color:var(--border)}
+.rbar-m:hover{color:var(--text);border-color:var(--border2)}
+
+/* HERO */
+.hero{padding:110px 56px 80px;max-width:1280px;margin:0 auto;position:relative;z-index:1}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:10px;font-family:var(--font-mono);font-size:11px;color:var(--green);background:rgba(0,255,140,.06);border:1px solid rgba(0,255,140,.2);padding:7px 16px;border-radius:20px;margin-bottom:44px;letter-spacing:1px}
+.pulse{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s ease infinite;flex-shrink:0}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(0,255,140,.7)}50%{box-shadow:0 0 0 8px rgba(0,255,140,0)}}
+
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.hero h1{font-family:var(--font-head);font-size:clamp(54px,5.8vw,88px);font-weight:800;line-height:.92;letter-spacing:-2.5px;margin-bottom:30px}
+.h1-green{color:var(--green)}
+.h1-dim{color:var(--muted)}
+.hero-sub{font-size:17px;color:var(--soft);line-height:1.8;margin-bottom:44px;font-weight:400;max-width:500px}
+.hero-sub strong{color:var(--text);font-weight:600}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap}
+
+.btn-main{font-family:var(--font-mono);font-size:13px;padding:14px 32px;background:var(--green);color:#000;border:none;border-radius:8px;cursor:pointer;font-weight:600;transition:all .25s;display:inline-flex;align-items:center;gap:8px;letter-spacing:.5px}
+.btn-main:hover{background:var(--green2);transform:translateY(-2px);box-shadow:0 16px 48px rgba(0,255,140,.3)}
+.btn-out{font-family:var(--font-mono);font-size:13px;padding:14px 28px;background:transparent;color:var(--text);border:1px solid var(--border2);border-radius:8px;cursor:pointer;transition:all .25s;display:inline-flex;align-items:center;gap:8px}
+.btn-out:hover{border-color:rgba(0,255,140,.4);color:var(--green);background:rgba(0,255,140,.04)}
+
+.hero-nums{display:flex;gap:48px;margin-top:64px;padding-top:40px;border-top:1px solid var(--border);flex-wrap:wrap}
+.num-val{font-family:var(--font-head);font-size:40px;font-weight:800;color:var(--green);line-height:1;letter-spacing:-1px}
+.num-lab{font-size:12px;color:var(--muted);margin-top:6px;letter-spacing:.5px;text-transform:uppercase;font-family:var(--font-mono)}
+
+/* HERO VISUAL */
+.chain-diagram{background:var(--card);border:1px solid var(--border2);border-radius:24px;padding:36px;position:relative;overflow:hidden}
+.chain-diagram::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 75% 25%, rgba(0,255,140,.07) 0%, transparent 55%);pointer-events:none}
+.chain-diagram::after{content:'';position:absolute;bottom:0;right:0;width:200px;height:200px;background:radial-gradient(circle at 100% 100%, rgba(157,111,255,.07) 0%, transparent 60%);pointer-events:none}
+.diag-label{font-family:var(--font-mono);font-size:9px;color:var(--muted);letter-spacing:3px;margin-bottom:28px;text-transform:uppercase}
+.diag-row{display:flex;flex-direction:column;gap:6px}
+.diag-block{display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:12px;border:1px solid var(--border);background:var(--surface);transition:all .3s;cursor:default;position:relative}
+.diag-block:hover{border-color:rgba(0,255,140,.25);background:rgba(0,255,140,.03);transform:translateX(6px)}
+.diag-icon{font-size:18px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;background:var(--bg);border-radius:10px;flex-shrink:0;border:1px solid var(--border)}
+.diag-text{flex:1;min-width:0}
+.diag-name{font-family:var(--font-head);font-size:13px;font-weight:700;margin-bottom:2px}
+.diag-sub{font-size:11px;color:var(--muted);font-family:var(--font-mono)}
+.diag-addr{font-family:var(--font-mono);font-size:10px;padding:2px 8px;border-radius:4px;background:rgba(157,111,255,.12);color:var(--purple);flex-shrink:0}
+.diag-arrow{display:flex;justify-content:center;align-items:center;padding:2px 0;gap:4px}
+.diag-arrow-line{width:1px;height:14px;background:linear-gradient(to bottom,var(--border2),transparent)}
+
+/* SECTIONS */
+.sw{max-width:1280px;margin:0 auto;padding:88px 56px;position:relative;z-index:1}
+.sec-eyebrow{font-family:var(--font-mono);font-size:10px;letter-spacing:3.5px;text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:10px;color:var(--green)}
+.sec-eyebrow-line{width:28px;height:1px;background:var(--green)}
+.sec-h{font-family:var(--font-head);font-size:clamp(38px,4vw,58px);font-weight:800;line-height:1.02;letter-spacing:-1.5px;margin-bottom:18px}
+.sec-p{color:var(--soft);font-size:16px;line-height:1.85;max-width:600px;margin-bottom:64px;font-weight:400}
+hr.divider{border:none;border-top:1px solid var(--border)}
+
+/* BUILD CARDS */
+.builds-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px}
+.build-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:30px;transition:all .35s;position:relative;overflow:hidden;cursor:default}
+.build-card-glow{content:'';position:absolute;inset:0;opacity:0;transition:opacity .35s;border-radius:18px;pointer-events:none}
+.build-card:hover .build-card-glow{opacity:1}
+.build-card:hover{transform:translateY(-8px);box-shadow:0 32px 80px rgba(0,0,0,.5)}
+.c-green{border-color:transparent}.c-green:hover{border-color:rgba(0,255,140,.25)}
+.c-green .build-card-glow{background:radial-gradient(circle at 50% -10%,rgba(0,255,140,.1) 0%,transparent 60%)}
+.c-amber{border-color:transparent}.c-amber:hover{border-color:rgba(255,173,0,.25)}
+.c-amber .build-card-glow{background:radial-gradient(circle at 50% -10%,rgba(255,173,0,.09) 0%,transparent 60%)}
+.c-purple{border-color:transparent}.c-purple:hover{border-color:rgba(157,111,255,.25)}
+.c-purple .build-card-glow{background:radial-gradient(circle at 50% -10%,rgba(157,111,255,.1) 0%,transparent 60%)}
+.c-teal{border-color:transparent}.c-teal:hover{border-color:rgba(0,229,204,.25)}
+.c-teal .build-card-glow{background:radial-gradient(circle at 50% -10%,rgba(0,229,204,.1) 0%,transparent 60%)}
+.c-crimson{border-color:transparent}.c-crimson:hover{border-color:rgba(255,61,107,.25)}
+.c-crimson .build-card-glow{background:radial-gradient(circle at 50% -10%,rgba(255,61,107,.08) 0%,transparent 60%)}
+
+.build-emoji{font-size:34px;margin-bottom:18px;display:block;position:relative;z-index:1}
+.build-title{font-family:var(--font-head);font-size:18px;font-weight:700;margin-bottom:8px;position:relative;z-index:1}
+.build-desc{font-size:13px;color:var(--soft);line-height:1.75;margin-bottom:18px;position:relative;z-index:1}
+.build-chips{display:flex;gap:6px;flex-wrap:wrap;position:relative;z-index:1}
+.chip{font-family:var(--font-mono);font-size:9px;padding:3px 9px;border-radius:4px;letter-spacing:.5px;font-weight:500}
+.chip-g{background:rgba(0,255,140,.1);color:var(--green)}
+.chip-p{background:rgba(157,111,255,.1);color:var(--purple)}
+.chip-a{background:rgba(255,173,0,.1);color:var(--amber)}
+.chip-t{background:rgba(0,229,204,.1);color:var(--teal)}
+.chip-r{background:rgba(255,61,107,.1);color:var(--crimson)}
+
+/* HOW IT WORKS */
+.how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;position:relative}
+.how-step{background:var(--card);border:1px solid var(--border);padding:36px 30px;transition:border-color .3s;position:relative}
+.how-step:first-child{border-radius:18px 0 0 18px}
+.how-step:last-child{border-radius:0 18px 18px 0}
+.how-step:hover{border-color:rgba(0,255,140,.2)}
+.how-num{font-family:var(--font-mono);font-size:10px;color:var(--green);letter-spacing:2px;margin-bottom:24px;display:flex;align-items:center;gap:10px}
+.how-circle{width:30px;height:30px;border:1px solid rgba(0,255,140,.4);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--green)}
+.how-icon{font-size:30px;margin-bottom:18px}
+.how-title{font-family:var(--font-head);font-size:20px;font-weight:700;margin-bottom:12px}
+.how-desc{font-size:13px;color:var(--soft);line-height:1.75}
+.how-code{margin-top:18px;background:var(--bg);border-radius:10px;padding:14px 16px;font-family:var(--font-mono);font-size:11px;color:#7A95B8;line-height:1.9;border:1px solid var(--border)}
+.how-code .cm{color:var(--muted);font-style:italic}
+.how-code .cg{color:var(--green)}
+.how-code .cp{color:var(--purple)}
+
+/* LIVE DEMO */
+.demo-wrap{background:var(--card);border:1px solid var(--border2);border-radius:24px;overflow:hidden;position:relative}
+.demo-wrap::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 0%, rgba(0,255,140,.04) 0%, transparent 50%);pointer-events:none}
+.demo-header{padding:28px 36px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.demo-title-wrap{display:flex;align-items:center;gap:12px}
+.demo-dot{width:10px;height:10px;border-radius:50%;background:var(--green);animation:pulse 2s ease infinite}
+.demo-title{font-family:var(--font-head);font-size:18px;font-weight:700}
+.demo-subtitle{font-size:13px;color:var(--soft);margin-top:2px}
+.demo-badge{font-family:var(--font-mono);font-size:9px;padding:4px 10px;border-radius:4px;background:rgba(0,255,140,.1);color:var(--green);border:1px solid rgba(0,255,140,.2);letter-spacing:1px}
+.demo-body{padding:36px}
+.demo-form{display:flex;flex-direction:column;gap:20px}
+.demo-field{display:flex;flex-direction:column;gap:8px}
+.demo-label{font-family:var(--font-mono);font-size:10px;letter-spacing:2px;color:var(--soft);text-transform:uppercase}
+.demo-select,.demo-input{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px;font-family:var(--font-mono);font-size:12px;color:var(--text);outline:none;transition:border-color .2s;width:100%;appearance:none;-webkit-appearance:none}
+.demo-select:focus,.demo-input:focus{border-color:rgba(0,255,140,.4)}
+.demo-select option{background:var(--card2)}
+.demo-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.demo-info{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px}
+.demo-info-label{font-family:var(--font-mono);font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:6px}
+.demo-info-val{font-family:var(--font-mono);font-size:12px;color:var(--green)}
+.demo-wallet-row{display:flex;align-items:center;gap:10px;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:10px}
+.demo-wallet-icon{font-size:18px}
+.demo-wallet-text{flex:1}
+.demo-wallet-name{font-size:13px;font-weight:600;margin-bottom:2px}
+.demo-wallet-sub{font-size:11px;color:var(--soft);font-family:var(--font-mono)}
+.demo-wallet-status{font-family:var(--font-mono);font-size:10px;padding:3px 8px;border-radius:4px;letter-spacing:.5px}
+.ws-disconnected{background:rgba(255,173,0,.1);color:var(--amber);border:1px solid rgba(255,173,0,.2)}
+.ws-connected{background:rgba(0,255,140,.1);color:var(--green);border:1px solid rgba(0,255,140,.2)}
+.demo-step-indicator{display:flex;gap:6px;margin-bottom:24px}
+.demo-step-dot{width:6px;height:6px;border-radius:50%;background:var(--border2);transition:all .3s}
+.demo-step-dot.active{background:var(--green);box-shadow:0 0 8px rgba(0,255,140,.5)}
+.demo-step-dot.done{background:var(--green2)}
+.demo-actions{display:flex;gap:12px;flex-wrap:wrap}
+.demo-btn-primary{flex:1;min-width:160px;font-family:var(--font-mono);font-size:12px;padding:14px 24px;background:var(--green);color:#000;border:none;border-radius:8px;cursor:pointer;font-weight:700;transition:all .25s;letter-spacing:.5px;position:relative;overflow:hidden;text-align:center}
+.demo-btn-primary:hover:not(:disabled){background:var(--green2);box-shadow:0 12px 40px rgba(0,255,140,.35);transform:translateY(-2px)}
+.demo-btn-primary:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
+.demo-btn-secondary{font-family:var(--font-mono);font-size:12px;padding:14px 20px;background:transparent;color:var(--soft);border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:all .2s;letter-spacing:.3px}
+.demo-btn-secondary:hover{border-color:var(--border2);color:var(--text)}
+
+/* TERMINAL */
+.terminal{background:#020406;border:1px solid var(--border);border-radius:12px;overflow:hidden;font-family:var(--font-mono)}
+.terminal-bar{background:var(--surface);padding:10px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border)}
+.term-dot{width:11px;height:11px;border-radius:50%}
+.td-red{background:#FF5F57}.td-yellow{background:#FEBC2E}.td-green{background:#28C840}
+.terminal-body{padding:20px;font-size:12px;line-height:1.9;min-height:180px;max-height:320px;overflow-y:auto;scroll-behavior:smooth}
+.t-line{display:flex;gap:10px;animation:fadeIn .2s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.t-prompt{color:var(--green);flex-shrink:0}
+.t-text{color:#7A95B8}
+.t-success{color:var(--green)}
+.t-warn{color:var(--amber)}
+.t-error{color:var(--crimson)}
+.t-hash{color:var(--teal)}
+.t-addr{color:var(--purple)}
+.t-blink{display:inline-block;width:8px;height:14px;background:var(--green);animation:blink 1s step-end infinite;margin-left:2px;vertical-align:middle}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* TX RESULT */
+.tx-result{background:rgba(0,255,140,.04);border:1px solid rgba(0,255,140,.15);border-radius:12px;padding:24px;display:none}
+.tx-result.show{display:block}
+.tx-result-head{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.tx-checkmark{width:32px;height:32px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#000;font-size:16px;flex-shrink:0}
+.tx-result-title{font-family:var(--font-head);font-size:17px;font-weight:700}
+.tx-result-sub{font-size:12px;color:var(--soft);margin-top:2px}
+.tx-fields{display:flex;flex-direction:column;gap:10px}
+.tx-field{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--surface);border-radius:8px;gap:12px;flex-wrap:wrap}
+.tx-field-label{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:1px}
+.tx-field-val{font-family:var(--font-mono);font-size:11px;color:var(--text);word-break:break-all;text-align:right}
+.tx-field-val a{color:var(--green);text-decoration:underline;text-decoration-color:rgba(0,255,140,.3)}
+.tx-field-val a:hover{text-decoration-color:var(--green)}
+
+/* TUTORIAL */
+.tut-list{display:flex;flex-direction:column;gap:0}
+.tut-item{display:grid;grid-template-columns:72px 1fr;position:relative}
+.tut-item:not(:last-child)::before{content:'';position:absolute;left:35px;top:60px;bottom:0;width:1px;background:linear-gradient(to bottom,var(--border2) 70%,transparent);z-index:0}
+.tut-left{display:flex;flex-direction:column;align-items:center;padding-top:0;padding-bottom:40px}
+.tut-num{width:52px;height:52px;border-radius:50%;border:1.5px solid var(--border);background:var(--card);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:12px;color:var(--muted);flex-shrink:0;position:relative;z-index:1;transition:all .4s}
+.tut-item.active .tut-num{border-color:var(--green);color:var(--green);background:rgba(0,255,140,.06);box-shadow:0 0 20px rgba(0,255,140,.15)}
+.tut-body{padding:0 0 44px 28px}
+.tut-diff{font-family:var(--font-mono);font-size:9px;letter-spacing:2px;margin-bottom:12px;display:flex;align-items:center;gap:7px;text-transform:uppercase}
+.diff-pip{width:5px;height:5px;border-radius:50%}
+.d-easy .diff-pip{background:var(--green)}.d-easy .diff-label{color:var(--green)}
+.d-med .diff-pip{background:var(--amber)}.d-med .diff-label{color:var(--amber)}
+.d-hard .diff-pip{background:var(--crimson)}.d-hard .diff-label{color:var(--crimson)}
+.tut-h{font-family:var(--font-head);font-size:24px;font-weight:700;margin-bottom:12px;letter-spacing:-.5px}
+.tut-p{font-size:14px;color:var(--soft);line-height:1.85;margin-bottom:22px;max-width:660px}
+.tut-p strong{color:var(--text);font-weight:600}
+
+/* AGENT TABS */
+.agent-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.atab{font-family:var(--font-mono);font-size:11px;padding:7px 15px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;transition:all .15s;letter-spacing:.3px}
+.atab:hover{border-color:var(--border2);color:var(--text)}
+.atab.on{border-color:rgba(0,255,140,.5);background:rgba(0,255,140,.07);color:var(--green)}
+.atab.rec::after{content:'★';margin-left:4px;font-size:9px;opacity:.7}
+.agent-panel{display:none}
+.agent-panel.show{display:block}
+.ap-head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.ap-name{font-family:var(--font-head);font-size:15px;font-weight:700}
+.ap-badge{font-family:var(--font-mono);font-size:9px;padding:3px 9px;border-radius:4px;letter-spacing:1px}
+.badge-g{background:rgba(0,255,140,.1);color:var(--green)}
+.badge-p{background:rgba(157,111,255,.1);color:var(--purple)}
+.ap-sub{font-size:13px;color:var(--soft);line-height:1.7;margin-bottom:14px}
+.ap-sub a{color:var(--green)}.ap-sub strong{color:var(--text);font-weight:600}
+
+/* CODE BLOCK */
+.code{background:#020408;border:1px solid var(--border);border-radius:12px;padding:20px;font-family:var(--font-mono);font-size:12px;color:#7A95B8;line-height:1.9;margin:12px 0;overflow-x:auto;position:relative;tab-size:2}
+.code .cm{color:var(--muted);font-style:italic}
+.code .cg{color:var(--green)}
+.code .cp{color:var(--purple)}
+.code .ca{color:var(--amber)}
+.cbtn{position:absolute;top:10px;right:10px;font-family:var(--font-mono);font-size:9px;padding:5px 10px;background:var(--border);color:var(--muted);border:none;border-radius:5px;cursor:pointer;transition:all .2s;letter-spacing:.5px}
+.cbtn:hover{background:var(--green);color:#000}
+
+/* TIP */
+.tip{border-radius:10px;padding:14px 18px;margin-top:12px}
+.tip-g{background:rgba(0,255,140,.04);border:1px solid rgba(0,255,140,.13)}
+.tip-a{background:rgba(255,173,0,.04);border:1px solid rgba(255,173,0,.13)}
+.tip-r{background:rgba(255,61,107,.04);border:1px solid rgba(255,61,107,.13)}
+.tip-head{font-family:var(--font-mono);font-size:9px;letter-spacing:2px;margin-bottom:7px;text-transform:uppercase}
+.tip-g .tip-head{color:var(--green)}.tip-a .tip-head{color:var(--amber)}.tip-r .tip-head{color:var(--crimson)}
+.tip-body{font-size:13px;color:var(--soft);line-height:1.7}
+.tip-body a{color:var(--green)}.tip-body strong{color:var(--text);font-weight:600}
+.tip-body code{font-family:var(--font-mono);font-size:11px;color:var(--green);background:rgba(0,255,140,.08);padding:1px 6px;border-radius:3px}
+
+/* EXPAND */
+.xbtn{font-family:var(--font-mono);font-size:11px;padding:8px 16px;border:1px solid rgba(0,255,140,.2);color:var(--green);background:transparent;border-radius:6px;cursor:pointer;transition:all .2s;letter-spacing:.3px}
+.xbtn:hover{background:rgba(0,255,140,.06);border-color:rgba(0,255,140,.4)}
+.xpanel{display:none}.xpanel.open{display:block}
+
+/* PRECOMPILES */
+.pre-tabs{display:flex;gap:4px;margin-bottom:28px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:4px;width:fit-content}
+.ptab{font-family:var(--font-mono);font-size:11px;padding:7px 18px;border-radius:5px;border:none;background:transparent;color:var(--muted);cursor:pointer;transition:all .15s;letter-spacing:.3px}
+.ptab.on{background:var(--card2);color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,.4)}
+.pre-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.pre-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:22px;transition:all .2s;display:none}
+.pre-card.show{display:block}
+.pre-card:hover{border-color:rgba(157,111,255,.25);transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,.4)}
+.pre-addr{font-family:var(--font-mono);font-size:10px;color:var(--purple);margin-bottom:8px;letter-spacing:.5px}
+.pre-name{font-family:var(--font-head);font-size:14px;font-weight:700;margin-bottom:6px}
+.pre-desc{font-size:12px;color:var(--soft);line-height:1.6;margin-bottom:10px}
+.pre-badge{font-family:var(--font-mono);font-size:9px;padding:3px 8px;border-radius:3px;letter-spacing:.5px}
+.pb-sync{background:rgba(0,255,140,.1);color:var(--green)}
+.pb-short{background:rgba(255,173,0,.1);color:var(--amber)}
+.pb-long{background:rgba(255,61,107,.1);color:var(--crimson)}
+
+/* FAQ */
+.faq-list{display:flex;flex-direction:column;gap:6px}
+.faq-item{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:border-color .2s}
+.faq-item.open{border-color:rgba(0,255,140,.18)}
+.faq-q{display:flex;align-items:center;justify-content:space-between;padding:22px 28px;cursor:pointer;gap:16px}
+.faq-q-text{font-family:var(--font-head);font-size:17px;font-weight:600;letter-spacing:-.3px}
+.faq-icon{font-size:18px;color:var(--green);flex-shrink:0;transition:transform .3s;font-family:var(--font-mono);line-height:1}
+.faq-item.open .faq-icon{transform:rotate(45deg)}
+.faq-a{display:none;padding:0 28px 22px;font-size:14px;color:var(--soft);line-height:1.85}
+.faq-item.open .faq-a{display:block}
+.faq-a a{color:var(--green)}
+
+/* GLOSSARY */
+.gloss-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:10px}
+.gloss-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px 24px;transition:border-color .2s}
+.gloss-card:hover{border-color:rgba(0,255,140,.18)}
+.gloss-term{font-family:var(--font-mono);font-size:12px;color:var(--green);margin-bottom:8px;letter-spacing:.3px}
+.gloss-def{font-size:13px;color:var(--soft);line-height:1.75}
+
+/* CTA */
+.cta-wrap{max-width:1280px;margin:0 auto;padding:60px 56px 110px;position:relative;z-index:1}
+.cta-inner{background:linear-gradient(135deg,rgba(0,255,140,.05) 0%,rgba(157,111,255,.05) 100%);border:1px solid rgba(0,255,140,.12);border-radius:28px;padding:80px 64px;text-align:center;position:relative;overflow:hidden}
+.cta-inner::before{content:'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:500px;height:500px;background:radial-gradient(circle,rgba(0,255,140,.07) 0%,transparent 65%);pointer-events:none}
+.cta-inner::after{content:'';position:absolute;bottom:-80px;right:10%;width:300px;height:300px;background:radial-gradient(circle,rgba(157,111,255,.07) 0%,transparent 60%);pointer-events:none}
+.cta-h{font-family:var(--font-head);font-size:clamp(38px,5.5vw,68px);font-weight:800;letter-spacing:-2px;margin-bottom:18px;position:relative;line-height:.95}
+.cta-p{font-size:17px;color:var(--soft);max-width:520px;margin:0 auto 44px;line-height:1.75;position:relative;font-weight:400}
+.cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:32px 56px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;position:relative;z-index:1}
+.foot-logo{font-family:var(--font-head);font-size:13px;font-weight:700;color:var(--muted);display:flex;align-items:center;gap:8px}
+.foot-links{display:flex;gap:18px;flex-wrap:wrap}
+.foot-link{font-family:var(--font-mono);font-size:11px;color:var(--muted);transition:color .2s}
+.foot-link:hover{color:var(--green)}
+.foot-disclaimer{font-size:11px;color:var(--muted);width:100%;padding-top:12px;border-top:1px solid var(--border)}
+
+/* WALLET PILLS */
+.wpills{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.wpill{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-family:var(--font-mono);font-size:11px;display:flex;gap:8px}
+.wp-l{color:var(--muted)}.wp-v{color:var(--green)}
+.wallet-btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.wbtn{font-family:var(--font-mono);font-size:12px;padding:10px 20px;border-radius:7px;transition:all .2s;display:inline-block;font-weight:500;cursor:pointer}
+.wbtn-g{background:var(--green);color:#000;border:none}.wbtn-g:hover{background:var(--green2);transform:translateY(-2px)}
+.wbtn-o{border:1px solid var(--border);color:var(--soft);background:transparent}.wbtn-o:hover{border-color:var(--border2);color:var(--text)}
+
+/* FADE UP */
+.fade-up{opacity:0;transform:translateY(32px);transition:opacity .7s ease,transform .7s ease}
+.fade-up.in{opacity:1;transform:translateY(0)}
+
+/* RESPONSIVE */
+@media(max-width:1000px){
+  .hero-grid{grid-template-columns:1fr}.hero-visual{display:none}
+  .how-grid{grid-template-columns:1fr}
+  .how-step:first-child{border-radius:18px 18px 0 0}
+  .how-step:last-child{border-radius:0 0 18px 18px}
+  nav{padding:0 20px}.nav-links{display:none}
+  .sw,.hero,.cta-wrap{padding-left:20px;padding-right:20px}
+  .rbar{padding:8px 20px;top:60px}
+  .cta-inner{padding:48px 28px}
+  footer{padding:24px 20px}
+}
+
+/* LANGAUGE HIDDEN */
+[data-lang]{display:none}
+[data-lang].lang-active{display:revert}
+span[data-lang].lang-active{display:inline}
+div[data-lang].lang-active{display:block}
+h1[data-lang].lang-active{display:block}
+h2[data-lang].lang-active{display:block}
+p[data-lang].lang-active{display:block}
+a[data-lang].lang-active{display:inline-block}
+</style>
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<!-- NAV -->
+<nav>
+  <a class="logo" href="#">
+    <!-- Ritual knot logo — SVG recreated from the uploaded image -->
+    <svg class="logo-img" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <rect width="200" height="200" fill="#00FF8C" rx="0"/>
+      <!-- Endless knot / Ritual logo (simplified geometric Celtic/Tibetan endless knot) -->
+      <g fill="#000">
+        <!-- Center square -->
+        <rect x="78" y="78" width="44" height="44"/>
+        <!-- Top arm -->
+        <rect x="86" y="40" width="28" height="16"/>
+        <rect x="78" y="56" width="44" height="22"/>
+        <!-- Bottom arm -->
+        <rect x="86" y="144" width="28" height="16"/>
+        <rect x="78" y="122" width="44" height="22"/>
+        <!-- Left arm -->
+        <rect x="40" y="86" width="16" height="28"/>
+        <rect x="56" y="78" width="22" height="44"/>
+        <!-- Right arm -->
+        <rect x="144" y="86" width="16" height="28"/>
+        <rect x="122" y="78" width="22" height="44"/>
+        <!-- Corner squares -->
+        <rect x="40" y="40" width="22" height="22"/>
+        <rect x="138" y="40" width="22" height="22"/>
+        <rect x="40" y="138" width="22" height="22"/>
+        <rect x="138" y="138" width="22" height="22"/>
+        <!-- Corner connectors - horizontal -->
+        <rect x="62" y="40" width="24" height="14"/>
+        <rect x="114" y="40" width="24" height="14"/>
+        <rect x="62" y="146" width="24" height="14"/>
+        <rect x="114" y="146" width="24" height="14"/>
+        <!-- Corner connectors - vertical -->
+        <rect x="40" y="62" width="14" height="24"/>
+        <rect x="146" y="62" width="14" height="24"/>
+        <rect x="40" y="114" width="14" height="24"/>
+        <rect x="146" y="114" width="14" height="24"/>
+        <!-- Inner cutouts to create knot effect -->
+        <rect x="62" y="54" width="16" height="24" fill="#00FF8C"/>
+        <rect x="122" y="54" width="16" height="24" fill="#00FF8C"/>
+        <rect x="62" y="122" width="16" height="24" fill="#00FF8C"/>
+        <rect x="122" y="122" width="16" height="24" fill="#00FF8C"/>
+        <rect x="54" y="62" width="24" height="16" fill="#00FF8C"/>
+        <rect x="122" y="62" width="24" height="16" fill="#00FF8C"/>
+        <rect x="54" y="122" width="24" height="16" fill="#00FF8C"/>
+        <rect x="122" y="122" width="24" height="16" fill="#00FF8C"/>
+      </g>
+    </svg>
+    <span class="logo-text">Ritual<span>Learn</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="#how" class="nav-link" data-lang="en">How It Works</a>
+    <a href="#how" class="nav-link" data-lang="id">Cara Kerja</a>
+    <a href="#how" class="nav-link" data-lang="zh">工作原理</a>
+    <a href="#how" class="nav-link" data-lang="ja">仕組み</a>
+    <a href="#how" class="nav-link" data-lang="es">Cómo Funciona</a>
+    <a href="#how" class="nav-link" data-lang="fr">Comment ça marche</a>
+    <a href="#tutorial" class="nav-link">Tutorial</a>
+    <a href="#demo" class="nav-link" data-lang="en">Live Demo</a>
+    <a href="#demo" class="nav-link" data-lang="id">Demo Langsung</a>
+    <a href="#demo" class="nav-link" data-lang="zh">实时演示</a>
+    <a href="#demo" class="nav-link" data-lang="ja">ライブデモ</a>
+    <a href="#demo" class="nav-link" data-lang="es">Demo en Vivo</a>
+    <a href="#demo" class="nav-link" data-lang="fr">Démo Live</a>
+    <a href="#precompiles" class="nav-link">Precompiles</a>
+    <a href="#faq" class="nav-link">FAQ</a>
+  </div>
+  <div class="nav-right">
+    <div class="lang-select" id="langSelect">
+      <div class="lang-current" onclick="toggleLangMenu()">
+        <span class="lang-flag" id="currentFlag">🇺🇸</span>
+        <span id="currentLangCode">EN</span>
+        <span style="color:var(--muted);font-size:9px">▾</span>
+      </div>
+      <div class="lang-dropdown" id="langDropdown">
+        <div class="lang-opt active" onclick="setLang('en','🇺🇸')"><span class="lang-opt-flag">🇺🇸</span><span class="lang-opt-name">English</span><span class="lang-opt-code">EN</span></div>
+        <div class="lang-opt" onclick="setLang('id','🇮🇩')"><span class="lang-opt-flag">🇮🇩</span><span class="lang-opt-name">Bahasa Indonesia</span><span class="lang-opt-code">ID</span></div>
+        <div class="lang-opt" onclick="setLang('zh','🇨🇳')"><span class="lang-opt-flag">🇨🇳</span><span class="lang-opt-name">中文</span><span class="lang-opt-code">ZH</span></div>
+        <div class="lang-opt" onclick="setLang('ja','🇯🇵')"><span class="lang-opt-flag">🇯🇵</span><span class="lang-opt-name">日本語</span><span class="lang-opt-code">JA</span></div>
+        <div class="lang-opt" onclick="setLang('es','🇪🇸')"><span class="lang-opt-flag">🇪🇸</span><span class="lang-opt-name">Español</span><span class="lang-opt-code">ES</span></div>
+        <div class="lang-opt" onclick="setLang('fr','🇫🇷')"><span class="lang-opt-flag">🇫🇷</span><span class="lang-opt-name">Français</span><span class="lang-opt-code">FR</span></div>
+      </div>
+    </div>
+    <a href="https://skills.ritualfoundation.org" target="_blank" class="nav-cta">
+      <span data-lang="en">Get Started →</span>
+      <span data-lang="id">Mulai →</span>
+      <span data-lang="zh">开始 →</span>
+      <span data-lang="ja">始める →</span>
+      <span data-lang="es">Empezar →</span>
+      <span data-lang="fr">Commencer →</span>
+    </a>
+  </div>
+</nav>
+
+<!-- RESOURCE BAR -->
+<div class="rbar">
+  <span class="rbar-label">
+    <span data-lang="en">OFFICIAL</span>
+    <span data-lang="id">RESMI</span>
+    <span data-lang="zh">官方</span>
+    <span data-lang="ja">公式</span>
+    <span data-lang="es">OFICIAL</span>
+    <span data-lang="fr">OFFICIEL</span>
+  </span>
+  <a href="https://docs.ritualfoundation.org" target="_blank" class="rbar-link rbar-g">📄 Docs</a>
+  <a href="https://faucet.ritualfoundation.org" target="_blank" class="rbar-link rbar-g">💧 Faucet</a>
+  <a href="https://explorer.ritualfoundation.org" target="_blank" class="rbar-link rbar-g">🔍 Explorer</a>
+  <a href="https://rpc.ritualfoundation.org" target="_blank" class="rbar-link rbar-g">⚡ RPC</a>
+  <a href="https://skills.ritualfoundation.org" target="_blank" class="rbar-link rbar-t">🤖 Agent Skills</a>
+  <a href="https://github.com/ritual-foundation/ritual-dapp-skills" target="_blank" class="rbar-link rbar-m">⌥ GitHub</a>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">
+    <div class="pulse"></div>
+    <span>Chain ID 1979 · CRAT · ~350ms blocks · Live Now</span>
+  </div>
+  <div class="hero-grid">
+    <div>
+      <h1>
+        <span data-lang="en">You describe it.<br><span class="h1-green">AI builds it.</span><br><span class="h1-dim">On-chain.</span></span>
+        <span data-lang="id">Kamu ceritakan.<br><span class="h1-green">AI yang buat.</span><br><span class="h1-dim">On-chain.</span></span>
+        <span data-lang="zh">你描述它。<br><span class="h1-green">AI 来构建。</span><br><span class="h1-dim">链上运行。</span></span>
+        <span data-lang="ja">あなたが語る。<br><span class="h1-green">AIが作る。</span><br><span class="h1-dim">オンチェーン。</span></span>
+        <span data-lang="es">Tú lo describes.<br><span class="h1-green">IA lo construye.</span><br><span class="h1-dim">En la cadena.</span></span>
+        <span data-lang="fr">Vous décrivez.<br><span class="h1-green">L'IA construit.</span><br><span class="h1-dim">On-chain.</span></span>
+      </h1>
+      <p class="hero-sub">
+        <span data-lang="en">Ritual is a blockchain where <strong>AI models run natively</strong> — baked into the chain itself. No coding experience needed. Describe your dApp in plain language and deploy it.</span>
+        <span data-lang="id">Ritual adalah blockchain di mana <strong>model AI berjalan secara native</strong> — tertanam langsung di chain. Tidak perlu coding. Deskripsikan dApp-mu dalam bahasa biasa dan deploy.</span>
+        <span data-lang="zh">Ritual 是一条区块链，<strong>AI 模型原生运行</strong>其中——直接内置于链本身。无需编程经验。用普通语言描述你的 dApp 并部署它。</span>
+        <span data-lang="ja">Ritualは<strong>AIモデルがネイティブで動く</strong>ブロックチェーン。コーディング不要。普通の言葉でdAppを説明してデプロイするだけ。</span>
+        <span data-lang="es">Ritual es una blockchain donde <strong>los modelos de IA corren de forma nativa</strong> — integrados en la cadena. Sin experiencia en código. Describe tu dApp en lenguaje natural y despliégala.</span>
+        <span data-lang="fr">Ritual est une blockchain où les <strong>modèles d'IA s'exécutent nativement</strong> — intégrés dans la chaîne. Aucune expérience de code requise. Décrivez votre dApp et déployez-la.</span>
+      </p>
+      <div class="hero-btns">
+        <a href="#tutorial" class="btn-main">
+          <span data-lang="en">Start Tutorial →</span>
+          <span data-lang="id">Mulai Tutorial →</span>
+          <span data-lang="zh">开始教程 →</span>
+          <span data-lang="ja">チュートリアル開始 →</span>
+          <span data-lang="es">Iniciar Tutorial →</span>
+          <span data-lang="fr">Démarrer le tutoriel →</span>
+        </a>
+        <a href="#demo" class="btn-out">
+          <span data-lang="en">⚡ Live Deploy Demo</span>
+          <span data-lang="id">⚡ Demo Deploy Langsung</span>
+          <span data-lang="zh">⚡ 实时部署演示</span>
+          <span data-lang="ja">⚡ ライブデプロイデモ</span>
+          <span data-lang="es">⚡ Demo de Deploy en Vivo</span>
+          <span data-lang="fr">⚡ Démo Deploy en Direct</span>
+        </a>
+      </div>
+      <div class="hero-nums">
+        <div><div class="num-val">16</div><div class="num-lab">Precompiles</div></div>
+        <div><div class="num-val">~350ms</div><div class="num-lab"><span data-lang="en">Block Time</span><span data-lang="id">Waktu Blok</span><span data-lang="zh">出块时间</span><span data-lang="ja">ブロック時間</span><span data-lang="es">Tiempo de Bloque</span><span data-lang="fr">Temps de Bloc</span></div></div>
+        <div><div class="num-val">0</div><div class="num-lab"><span data-lang="en">Code Skills Needed</span><span data-lang="id">Skill Coding</span><span data-lang="zh">所需代码技能</span><span data-lang="ja">必要スキル</span><span data-lang="es">Habilidades de Código</span><span data-lang="fr">Compétences Requises</span></div></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="chain-diagram">
+        <div class="diag-label">HOW A RITUAL DAPP WORKS</div>
+        <div class="diag-row">
+          <div class="diag-block">
+            <div class="diag-icon">💬</div>
+            <div class="diag-text">
+              <div class="diag-name">
+                <span data-lang="en">You (plain language)</span>
+                <span data-lang="id">Kamu (bahasa biasa)</span>
+                <span data-lang="zh">你（自然语言）</span>
+                <span data-lang="ja">あなた（自然言語）</span>
+                <span data-lang="es">Tú (lenguaje natural)</span>
+                <span data-lang="fr">Vous (langage naturel)</span>
+              </div>
+              <div class="diag-sub">"Fetch ETH price, alert if drops 5%"</div>
+            </div>
+          </div>
+          <div class="diag-arrow"><div class="diag-arrow-line"></div></div>
+          <div class="diag-block">
+            <div class="diag-icon">🤖</div>
+            <div class="diag-text">
+              <div class="diag-name">AI Agent</div>
+              <div class="diag-sub"><span data-lang="en">Writes Solidity for you</span><span data-lang="id">Menulis Solidity untukmu</span><span data-lang="zh">为你编写 Solidity</span><span data-lang="ja">Solidityを代わりに書く</span><span data-lang="es">Escribe Solidity por ti</span><span data-lang="fr">Écrit le Solidity pour vous</span></div>
+            </div>
+            <span class="diag-addr">Claude / Cursor</span>
+          </div>
+          <div class="diag-arrow"><div class="diag-arrow-line"></div></div>
+          <div class="diag-block">
+            <div class="diag-icon">⚡</div>
+            <div class="diag-text">
+              <div class="diag-name">Smart Contract</div>
+              <div class="diag-sub"><span data-lang="en">Deployed to Ritual Chain</span><span data-lang="id">Dideploy ke Ritual Chain</span><span data-lang="zh">部署到 Ritual Chain</span><span data-lang="ja">Ritualチェーンにデプロイ</span><span data-lang="es">Desplegado en Ritual Chain</span><span data-lang="fr">Déployé sur Ritual Chain</span></div>
+            </div>
+            <span class="diag-addr">Chain 1979</span>
+          </div>
+          <div class="diag-arrow"><div class="diag-arrow-line"></div></div>
+          <div class="diag-block" style="border-color:rgba(0,255,140,.2);background:rgba(0,255,140,.03)">
+            <div class="diag-icon">✅</div>
+            <div class="diag-text">
+              <div class="diag-name" style="color:var(--green)"><span data-lang="en">Runs Forever</span><span data-lang="id">Berjalan Selamanya</span><span data-lang="zh">永久运行</span><span data-lang="ja">永遠に動く</span><span data-lang="es">Corre Para Siempre</span><span data-lang="fr">Tourne Pour Toujours</span></div>
+              <div class="diag-sub"><span data-lang="en">AI-powered, autonomous, on-chain</span><span data-lang="id">Bertenaga AI, otonom, on-chain</span><span data-lang="zh">AI 驱动，自主，链上</span><span data-lang="ja">AI搭載、自律、オンチェーン</span><span data-lang="es">Impulsado por IA, autónomo</span><span data-lang="fr">Propulsé par IA, autonome</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- WHAT CAN YOU BUILD -->
+<div class="sw fade-up" id="build">
+  <div class="sec-eyebrow"><div class="sec-eyebrow-line"></div>
+    <span data-lang="en">USE CASES</span><span data-lang="id">CONTOH PENGGUNAAN</span><span data-lang="zh">使用案例</span><span data-lang="ja">ユースケース</span><span data-lang="es">CASOS DE USO</span><span data-lang="fr">CAS D'USAGE</span>
+  </div>
+  <h2 class="sec-h">
+    <span data-lang="en">What can you build<br>on Ritual?</span>
+    <span data-lang="id">Apa yang bisa kamu<br>bangun di Ritual?</span>
+    <span data-lang="zh">在 Ritual 上<br>你能构建什么？</span>
+    <span data-lang="ja">Ritualで何を<br>作れるか？</span>
+    <span data-lang="es">¿Qué puedes construir<br>en Ritual?</span>
+    <span data-lang="fr">Que pouvez-vous créer<br>sur Ritual ?</span>
+  </h2>
+  <p class="sec-p">
+    <span data-lang="en">From AI trading bots to privacy-first chatbots — if it involves AI + blockchain, Ritual makes it native.</span>
+    <span data-lang="id">Dari bot trading AI hingga chatbot privat — jika melibatkan AI + blockchain, Ritual membuatnya native.</span>
+    <span data-lang="zh">从 AI 交易机器人到隐私聊天机器人——凡涉及 AI + 区块链，Ritual 使其原生化。</span>
+    <span data-lang="ja">AI取引ボットからプライバシーチャットボットまで — AI+ブロックチェーンならRitualでネイティブに。</span>
+    <span data-lang="es">Desde bots de trading IA hasta chatbots privados — si involucra IA + blockchain, Ritual lo hace nativo.</span>
+    <span data-lang="fr">Des bots de trading IA aux chatbots privés — si ça implique IA + blockchain, Ritual le rend natif.</span>
+  </p>
+  <div class="builds-grid">
+    <div class="build-card c-green">
+      <div class="build-card-glow"></div>
+      <span class="build-emoji">📈</span>
+      <div class="build-title"><span data-lang="en">AI Trading Bot</span><span data-lang="id">Bot Trading AI</span><span data-lang="zh">AI 交易机器人</span><span data-lang="ja">AI取引ボット</span><span data-lang="es">Bot de Trading IA</span><span data-lang="fr">Bot de Trading IA</span></div>
+      <div class="build-desc"><span data-lang="en">Fetches real-time prices, analyzes market sentiment, and auto buys/sells — 24/7 with no human needed.</span><span data-lang="id">Ambil harga real-time, analisis sentimen, dan otomatis beli/jual — 24/7 tanpa manusia.</span><span data-lang="zh">获取实时价格，分析市场情绪，自动买卖——24/7无需人工干预。</span><span data-lang="ja">リアルタイム価格取得、市場感情分析、自動売買—24/7無人運転。</span><span data-lang="es">Obtiene precios en tiempo real, analiza sentimiento y compra/vende automáticamente 24/7.</span><span data-lang="fr">Récupère les prix en temps réel, analyse le sentiment et achète/vend automatiquement 24h/24.</span></div>
+      <div class="build-chips"><span class="chip chip-g">HTTP</span><span class="chip chip-g">LLM</span><span class="chip chip-a">SCHEDULER</span></div>
+    </div>
+    <div class="build-card c-amber">
+      <div class="build-card-glow"></div>
+      <span class="build-emoji">🗞️</span>
+      <div class="build-title"><span data-lang="en">On-Chain News AI</span><span data-lang="id">AI Berita On-Chain</span><span data-lang="zh">链上新闻 AI</span><span data-lang="ja">オンチェーンニュースAI</span><span data-lang="es">IA de Noticias On-Chain</span><span data-lang="fr">IA d'Actualités On-Chain</span></div>
+      <div class="build-desc"><span data-lang="en">Pulls headlines from any news API, summarizes them with AI, and posts a daily digest permanently on-chain.</span><span data-lang="id">Ambil headline dari API berita, ringkas dengan AI, dan posting digest harian secara permanen on-chain.</span><span data-lang="zh">从新闻 API 获取头条，AI 摘要，永久发布每日摘要到链上。</span><span data-lang="ja">ニュースAPIからヘッドラインを取得し、AIで要約して毎日のダイジェストをチェーンに永久記録。</span><span data-lang="es">Extrae titulares de cualquier API de noticias, los resume con IA y publica un digest diario on-chain.</span><span data-lang="fr">Extrait des titres de n'importe quelle API d'actualités, les résume avec l'IA et publie un digest quotidien on-chain.</span></div>
+      <div class="build-chips"><span class="chip chip-g">HTTP</span><span class="chip chip-g">LLM</span><span class="chip chip-a">SCHEDULER</span></div>
+    </div>
+    <div class="build-card c-purple">
+      <div class="build-card-glow"></div>
+      <span class="build-emoji">🔒</span>
+      <div class="build-title"><span data-lang="en">Private AI Chatbot</span><span data-lang="id">Chatbot AI Privat</span><span data-lang="zh">隐私 AI 聊天机器人</span><span data-lang="ja">プライベートAIチャット</span><span data-lang="es">Chatbot IA Privado</span><span data-lang="fr">Chatbot IA Privé</span></div>
+      <div class="build-desc"><span data-lang="en">A ChatGPT-like chatbot that runs on-chain using FHE — your inputs stay encrypted even during processing.</span><span data-lang="id">Chatbot seperti ChatGPT yang berjalan on-chain menggunakan FHE — input kamu tetap terenkripsi.</span><span data-lang="zh">类似 ChatGPT 的链上聊天机器人，使用 FHE，即使处理过程中输入也保持加密。</span><span data-lang="ja">FHEを使ったチェーン上のChatGPTライクなチャットボット—処理中も入力が暗号化。</span><span data-lang="es">Un chatbot tipo ChatGPT que corre on-chain usando FHE — tus entradas permanecen cifradas incluso durante el procesamiento.</span><span data-lang="fr">Un chatbot type ChatGPT qui tourne on-chain avec FHE — vos entrées restent chiffrées même pendant le traitement.</span></div>
+      <div class="build-chips"><span class="chip chip-p">LLM</span><span class="chip chip-p">FHE</span><span class="chip chip-p">TEE</span></div>
+    </div>
+    <div class="build-card c-teal">
+      <div class="build-card-glow"></div>
+      <span class="build-emoji">🤖</span>
+      <div class="build-title"><span data-lang="en">Autonomous Agent</span><span data-lang="id">Autonomous Agent</span><span data-lang="zh">自主智能代理</span><span data-lang="ja">自律エージェント</span><span data-lang="es">Agente Autónomo</span><span data-lang="fr">Agent Autonome</span></div>
+      <div class="build-desc"><span data-lang="en">An AI with its own wallet, memory, and goals — makes decisions and executes transactions indefinitely.</span><span data-lang="id">AI yang punya wallet, memori, dan tujuan sendiri — membuat keputusan dan mengeksekusi transaksi selamanya.</span><span data-lang="zh">拥有自己钱包、记忆和目标的 AI——无限期地做决策和执行交易。</span><span data-lang="ja">自分のウォレット、記憶、目標を持つAI—無期限に意思決定とトランザクションを実行。</span><span data-lang="es">Una IA con su propio wallet, memoria y objetivos — toma decisiones y ejecuta transacciones indefinidamente.</span><span data-lang="fr">Une IA avec son propre wallet, mémoire et objectifs — prend des décisions et exécute des transactions indéfiniment.</span></div>
+      <div class="build-chips"><span class="chip chip-t">PERSISTENT AGENT</span><span class="chip chip-p">WALLET</span></div>
+    </div>
+    <div class="build-card c-green">
+      <div class="build-card-glow"></div>
+      <span class="build-emoji">🎨</span>
+      <div class="build-title"><span data-lang="en">AI NFT Generator</span><span data-lang="id">Generator NFT AI</span><span data-lang="zh">AI NFT 生成器</span><span data-lang="ja">AI NFTジェネレーター</span><span data-lang="es">Generador de NFT con IA</span><span data-lang="fr">Générateur de NFT IA</span></div>
+      <div class="build-desc"><span data-lang="en">Generate unique images on-chain using the Image precompile, then mint them as NFTs — fully autonomous.</span><span data-lang="id">Generate gambar unik on-chain menggunakan precompile Image, lalu mint sebagai NFT — sepenuhnya otonom.</span><span data-lang="zh">使用 Image 预编译在链上生成独特图像，然后铸造为 NFT——完全自主。</span><span data-lang="ja">Imageプリコンパイルを使ってチェーン上でユニークな画像を生成し、NFTとしてミント—完全自律。</span><span data-lang="es">Genera imágenes únicas on-chain usando el precompile Image y acúñalas como NFTs — totalmente autónomo.</span><span data-lang="fr">Génère des images uniques on-chain avec le precompile Image, puis les mint en NFTs — entièrement autonome.</span></div>
+      <div class="build-chips"><span class="chip chip-g">IMAGE</span><span class="chip chip-g">LLM</span></div>
+    </div>
+    <div class="build-card c-crimson">
+      <div class="build-card-glow"></div>
+      <span class="build-emoji">🪪</span>
+      <div class="build-title"><span data-lang="en">Passkey Wallet</span><span data-lang="id">Passkey Wallet</span><span data-lang="zh">密钥钱包</span><span data-lang="ja">パスキーウォレット</span><span data-lang="es">Wallet con Passkey</span><span data-lang="fr">Wallet Passkey</span></div>
+      <div class="build-desc"><span data-lang="en">A wallet using Face ID / fingerprint as key — no seed phrase, verified on-chain with SECP256R1.</span><span data-lang="id">Wallet menggunakan Face ID / sidik jari sebagai kunci — tanpa seed phrase, diverifikasi on-chain dengan SECP256R1.</span><span data-lang="zh">使用 Face ID/指纹作为密钥的钱包——无助记词，通过 SECP256R1 链上验证。</span><span data-lang="ja">Face ID/指紋をキーとして使うウォレット—シードフレーズ不要、SECP256R1でオンチェーン検証。</span><span data-lang="es">Un wallet que usa Face ID / huella dactilar como clave — sin frase semilla, verificado on-chain con SECP256R1.</span><span data-lang="fr">Un wallet utilisant Face ID/empreinte comme clé — sans phrase secrète, vérifié on-chain avec SECP256R1.</span></div>
+      <div class="build-chips"><span class="chip chip-r">PASSKEY</span><span class="chip chip-p">SECP256R1</span></div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- HOW IT WORKS -->
+<div class="sw fade-up" id="how">
+  <div class="sec-eyebrow"><div class="sec-eyebrow-line"></div>
+    <span data-lang="en">THE PROCESS</span><span data-lang="id">PROSESNYA</span><span data-lang="zh">流程</span><span data-lang="ja">プロセス</span><span data-lang="es">EL PROCESO</span><span data-lang="fr">LE PROCESSUS</span>
+  </div>
+  <h2 class="sec-h">
+    <span data-lang="en">How Ritual works in 3 steps</span>
+    <span data-lang="id">Cara kerja Ritual dalam 3 langkah</span>
+    <span data-lang="zh">Ritual 如何在 3 步内运作</span>
+    <span data-lang="ja">3ステップでRitualの仕組みを理解する</span>
+    <span data-lang="es">Cómo funciona Ritual en 3 pasos</span>
+    <span data-lang="fr">Comment Ritual fonctionne en 3 étapes</span>
+  </h2>
+  <p class="sec-p">
+    <span data-lang="en">You don't write code. You describe what you want. The AI does the rest.</span>
+    <span data-lang="id">Kamu tidak menulis kode. Kamu deskripsikan apa yang kamu mau. AI yang melakukan sisanya.</span>
+    <span data-lang="zh">你不写代码。你描述你想要的。AI 完成其余的工作。</span>
+    <span data-lang="ja">コードを書かない。欲しいものを説明する。AIが残りをやる。</span>
+    <span data-lang="es">No escribes código. Describes lo que quieres. La IA hace el resto.</span>
+    <span data-lang="fr">Vous n'écrivez pas de code. Vous décrivez ce que vous voulez. L'IA fait le reste.</span>
+  </p>
+  <div class="how-grid">
+    <div class="how-step">
+      <div class="how-num"><div class="how-circle">1</div></div>
+      <div class="how-icon">💬</div>
+      <div class="how-title"><span data-lang="en">You Describe</span><span data-lang="id">Kamu Deskripsikan</span><span data-lang="zh">你描述</span><span data-lang="ja">あなたが説明する</span><span data-lang="es">Tú Describes</span><span data-lang="fr">Vous Décrivez</span></div>
+      <div class="how-desc"><span data-lang="en">Tell the AI agent what dApp you want in plain language. No coding, no Solidity, no Web3 knowledge required.</span><span data-lang="id">Ceritakan ke agent AI dApp apa yang kamu inginkan dalam bahasa biasa. Tidak perlu coding atau pengetahuan Web3.</span><span data-lang="zh">用简单语言告诉 AI 代理你想要什么 dApp。无需编程、Solidity 或 Web3 知识。</span><span data-lang="ja">普通の言葉でAIエージェントに欲しいdAppを伝える。コーディング、Solidity、Web3の知識不要。</span><span data-lang="es">Dile al agente de IA qué dApp quieres en lenguaje simple. Sin código, sin Solidity, sin conocimiento Web3.</span><span data-lang="fr">Dites à l'agent IA quelle dApp vous voulez en langage simple. Sans code, sans Solidity, sans connaissance Web3.</span></div>
+      <div class="how-code"><span class="cm"># You type this:</span><br>"<span class="cg">Build a contract that checks ETH<br>price every 5 min and alerts if<br>it drops 5%</span>"</div>
+    </div>
+    <div class="how-step">
+      <div class="how-num"><div class="how-circle">2</div></div>
+      <div class="how-icon">🤖</div>
+      <div class="how-title"><span data-lang="en">AI Builds It</span><span data-lang="id">AI Membangunnya</span><span data-lang="zh">AI 构建它</span><span data-lang="ja">AIが作る</span><span data-lang="es">La IA lo Construye</span><span data-lang="fr">L'IA le Construit</span></div>
+      <div class="how-desc"><span data-lang="en">Claude Code reads the Ritual Skills files and writes all smart contract code, choosing the right precompiles automatically.</span><span data-lang="id">Claude Code membaca file Ritual Skills dan menulis semua kode smart contract, memilih precompile yang tepat secara otomatis.</span><span data-lang="zh">Claude Code 读取 Ritual Skills 文件，编写所有智能合约代码，自动选择正确的预编译。</span><span data-lang="ja">Claude CodeがRitual Skillsファイルを読み、すべてのスマートコントラクトコードを書き、適切なプリコンパイルを自動選択。</span><span data-lang="es">Claude Code lee los archivos Ritual Skills y escribe todo el código del smart contract, eligiendo los precompiles correctos automáticamente.</span><span data-lang="fr">Claude Code lit les fichiers Ritual Skills et écrit tout le code du smart contract, choisissant automatiquement les bons precompiles.</span></div>
+      <div class="how-code"><span class="cm"># AI writes:</span><br><span class="cp">contract</span> PriceAlert {<br>&nbsp;&nbsp;<span class="cg">// uses HTTP + Scheduler</span><br>&nbsp;&nbsp;<span class="cp">function</span> check() external {…}<br>}</div>
+    </div>
+    <div class="how-step">
+      <div class="how-num"><div class="how-circle">3</div></div>
+      <div class="how-icon">🚀</div>
+      <div class="how-title"><span data-lang="en">It Lives On-Chain</span><span data-lang="id">Hidup On-Chain</span><span data-lang="zh">永久上链</span><span data-lang="ja">チェーンで永遠に生きる</span><span data-lang="es">Vive On-Chain</span><span data-lang="fr">Il Vit On-Chain</span></div>
+      <div class="how-desc"><span data-lang="en">Your dApp is deployed to Ritual Chain. It runs autonomously, forever — no server, no maintenance, no one can shut it down.</span><span data-lang="id">dApp kamu dideploy ke Ritual Chain. Berjalan secara otonom, selamanya — tanpa server, tanpa maintenance.</span><span data-lang="zh">你的 dApp 部署到 Ritual Chain。自主运行，永久——无服务器，无维护，没有人能关闭它。</span><span data-lang="ja">dAppはRitual Chainにデプロイ。自律的に永遠に動く—サーバー不要、メンテ不要、誰も止められない。</span><span data-lang="es">Tu dApp se despliega en Ritual Chain. Corre autónomamente, para siempre — sin servidor, sin mantenimiento.</span><span data-lang="fr">Votre dApp est déployée sur Ritual Chain. Elle tourne de façon autonome, pour toujours — sans serveur, sans maintenance.</span></div>
+      <div class="how-code"><span class="cm"># Result:</span><br>Contract deployed ✓<br>Address: <span class="cp">0x7f3a…</span><br>Status: <span class="cg">RUNNING FOREVER</span></div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- LIVE DEPLOY DEMO -->
+<div class="sw fade-up" id="demo">
+  <div class="sec-eyebrow"><div class="sec-eyebrow-line"></div>
+    <span data-lang="en">LIVE DEMO</span><span data-lang="id">DEMO LANGSUNG</span><span data-lang="zh">实时演示</span><span data-lang="ja">ライブデモ</span><span data-lang="es">DEMO EN VIVO</span><span data-lang="fr">DÉMO EN DIRECT</span>
+  </div>
+  <h2 class="sec-h">
+    <span data-lang="en">Deploy your first smart<br>contract — <span style="color:var(--green)">right now</span></span>
+    <span data-lang="id">Deploy smart contract<br>pertamamu — <span style="color:var(--green)">sekarang juga</span></span>
+    <span data-lang="zh">立即部署你的第一个<br>智能合约—<span style="color:var(--green)">就是现在</span></span>
+    <span data-lang="ja">今すぐ最初のスマート<br>コントラクトをデプロイ—<span style="color:var(--green)">今すぐ</span></span>
+    <span data-lang="es">Despliega tu primer smart<br>contract — <span style="color:var(--green)">ahora mismo</span></span>
+    <span data-lang="fr">Déployez votre premier smart<br>contract — <span style="color:var(--green)">maintenant</span></span>
+  </h2>
+  <p class="sec-p">
+    <span data-lang="en">Connect MetaMask, pick a contract template, and deploy to Ritual testnet. Real transaction. Real block. Real explorer link.</span>
+    <span data-lang="id">Hubungkan MetaMask, pilih template contract, dan deploy ke testnet Ritual. Transaksi nyata. Blok nyata. Link explorer nyata.</span>
+    <span data-lang="zh">连接 MetaMask，选择合约模板，部署到 Ritual 测试网。真实交易。真实区块。真实浏览器链接。</span>
+    <span data-lang="ja">MetaMaskを接続し、コントラクトテンプレートを選択してRitualテストネットにデプロイ。本物のトランザクション。本物のブロック。本物のエクスプローラーリンク。</span>
+    <span data-lang="es">Conecta MetaMask, elige una plantilla de contrato y despliégala en el testnet de Ritual. Transacción real. Bloque real. Enlace al explorador real.</span>
+    <span data-lang="fr">Connectez MetaMask, choisissez un modèle de contrat, et déployez sur le testnet Ritual. Transaction réelle. Bloc réel. Lien explorateur réel.</span>
+  </p>
+
+  <div class="demo-wrap">
+    <div class="demo-header">
+      <div class="demo-title-wrap">
+        <div class="demo-dot"></div>
+        <div>
+          <div class="demo-title">
+            <span data-lang="en">Ritual Testnet Deployer</span>
+            <span data-lang="id">Deployer Testnet Ritual</span>
+            <span data-lang="zh">Ritual 测试网部署器</span>
+            <span data-lang="ja">Ritualテストネットデプロイヤー</span>
+            <span data-lang="es">Deployer Testnet de Ritual</span>
+            <span data-lang="fr">Déployeur Testnet Ritual</span>
+          </div>
+          <div class="demo-subtitle">
+            <span data-lang="en">Chain ID: 1979 · RPC: rpc.ritualfoundation.org · Symbol: CRAT</span>
+            <span data-lang="id">Chain ID: 1979 · RPC: rpc.ritualfoundation.org · Simbol: CRAT</span>
+            <span data-lang="zh">链 ID: 1979 · RPC: rpc.ritualfoundation.org · 符号: CRAT</span>
+            <span data-lang="ja">チェーン ID: 1979 · RPC: rpc.ritualfoundation.org · シンボル: CRAT</span>
+            <span data-lang="es">Chain ID: 1979 · RPC: rpc.ritualfoundation.org · Símbolo: CRAT</span>
+            <span data-lang="fr">Chain ID: 1979 · RPC: rpc.ritualfoundation.org · Symbole: CRAT</span>
+          </div>
+        </div>
+      </div>
+      <div class="demo-badge">TESTNET · FREE</div>
+    </div>
+
+    <div class="demo-body">
+      <div class="demo-step-indicator">
+        <div class="demo-step-dot active" id="sdot0"></div>
+        <div class="demo-step-dot" id="sdot1"></div>
+        <div class="demo-step-dot" id="sdot2"></div>
+        <div class="demo-step-dot" id="sdot3"></div>
+      </div>
+
+      <!-- STEP 0: Connect wallet -->
+      <div id="demo-step-0">
+        <div class="demo-form">
+          <div class="demo-wallet-row">
+            <div class="demo-wallet-icon">🦊</div>
+            <div class="demo-wallet-text">
+              <div class="demo-wallet-name">MetaMask</div>
+              <div class="demo-wallet-sub" id="walletAddr">
+                <span data-lang="en">Not connected</span>
+                <span data-lang="id">Belum terhubung</span>
+                <span data-lang="zh">未连接</span>
+                <span data-lang="ja">未接続</span>
+                <span data-lang="es">No conectado</span>
+                <span data-lang="fr">Non connecté</span>
+              </div>
+            </div>
+            <div class="demo-wallet-status ws-disconnected" id="walletStatus">
+              <span data-lang="en">DISCONNECTED</span>
+              <span data-lang="id">TERPUTUS</span>
+              <span data-lang="zh">未连接</span>
+              <span data-lang="ja">未接続</span>
+              <span data-lang="es">DESCONECTADO</span>
+              <span data-lang="fr">DÉCONNECTÉ</span>
+            </div>
+          </div>
+          <div class="tip tip-a">
+            <div class="tip-head">💡 <span data-lang="en">NEED TESTNET TOKENS?</span><span data-lang="id">BUTUH TOKEN TESTNET?</span><span data-lang="zh">需要测试网代币？</span><span data-lang="ja">テストネットトークンが必要？</span><span data-lang="es">¿NECESITAS TOKENS DE TESTNET?</span><span data-lang="fr">BESOIN DE TOKENS TESTNET ?</span></div>
+            <div class="tip-body">
+              <span data-lang="en">Get free CRAT tokens at <a href="https://faucet.ritualfoundation.org" target="_blank">faucet.ritualfoundation.org ↗</a> — enough to deploy many contracts.</span>
+              <span data-lang="id">Dapatkan token CRAT gratis di <a href="https://faucet.ritualfoundation.org" target="_blank">faucet.ritualfoundation.org ↗</a> — cukup untuk deploy banyak contract.</span>
+              <span data-lang="zh">在 <a href="https://faucet.ritualfoundation.org" target="_blank">faucet.ritualfoundation.org ↗</a> 获取免费 CRAT 代币——足以部署许多合约。</span>
+              <span data-lang="ja"><a href="https://faucet.ritualfoundation.org" target="_blank">faucet.ritualfoundation.org ↗</a> で無料のCRATトークンを取得—多くのコントラクトのデプロイに十分。</span>
+              <span data-lang="es">Obtén tokens CRAT gratis en <a href="https://faucet.ritualfoundation.org" target="_blank">faucet.ritualfoundation.org ↗</a> — suficientes para desplegar muchos contratos.</span>
+              <span data-lang="fr">Obtenez des tokens CRAT gratuits sur <a href="https://faucet.ritualfoundation.org" target="_blank">faucet.ritualfoundation.org ↗</a> — suffisant pour déployer de nombreux contrats.</span>
+            </div>
+          </div>
+          <div class="demo-actions">
+            <button class="demo-btn-primary" id="btnConnect" onclick="connectWallet()">
+              <span data-lang="en">Connect MetaMask</span>
+              <span data-lang="id">Hubungkan MetaMask</span>
+              <span data-lang="zh">连接 MetaMask</span>
+              <span data-lang="ja">MetaMaskを接続</span>
+              <span data-lang="es">Conectar MetaMask</span>
+              <span data-lang="fr">Connecter MetaMask</span>
+            </button>
+            <button class="demo-btn-secondary" onclick="skipToDemo()">
+              <span data-lang="en">Try Demo (Simulated)</span>
+              <span data-lang="id">Coba Demo (Simulasi)</span>
+              <span data-lang="zh">试用演示（模拟）</span>
+              <span data-lang="ja">デモを試す（シミュレート）</span>
+              <span data-lang="es">Probar Demo (Simulado)</span>
+              <span data-lang="fr">Essayer le Démo (Simulé)</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 1: Choose contract template -->
+      <div id="demo-step-1" style="display:none">
+        <div class="demo-form">
+          <div class="demo-field">
+            <div class="demo-label">
+              <span data-lang="en">CONTRACT TEMPLATE</span>
+              <span data-lang="id">TEMPLATE CONTRACT</span>
+              <span data-lang="zh">合约模板</span>
+              <span data-lang="ja">コントラクトテンプレート</span>
+              <span data-lang="es">PLANTILLA DE CONTRATO</span>
+              <span data-lang="fr">MODÈLE DE CONTRAT</span>
+            </div>
+            <select class="demo-select" id="contractTemplate" onchange="updateContractPreview()">
+              <option value="hello">📝 HelloWorld — Store a message on-chain</option>
+              <option value="counter">🔢 Counter — Increment/decrement on-chain</option>
+              <option value="timestamp">⏱️ TimeStamp — Record current block time</option>
+            </select>
+          </div>
+          <div class="demo-field">
+            <div class="demo-label">
+              <span data-lang="en">CONTRACT PREVIEW</span>
+              <span data-lang="id">PREVIEW CONTRACT</span>
+              <span data-lang="zh">合约预览</span>
+              <span data-lang="ja">コントラクトプレビュー</span>
+              <span data-lang="es">VISTA PREVIA DEL CONTRATO</span>
+              <span data-lang="fr">APERÇU DU CONTRAT</span>
+            </div>
+            <div class="terminal">
+              <div class="terminal-bar"><div class="term-dot td-red"></div><div class="term-dot td-yellow"></div><div class="term-dot td-green"></div><span style="font-family:var(--font-mono);font-size:10px;color:var(--muted);margin-left:8px">contract.sol</span></div>
+              <div class="terminal-body" id="contractPreview" style="min-height:120px">
+                <div class="t-line"><span class="t-text"><span style="color:var(--purple)">// SPDX-License-Identifier: MIT</span></span></div>
+                <div class="t-line"><span class="t-text"><span style="color:var(--amber)">pragma</span> solidity ^0.8.19;</span></div>
+                <div class="t-line"><span class="t-text">&nbsp;</span></div>
+                <div class="t-line"><span class="t-text"><span style="color:var(--teal)">contract</span> <span style="color:var(--green)">HelloRitual</span> {</span></div>
+                <div class="t-line"><span class="t-text">&nbsp;&nbsp;string public message;</span></div>
+                <div class="t-line"><span class="t-text">&nbsp;&nbsp;<span style="color:var(--teal)">constructor</span>() { message = <span style="color:var(--amber)">"Hello, Ritual!"</span>; }</span></div>
+                <div class="t-line"><span class="t-text">&nbsp;&nbsp;<span style="color:var(--teal)">function</span> <span style="color:var(--green)">setMessage</span>(string memory m) external {</span></div>
+                <div class="t-line"><span class="t-text">&nbsp;&nbsp;&nbsp;&nbsp;message = m;</span></div>
+                <div class="t-line"><span class="t-text">&nbsp;&nbsp;}</span></div>
+                <div class="t-line"><span class="t-text">}</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="demo-actions">
+            <button class="demo-btn-primary" onclick="goToStep(2)">
+              <span data-lang="en">Next: Review & Deploy →</span>
+              <span data-lang="id">Lanjut: Review & Deploy →</span>
+              <span data-lang="zh">下一步：审查并部署 →</span>
+              <span data-lang="ja">次へ：確認してデプロイ →</span>
+              <span data-lang="es">Siguiente: Revisar y Desplegar →</span>
+              <span data-lang="fr">Suivant: Réviser et Déployer →</span>
+            </button>
+            <button class="demo-btn-secondary" onclick="goToStep(0)">← Back</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2: Review & Deploy -->
+      <div id="demo-step-2" style="display:none">
+        <div class="demo-form">
+          <div class="demo-grid">
+            <div class="demo-info">
+              <div class="demo-info-label">NETWORK</div>
+              <div class="demo-info-val">Ritual Testnet</div>
+            </div>
+            <div class="demo-info">
+              <div class="demo-info-label">CHAIN ID</div>
+              <div class="demo-info-val">1979</div>
+            </div>
+            <div class="demo-info">
+              <div class="demo-info-label">GAS TOKEN</div>
+              <div class="demo-info-val">CRAT</div>
+            </div>
+            <div class="demo-info">
+              <div class="demo-info-label">CONTRACT</div>
+              <div class="demo-info-val" id="reviewContractName">HelloRitual</div>
+            </div>
+          </div>
+          <div class="terminal" style="margin-top:16px">
+            <div class="terminal-bar"><div class="term-dot td-red"></div><div class="term-dot td-yellow"></div><div class="term-dot td-green"></div><span style="font-family:var(--font-mono);font-size:10px;color:var(--muted);margin-left:8px">deploy.log</span></div>
+            <div class="terminal-body" id="deployLog" style="min-height:120px">
+              <div class="t-line"><span class="t-prompt">▶</span><span class="t-text"><span data-lang="en">Ready to deploy to Ritual Chain (1979)</span><span data-lang="id">Siap deploy ke Ritual Chain (1979)</span><span data-lang="zh">准备部署到 Ritual Chain (1979)</span><span data-lang="ja">Ritual Chain (1979) へのデプロイ準備完了</span><span data-lang="es">Listo para desplegar en Ritual Chain (1979)</span><span data-lang="fr">Prêt à déployer sur Ritual Chain (1979)</span></span></div>
+              <div class="t-line"><span class="t-prompt">▶</span><span class="t-text">RPC: <span style="color:var(--teal)">https://rpc.ritualfoundation.org</span></span></div>
+              <div class="t-line"><span class="t-prompt">▶</span><span class="t-text"><span data-lang="en">Click Deploy to broadcast transaction</span><span data-lang="id">Klik Deploy untuk broadcast transaksi</span><span data-lang="zh">点击部署以广播交易</span><span data-lang="ja">デプロイをクリックしてトランザクションをブロードキャスト</span><span data-lang="es">Haz clic en Desplegar para transmitir la transacción</span><span data-lang="fr">Cliquez sur Déployer pour diffuser la transaction</span></span></div>
+              <div class="t-line"><span class="t-blink"></span></div>
+            </div>
+          </div>
+          <div class="demo-actions">
+            <button class="demo-btn-primary" id="btnDeploy" onclick="deployContract()">
+              🚀 <span data-lang="en">Deploy Contract</span>
+              <span data-lang="id">Deploy Contract</span>
+              <span data-lang="zh">部署合约</span>
+              <span data-lang="ja">コントラクトをデプロイ</span>
+              <span data-lang="es">Desplegar Contrato</span>
+              <span data-lang="fr">Déployer le Contrat</span>
+            </button>
+            <button class="demo-btn-secondary" onclick="goToStep(1)">← Back</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 3: Success -->
+      <div id="demo-step-3" style="display:none">
+        <div id="txResult" class="tx-result show">
+          <div class="tx-result-head">
+            <div class="tx-checkmark">✓</div>
+            <div>
+              <div class="tx-result-title">
+                <span data-lang="en">Contract Deployed!</span>
+                <span data-lang="id">Contract Berhasil Dideploy!</span>
+                <span data-lang="zh">合约已部署！</span>
+                <span data-lang="ja">コントラクトがデプロイされました！</span>
+                <span data-lang="es">¡Contrato Desplegado!</span>
+                <span data-lang="fr">Contrat Déployé !</span>
+              </div>
+              <div class="tx-result-sub">
+                <span data-lang="en">Your smart contract is now live on Ritual Chain</span>
+                <span data-lang="id">Smart contract kamu sekarang live di Ritual Chain</span>
+                <span data-lang="zh">你的智能合约现已在 Ritual Chain 上线</span>
+                <span data-lang="ja">あなたのスマートコントラクトはRitual Chainで稼働中</span>
+                <span data-lang="es">Tu smart contract ya está activo en Ritual Chain</span>
+                <span data-lang="fr">Votre smart contract est maintenant en direct sur Ritual Chain</span>
+              </div>
+            </div>
+          </div>
+          <div class="tx-fields">
+            <div class="tx-field">
+              <span class="tx-field-label">TX HASH</span>
+              <span class="tx-field-val" id="txHash">—</span>
+            </div>
+            <div class="tx-field">
+              <span class="tx-field-label">CONTRACT ADDRESS</span>
+              <span class="tx-field-val" id="contractAddr">—</span>
+            </div>
+            <div class="tx-field">
+              <span class="tx-field-label">BLOCK</span>
+              <span class="tx-field-val" id="txBlock">—</span>
+            </div>
+            <div class="tx-field">
+              <span class="tx-field-label">GAS USED</span>
+              <span class="tx-field-val" id="txGas">—</span>
+            </div>
+            <div class="tx-field">
+              <span class="tx-field-label">EXPLORER</span>
+              <span class="tx-field-val" id="explorerLink">—</span>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:20px">
+          <button class="demo-btn-secondary" onclick="resetDemo()">
+            <span data-lang="en">← Deploy Another</span>
+            <span data-lang="id">← Deploy Lagi</span>
+            <span data-lang="zh">← 再次部署</span>
+            <span data-lang="ja">← もう一度デプロイ</span>
+            <span data-lang="es">← Desplegar Otro</span>
+            <span data-lang="fr">← Déployer un Autre</span>
+          </button>
+        </div>
+      </div>
+
+    </div><!-- end demo-body -->
+  </div><!-- end demo-wrap -->
+</div>
+
+<hr class="divider">
+
+<!-- TUTORIAL -->
+<div class="sw fade-up" id="tutorial">
+  <div class="sec-eyebrow"><div class="sec-eyebrow-line"></div>
+    <span data-lang="en">STEP BY STEP</span><span data-lang="id">LANGKAH DEMI LANGKAH</span><span data-lang="zh">分步教程</span><span data-lang="ja">ステップバイステップ</span><span data-lang="es">PASO A PASO</span><span data-lang="fr">ÉTAPE PAR ÉTAPE</span>
+  </div>
+  <h2 class="sec-h">
+    <span data-lang="en">Your first dApp,<br>start to finish</span>
+    <span data-lang="id">dApp pertamamu,<br>dari awal sampai selesai</span>
+    <span data-lang="zh">你的第一个 dApp，<br>从头到尾</span>
+    <span data-lang="ja">最初のdApp、<br>最初から最後まで</span>
+    <span data-lang="es">Tu primera dApp,<br>de principio a fin</span>
+    <span data-lang="fr">Votre première dApp,<br>du début à la fin</span>
+  </h2>
+  <p class="sec-p">
+    <span data-lang="en">Estimated total time: <strong>30–60 minutes</strong>. Follow in order.</span>
+    <span data-lang="id">Estimasi total waktu: <strong>30–60 menit</strong>. Ikuti secara berurutan.</span>
+    <span data-lang="zh">预计总时间：<strong>30–60 分钟</strong>。按顺序跟进。</span>
+    <span data-lang="ja">推定所要時間：<strong>30〜60分</strong>。順番通りに進めてください。</span>
+    <span data-lang="es">Tiempo total estimado: <strong>30–60 minutos</strong>. Sigue en orden.</span>
+    <span data-lang="fr">Temps total estimé : <strong>30 à 60 minutes</strong>. Suivez dans l'ordre.</span>
+  </p>
+
+  <div class="tut-list">
+    <!-- STEP 1 -->
+    <div class="tut-item active" id="s1">
+      <div class="tut-left"><div class="tut-num">01</div></div>
+      <div class="tut-body">
+        <div class="tut-diff d-easy"><div class="diff-pip"></div><span class="diff-label"><span data-lang="en">EASY · ~10 min</span><span data-lang="id">MUDAH · ~10 menit</span><span data-lang="zh">简单 · ~10 分钟</span><span data-lang="ja">簡単 · ~10分</span><span data-lang="es">FÁCIL · ~10 min</span><span data-lang="fr">FACILE · ~10 min</span></span></div>
+        <div class="tut-h"><span data-lang="en">Install your AI coding agent</span><span data-lang="id">Install AI coding agent-mu</span><span data-lang="zh">安装你的 AI 编程代理</span><span data-lang="ja">AIコーディングエージェントをインストール</span><span data-lang="es">Instala tu agente de codificación IA</span><span data-lang="fr">Installez votre agent de codage IA</span></div>
+        <p class="tut-p"><span data-lang="en">The AI agent writes all the code for you. <strong>Claude Code + Opus 4.5 Max</strong> or <strong>Cursor + Codex 5.3 Extra High</strong> are officially recommended.</span><span data-lang="id">Agent AI yang menulis semua kode. <strong>Claude Code + Opus 4.5 Max</strong> atau <strong>Cursor + Codex 5.3 Extra High</strong> direkomendasikan.</span><span data-lang="zh">AI 代理为你写所有代码。官方推荐 <strong>Claude Code + Opus 4.5 Max</strong> 或 <strong>Cursor + Codex 5.3 Extra High</strong>。</span><span data-lang="ja">AIエージェントがすべてのコードを書く。公式推奨は <strong>Claude Code + Opus 4.5 Max</strong> または <strong>Cursor + Codex 5.3 Extra High</strong>。</span><span data-lang="es">El agente de IA escribe todo el código por ti. Se recomienda oficialmente <strong>Claude Code + Opus 4.5 Max</strong> o <strong>Cursor + Codex 5.3 Extra High</strong>.</span><span data-lang="fr">L'agent IA écrit tout le code pour vous. <strong>Claude Code + Opus 4.5 Max</strong> ou <strong>Cursor + Codex 5.3 Extra High</strong> sont recommandés officiellement.</span></p>
+
+        <div class="agent-tabs">
+          <button class="atab on rec" onclick="showAgent('cc',this)">Claude Code</button>
+          <button class="atab rec" onclick="showAgent('cur',this)">Cursor</button>
+          <button class="atab" onclick="showAgent('cod',this)">Codex CLI</button>
+          <button class="atab" onclick="showAgent('her',this)">Hermes</button>
+          <button class="atab" onclick="showAgent('oc',this)">OpenClaw</button>
+          <button class="atab" onclick="showAgent('cg',this)">ChatGPT</button>
+        </div>
+
+        <div id="ag-cc" class="agent-panel show">
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:22px">
+            <div class="ap-head"><span class="ap-name">Claude Code</span><span class="ap-badge badge-g"><span data-lang="en">★ RECOMMENDED</span><span data-lang="id">★ DIREKOMENDASIKAN</span><span data-lang="zh">★ 推荐</span><span data-lang="ja">★ 推奨</span><span data-lang="es">★ RECOMENDADO</span><span data-lang="fr">★ RECOMMANDÉ</span></span></div>
+            <p class="ap-sub"><span data-lang="en">Best with <strong>Opus 4.5 Max</strong>. Needs Node.js first — download from <a href="https://nodejs.org" target="_blank">nodejs.org ↗</a></span><span data-lang="id">Terbaik dengan <strong>Opus 4.5 Max</strong>. Butuh Node.js dulu — download dari <a href="https://nodejs.org" target="_blank">nodejs.org ↗</a></span><span data-lang="zh">最佳搭配 <strong>Opus 4.5 Max</strong>。首先需要 Node.js — 从 <a href="https://nodejs.org" target="_blank">nodejs.org ↗</a> 下载</span><span data-lang="ja"><strong>Opus 4.5 Max</strong> が最適。まず Node.js が必要 — <a href="https://nodejs.org" target="_blank">nodejs.org ↗</a> からダウンロード</span><span data-lang="es">Mejor con <strong>Opus 4.5 Max</strong>. Necesitas Node.js primero — descárgalo de <a href="https://nodejs.org" target="_blank">nodejs.org ↗</a></span><span data-lang="fr">Meilleur avec <strong>Opus 4.5 Max</strong>. Node.js requis d'abord — télécharger sur <a href="https://nodejs.org" target="_blank">nodejs.org ↗</a></span></p>
+            <div class="code"><button class="cbtn" onclick="cp(this)">COPY</button><span class="cm"># Step 1 — Install Claude Code</span><br>npm install -g @anthropic-ai/claude-code<br><br><span class="cm"># Step 2 — Create project folder</span><br>mkdir my-ritual-dapp && cd my-ritual-dapp<br><br><span class="cm"># Step 3 — Install Ritual Skills</span><br>git clone https://github.com/ritual-foundation/ritual-dapp-skills.git .claude/skills/ritual-dapp-skills<br><br><span class="cm"># Step 4 — Launch</span><br>claude</div>
+            <div class="tip tip-g"><div class="tip-head">💡 NEED API KEY?</div><div class="tip-body"><span data-lang="en">Get your Anthropic API key at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com ↗</a></span><span data-lang="id">Dapatkan API key Anthropic di <a href="https://console.anthropic.com" target="_blank">console.anthropic.com ↗</a></span><span data-lang="zh">在 <a href="https://console.anthropic.com" target="_blank">console.anthropic.com ↗</a> 获取你的 Anthropic API 密钥</span><span data-lang="ja"><a href="https://console.anthropic.com" target="_blank">console.anthropic.com ↗</a> でAnthropicのAPIキーを取得</span><span data-lang="es">Obtén tu API key de Anthropic en <a href="https://console.anthropic.com" target="_blank">console.anthropic.com ↗</a></span><span data-lang="fr">Obtenez votre clé API Anthropic sur <a href="https://console.anthropic.com" target="_blank">console.anthropic.com ↗</a></span></div></div>
+          </div>
+        </div>
+        <div id="ag-cur" class="agent-panel">
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:22px">
+            <div class="ap-head"><span class="ap-name">Cursor</span><span class="ap-badge badge-p"><span data-lang="en">★ RECOMMENDED</span><span data-lang="id">★ DIREKOMENDASIKAN</span><span data-lang="zh">★ 推荐</span><span data-lang="ja">★ 推奨</span><span data-lang="es">★ RECOMENDADO</span><span data-lang="fr">★ RECOMMANDÉ</span></span></div>
+            <p class="ap-sub"><span data-lang="en">Best with <strong>Codex 5.3 Extra High</strong>. Download from <a href="https://cursor.so" target="_blank">cursor.so ↗</a></span><span data-lang="id">Terbaik dengan <strong>Codex 5.3 Extra High</strong>. Download dari <a href="https://cursor.so" target="_blank">cursor.so ↗</a></span><span data-lang="zh">最佳搭配 <strong>Codex 5.3 Extra High</strong>。从 <a href="https://cursor.so" target="_blank">cursor.so ↗</a> 下载</span><span data-lang="ja"><strong>Codex 5.3 Extra High</strong> が最適。<a href="https://cursor.so" target="_blank">cursor.so ↗</a> からダウンロード</span><span data-lang="es">Mejor con <strong>Codex 5.3 Extra High</strong>. Descarga de <a href="https://cursor.so" target="_blank">cursor.so ↗</a></span><span data-lang="fr">Meilleur avec <strong>Codex 5.3 Extra High</strong>. Télécharger sur <a href="https://cursor.so" target="_blank">cursor.so ↗</a></span></p>
+            <div class="code"><button class="cbtn" onclick="cp(this)">COPY</button><span class="cm"># Skills go in .cursor/skills/ folder</span><br>git clone https://github.com/ritual-foundation/ritual-dapp-skills.git .cursor/skills/ritual-dapp-skills</div>
+          </div>
+        </div>
+        <div id="ag-cod" class="agent-panel">
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:22px">
+            <div class="ap-head"><span class="ap-name">Codex CLI</span></div>
+            <div class="code"><button class="cbtn" onclick="cp(this)">COPY</button>npm install -g @openai/codex<br>git clone https://github.com/ritual-foundation/ritual-dapp-skills.git .codex/skills/ritual-dapp-skills</div>
+          </div>
+        </div>
+        <div id="ag-her" class="agent-panel">
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:22px">
+            <div class="ap-head"><span class="ap-name">Hermes</span></div>
+            <div class="code"><button class="cbtn" onclick="cp(this)">COPY</button>hermes skills tap add ritual-foundation/ritual-dapp-skills</div>
+          </div>
+        </div>
+        <div id="ag-oc" class="agent-panel">
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:22px">
+            <div class="ap-head"><span class="ap-name">OpenClaw</span></div>
+            <div class="code"><button class="cbtn" onclick="cp(this)">COPY</button>git clone https://github.com/ritual-foundation/ritual-dapp-skills.git ~/.openclaw/skills/ritual-dapp-skills</div>
+          </div>
+        </div>
+        <div id="ag-cg" class="agent-panel">
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:22px">
+            <div class="ap-head"><span class="ap-name">ChatGPT / Copilot</span></div>
+            <p class="ap-sub"><span data-lang="en">Paste the raw SKILL.md content into your chat context. Available at <a href="https://github.com/ritual-foundation/ritual-dapp-skills/blob/main/skills/ritual-dapp-precompiles/SKILL.md" target="_blank">GitHub ↗</a></span><span data-lang="id">Paste konten raw SKILL.md ke dalam konteks chat. Tersedia di <a href="https://github.com/ritual-foundation/ritual-dapp-skills/blob/main/skills/ritual-dapp-precompiles/SKILL.md" target="_blank">GitHub ↗</a></span><span data-lang="zh">将原始 SKILL.md 内容粘贴到聊天上下文中。在 <a href="https://github.com/ritual-foundation/ritual-dapp-skills/blob/main/skills/ritual-dapp-precompiles/SKILL.md" target="_blank">GitHub ↗</a> 上可用</span><span data-lang="ja">生のSKILL.mdコンテンツをチャットコンテキストに貼り付ける。<a href="https://github.com/ritual-foundation/ritual-dapp-skills/blob/main/skills/ritual-dapp-precompiles/SKILL.md" target="_blank">GitHub ↗</a> で入手可能</span><span data-lang="es">Pega el contenido raw de SKILL.md en tu contexto de chat. Disponible en <a href="https://github.com/ritual-foundation/ritual-dapp-skills/blob/main/skills/ritual-dapp-precompiles/SKILL.md" target="_blank">GitHub ↗</a></span><span data-lang="fr">Collez le contenu brut de SKILL.md dans votre contexte de chat. Disponible sur <a href="https://github.com/ritual-foundation/ritual-dapp-skills/blob/main/skills/ritual-dapp-precompiles/SKILL.md" target="_blank">GitHub ↗</a></span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="tut-item" id="s2">
+      <div class="tut-left"><div class="tut-num">02</div></div>
+      <div class="tut-body">
+        <div class="tut-diff d-easy"><div class="diff-pip"></div><span class="diff-label"><span data-lang="en">EASY · ~5 min</span><span data-lang="id">MUDAH · ~5 menit</span><span data-lang="zh">简单 · ~5 分钟</span><span data-lang="ja">簡単 · ~5分</span><span data-lang="es">FÁCIL · ~5 min</span><span data-lang="fr">FACILE · ~5 min</span></span></div>
+        <div class="tut-h"><span data-lang="en">Add Ritual Network to MetaMask</span><span data-lang="id">Tambahkan Ritual Network ke MetaMask</span><span data-lang="zh">将 Ritual 网络添加到 MetaMask</span><span data-lang="ja">MetaMaskにRitualネットワークを追加</span><span data-lang="es">Añade Ritual Network a MetaMask</span><span data-lang="fr">Ajoutez Ritual Network à MetaMask</span></div>
+        <p class="tut-p"><span data-lang="en">You need a wallet to receive your contract address and pay gas. MetaMask is the easiest option.</span><span data-lang="id">Kamu butuh wallet untuk menerima alamat contract dan membayar gas. MetaMask adalah opsi termudah.</span><span data-lang="zh">你需要一个钱包来接收合约地址和支付 gas。MetaMask 是最简单的选择。</span><span data-lang="ja">コントラクトアドレスを受け取りガスを支払うためにウォレットが必要。MetaMaskが最も簡単。</span><span data-lang="es">Necesitas un wallet para recibir tu dirección de contrato y pagar gas. MetaMask es la opción más fácil.</span><span data-lang="fr">Vous avez besoin d'un wallet pour recevoir votre adresse de contrat et payer le gas. MetaMask est l'option la plus simple.</span></p>
+        <div class="wpills">
+          <div class="wpill"><span class="wp-l">Network:</span><span class="wp-v">Ritual Testnet</span></div>
+          <div class="wpill"><span class="wp-l">Chain ID:</span><span class="wp-v">1979</span></div>
+          <div class="wpill"><span class="wp-l">RPC:</span><span class="wp-v">https://rpc.ritualfoundation.org</span></div>
+          <div class="wpill"><span class="wp-l">Symbol:</span><span class="wp-v">CRAT</span></div>
+          <div class="wpill"><span class="wp-l">Explorer:</span><span class="wp-v">https://explorer.ritualfoundation.org</span></div>
+        </div>
+        <div class="wallet-btns">
+          <a href="https://metamask.io/download" target="_blank" class="wbtn wbtn-g"><span data-lang="en">Download MetaMask</span><span data-lang="id">Download MetaMask</span><span data-lang="zh">下载 MetaMask</span><span data-lang="ja">MetaMaskをダウンロード</span><span data-lang="es">Descargar MetaMask</span><span data-lang="fr">Télécharger MetaMask</span></a>
+          <a href="https://faucet.ritualfoundation.org" target="_blank" class="wbtn wbtn-o"><span data-lang="en">Get Free CRAT Tokens</span><span data-lang="id">Dapatkan CRAT Gratis</span><span data-lang="zh">获取免费 CRAT 代币</span><span data-lang="ja">無料CRATトークンを取得</span><span data-lang="es">Obtener tokens CRAT gratis</span><span data-lang="fr">Obtenir des tokens CRAT gratuits</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="tut-item" id="s3">
+      <div class="tut-left"><div class="tut-num">03</div></div>
+      <div class="tut-body">
+        <div class="tut-diff d-easy"><div class="diff-pip"></div><span class="diff-label"><span data-lang="en">EASY · ~5 min</span><span data-lang="id">MUDAH · ~5 menit</span><span data-lang="zh">简单 · ~5 分钟</span><span data-lang="ja">簡単 · ~5分</span><span data-lang="es">FÁCIL · ~5 min</span><span data-lang="fr">FACILE · ~5 min</span></span></div>
+        <div class="tut-h"><span data-lang="en">Tell the AI what to build</span><span data-lang="id">Beritahu AI apa yang harus dibangun</span><span data-lang="zh">告诉 AI 要构建什么</span><span data-lang="ja">AIに何を作るか伝える</span><span data-lang="es">Dile a la IA qué construir</span><span data-lang="fr">Dites à l'IA quoi construire</span></div>
+        <p class="tut-p"><span data-lang="en">Once Claude Code is running, give it a starting prompt. Here's a great beginner one:</span><span data-lang="id">Setelah Claude Code berjalan, beri prompt awal. Ini prompt pemula yang bagus:</span><span data-lang="zh">Claude Code 运行后，给它一个起始提示。这是一个很好的初学者提示：</span><span data-lang="ja">Claude Codeが起動したら、開始プロンプトを与える。初心者向けの良いプロンプト：</span><span data-lang="es">Una vez que Claude Code esté corriendo, dale un prompt inicial. Aquí hay uno para principiantes:</span><span data-lang="fr">Une fois Claude Code en cours d'exécution, donnez-lui un prompt de démarrage. En voici un pour les débutants :</span></p>
+        <div class="code"><button class="cbtn" onclick="cp(this)">COPY</button><span class="cm"># Paste this into Claude Code:</span><br><br>Please read http://skills.ritualfoundation.org and then build me<br>a simple smart contract called HelloRitual that:<br>- Stores a greeting message on-chain<br>- Has a function to update the message<br>- Deploy it to Ritual Chain (Chain ID 1979)<br>- RPC: https://rpc.ritualfoundation.org<br>- Show me the explorer link when done</div>
+        <div class="tip tip-g"><div class="tip-head">💡 <span data-lang="en">PROMPT TIP</span><span data-lang="id">TIP PROMPT</span><span data-lang="zh">提示技巧</span><span data-lang="ja">プロンプトのコツ</span><span data-lang="es">CONSEJO DE PROMPT</span><span data-lang="fr">CONSEIL DE PROMPT</span></div><div class="tip-body"><span data-lang="en">The more specific your prompt, the better. Tell the AI: what the contract does, what inputs it takes, and what it outputs. You can ask it to "think step by step" for complex requests.</span><span data-lang="id">Semakin spesifik prompt kamu, semakin baik. Beri tahu AI: apa yang dilakukan contract, input apa yang diterima, dan apa outputnya.</span><span data-lang="zh">提示越具体越好。告诉 AI：合约做什么、接受什么输入、输出什么。复杂请求可要求它"一步一步思考"。</span><span data-lang="ja">プロンプトは具体的であればあるほど良い。AIに伝える：コントラクトが何をするか、どんな入力を受け取るか、何を出力するか。</span><span data-lang="es">Cuanto más específico sea tu prompt, mejor. Dile a la IA: qué hace el contrato, qué entradas acepta y qué produce.</span><span data-lang="fr">Plus votre prompt est spécifique, mieux c'est. Dites à l'IA : ce que fait le contrat, les entrées qu'il accepte et ce qu'il produit.</span></div></div>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="tut-item" id="s4">
+      <div class="tut-left"><div class="tut-num">04</div></div>
+      <div class="tut-body">
+        <div class="tut-diff d-med"><div class="diff-pip"></div><span class="diff-label"><span data-lang="en">MEDIUM · ~20 min</span><span data-lang="id">MENENGAH · ~20 menit</span><span data-lang="zh">中等 · ~20 分钟</span><span data-lang="ja">中級 · ~20分</span><span data-lang="es">MEDIO · ~20 min</span><span data-lang="fr">MOYEN · ~20 min</span></span></div>
+        <div class="tut-h"><span data-lang="en">Review, iterate, deploy</span><span data-lang="id">Review, iterasi, deploy</span><span data-lang="zh">检查、迭代、部署</span><span data-lang="ja">レビュー、反復、デプロイ</span><span data-lang="es">Revisar, iterar, desplegar</span><span data-lang="fr">Réviser, itérer, déployer</span></div>
+        <p class="tut-p"><span data-lang="en">The AI will propose architecture, write the Solidity code, and attempt to deploy. Your job is to read what it produces and approve each step. If something breaks, paste the error back — it has an auto-debugger.</span><span data-lang="id">AI akan mengusulkan arsitektur, menulis kode Solidity, dan mencoba deploy. Tugasmu adalah membaca apa yang dihasilkan dan menyetujui setiap langkah. Jika ada error, paste kembali — ada auto-debugger.</span><span data-lang="zh">AI 将提出架构、编写 Solidity 代码并尝试部署。你的工作是阅读它产生的内容并批准每个步骤。如果出错，粘贴错误回去——它有自动调试器。</span><span data-lang="ja">AIがアーキテクチャを提案し、Solidityコードを書き、デプロイを試みる。各ステップを読んで承認するのがあなたの仕事。エラーが出たら貼り付けて—自動デバッガーがある。</span><span data-lang="es">La IA propondrá arquitectura, escribirá el código Solidity e intentará desplegar. Tu trabajo es leer lo que produce y aprobar cada paso. Si algo falla, pega el error de vuelta — tiene un auto-debugger.</span><span data-lang="fr">L'IA proposera une architecture, écrira le code Solidity et tentera de déployer. Votre travail est de lire ce qu'elle produit et d'approuver chaque étape. Si quelque chose échoue, collez l'erreur — elle a un auto-debugger.</span></p>
+        <button class="xbtn" onclick="xp('xp4',this)"><span data-lang="en">Show Phases ↓</span><span data-lang="id">Lihat Fase ↓</span><span data-lang="zh">查看阶段 ↓</span><span data-lang="ja">フェーズを表示 ↓</span><span data-lang="es">Mostrar Fases ↓</span><span data-lang="fr">Afficher les phases ↓</span></button>
+        <div class="xpanel" id="xp4">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px">
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px"><div style="font-family:var(--font-mono);font-size:9px;color:var(--green);margin-bottom:8px;letter-spacing:2px">PHASE 1</div><div style="font-family:var(--font-head);font-weight:700;margin-bottom:6px"><span data-lang="en">Architecture</span><span data-lang="id">Arsitektur</span><span data-lang="zh">架构</span><span data-lang="ja">アーキテクチャ</span><span data-lang="es">Arquitectura</span><span data-lang="fr">Architecture</span></div><div style="font-size:12px;color:var(--soft)"><span data-lang="en">AI proposes the structure. You read and approve.</span><span data-lang="id">AI mengusulkan struktur. Kamu baca dan setujui.</span><span data-lang="zh">AI 提出结构。你阅读并批准。</span><span data-lang="ja">AIが構造を提案。読んで承認。</span><span data-lang="es">La IA propone la estructura. Lees y apruebas.</span><span data-lang="fr">L'IA propose la structure. Vous lisez et approuvez.</span></div></div>
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px"><div style="font-family:var(--font-mono);font-size:9px;color:var(--green);margin-bottom:8px;letter-spacing:2px">PHASE 2</div><div style="font-family:var(--font-head);font-weight:700;margin-bottom:6px"><span data-lang="en">Contracts</span><span data-lang="id">Kontrak</span><span data-lang="zh">合约</span><span data-lang="ja">コントラクト</span><span data-lang="es">Contratos</span><span data-lang="fr">Contrats</span></div><div style="font-size:12px;color:var(--soft)"><span data-lang="en">Solidity written and compiled. You approve.</span><span data-lang="id">Solidity ditulis dan dikompilasi. Kamu setujui.</span><span data-lang="zh">Solidity 被编写和编译。你批准。</span><span data-lang="ja">Solidityが書かれてコンパイルされる。承認。</span><span data-lang="es">Solidity escrito y compilado. Tú apruebas.</span><span data-lang="fr">Solidity écrit et compilé. Vous approuvez.</span></div></div>
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px"><div style="font-family:var(--font-mono);font-size:9px;color:var(--green);margin-bottom:8px;letter-spacing:2px">PHASE 3</div><div style="font-family:var(--font-head);font-weight:700;margin-bottom:6px">Frontend</div><div style="font-size:12px;color:var(--soft)"><span data-lang="en">UI built if needed. You approve.</span><span data-lang="id">UI dibuat jika perlu. Kamu setujui.</span><span data-lang="zh">如需 UI 则构建。你批准。</span><span data-lang="ja">必要に応じてUI構築。承認。</span><span data-lang="es">UI construida si es necesaria. Tú apruebas.</span><span data-lang="fr">Interface construite si nécessaire. Vous approuvez.</span></div></div>
+            <div style="background:rgba(0,255,140,.04);border:1px solid rgba(0,255,140,.18);border-radius:10px;padding:18px"><div style="font-family:var(--font-mono);font-size:9px;color:var(--green);margin-bottom:8px;letter-spacing:2px">PHASE 4</div><div style="font-family:var(--font-head);font-weight:700;margin-bottom:6px;color:var(--green)">Deploy ✓</div><div style="font-size:12px;color:var(--soft)"><span data-lang="en">Live on Ritual Chain. Running forever.</span><span data-lang="id">Live di Ritual Chain. Berjalan selamanya.</span><span data-lang="zh">在 Ritual Chain 上线。永久运行。</span><span data-lang="ja">Ritual Chainで稼働。永遠に動く。</span><span data-lang="es">En vivo en Ritual Chain. Corriendo para siempre.</span><span data-lang="fr">En direct sur Ritual Chain. Pour toujours.</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="tut-item" id="s5">
+      <div class="tut-left"><div class="tut-num">05</div></div>
+      <div class="tut-body">
+        <div class="tut-diff d-hard"><div class="diff-pip"></div><span class="diff-label"><span data-lang="en">ADVANCED · Level Up</span><span data-lang="id">LANJUTAN · Level Up</span><span data-lang="zh">进阶 · 升级</span><span data-lang="ja">上級 · レベルアップ</span><span data-lang="es">AVANZADO · Sube de nivel</span><span data-lang="fr">AVANCÉ · Montez en niveau</span></span></div>
+        <div class="tut-h"><span data-lang="en">Build an AI trading bot</span><span data-lang="id">Bangun bot trading AI</span><span data-lang="zh">构建 AI 交易机器人</span><span data-lang="ja">AI取引ボットを作る</span><span data-lang="es">Construye un bot de trading con IA</span><span data-lang="fr">Construisez un bot de trading IA</span></div>
+        <p class="tut-p"><span data-lang="en">Combine multiple precompiles to create a fully autonomous trading agent — one that runs, decides, and trades on its own.</span><span data-lang="id">Gabungkan beberapa precompile untuk membuat trading agent yang sepenuhnya otonom — berjalan, memutuskan, dan trading sendiri.</span><span data-lang="zh">组合多个预编译创建完全自主的交易代理——自主运行、决策和交易。</span><span data-lang="ja">複数のプリコンパイルを組み合わせて完全自律型取引エージェントを作成—自律的に動き、決定し、取引する。</span><span data-lang="es">Combina múltiples precompiles para crear un agente de trading completamente autónomo — que corre, decide y opera por sí solo.</span><span data-lang="fr">Combinez plusieurs precompiles pour créer un agent de trading entièrement autonome — qui fonctionne, décide et trade seul.</span></p>
+        <button class="xbtn" onclick="xp('xp5',this)"><span data-lang="en">Show Architecture ↓</span><span data-lang="id">Lihat Arsitektur ↓</span><span data-lang="zh">查看架构 ↓</span><span data-lang="ja">アーキテクチャを表示 ↓</span><span data-lang="es">Mostrar Arquitectura ↓</span><span data-lang="fr">Afficher l'Architecture ↓</span></button>
+        <div class="xpanel" id="xp5">
+          <div class="code" style="margin-top:14px"><span style="color:var(--purple)">Scheduler</span> (every 5 min, automatic)<br>&nbsp;&nbsp;&nbsp;↓<br><span class="cg">HTTP Call (0x0801)</span>  → fetch price from CoinGecko<br>&nbsp;&nbsp;&nbsp;↓<br><span class="cg">LLM Call (0x0802)</span>  → "Buy, sell, or hold?" <span class="cm">// GLM-4.7-FP8</span><br>&nbsp;&nbsp;&nbsp;↓<br><span style="color:var(--amber)">Contract Logic</span>    → if BUY → execute swap on DEX<br>&nbsp;&nbsp;&nbsp;↓<br><span style="color:var(--purple)">Persistent Agent (0x0820)</span> → log trade, update memory</div>
+          <div class="tip tip-r" style="margin-top:0"><div class="tip-head">⚠️ FINANCIAL RISK</div><div class="tip-body"><span data-lang="en">Automated trading carries real financial risk. Always test with tiny amounts first. Ritual is new — treat it as an experiment.</span><span data-lang="id">Trading otomatis membawa risiko finansial nyata. Selalu uji dengan jumlah sangat kecil dulu. Ritual masih baru — anggap sebagai eksperimen.</span><span data-lang="zh">自动化交易存在真实的财务风险。始终先用少量资金测试。Ritual 很新——将其视为实验。</span><span data-lang="ja">自動取引には実際の財務リスクがある。必ず少額でテストすること。Ritualは新しい—実験として扱う。</span><span data-lang="es">El trading automatizado conlleva riesgo financiero real. Siempre prueba con cantidades pequeñas primero. Ritual es nuevo — trátalo como un experimento.</span><span data-lang="fr">Le trading automatisé comporte un risque financier réel. Testez toujours avec de petites sommes d'abord. Ritual est nouveau — traitez-le comme une expérimentation.</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- PRECOMPILES -->
+<div class="sw fade-up" id="precompiles">
+  <div class="sec-eyebrow"><div class="sec-eyebrow-line"></div>
+    <span data-lang="en">REFERENCE</span><span data-lang="id">REFERENSI</span><span data-lang="zh">参考资料</span><span data-lang="ja">リファレンス</span><span data-lang="es">REFERENCIA</span><span data-lang="fr">RÉFÉRENCE</span>
+  </div>
+  <h2 class="sec-h"><span data-lang="en">All 16 Precompiles</span><span data-lang="id">16 Precompile Ritual</span><span data-lang="zh">全部 16 个预编译</span><span data-lang="ja">16のプリコンパイル一覧</span><span data-lang="es">Los 16 Precompiles</span><span data-lang="fr">Les 16 Precompiles</span></h2>
+  <p class="sec-p"><span data-lang="en">Ritual's built-in superpowers. Your smart contract can call any of these directly — no external APIs needed.</span><span data-lang="id">Kekuatan super bawaan Ritual. Smart contract-mu bisa memanggil ini langsung — tidak perlu API eksternal.</span><span data-lang="zh">Ritual 的内置超能力。你的智能合约可以直接调用任何这些——无需外部 API。</span><span data-lang="ja">Ritualの組み込みスーパーパワー。スマートコントラクトからこれらを直接呼び出せる—外部API不要。</span><span data-lang="es">Los superpoderes integrados de Ritual. Tu smart contract puede llamar a cualquiera de estos directamente — sin APIs externas.</span><span data-lang="fr">Les superpouvoirs intégrés de Ritual. Votre smart contract peut appeler l'un d'eux directement — sans API externe.</span></p>
+  <div class="pre-tabs">
+    <button class="ptab on" onclick="filterPre('all',this)"><span data-lang="en">All</span><span data-lang="id">Semua</span><span data-lang="zh">全部</span><span data-lang="ja">全て</span><span data-lang="es">Todos</span><span data-lang="fr">Tous</span></button>
+    <button class="ptab" onclick="filterPre('sync',this)">Sync</button>
+    <button class="ptab" onclick="filterPre('short',this)">Short Async</button>
+    <button class="ptab" onclick="filterPre('long',this)">Long Async</button>
+  </div>
+  <div class="pre-grid">
+    <div class="pre-card show" data-type="sync"><div class="pre-addr">0x0800</div><div class="pre-name">ONNX Inference</div><div class="pre-desc"><span data-lang="en">Run ML models from HuggingFace on-chain</span><span data-lang="id">Jalankan model ML dari HuggingFace on-chain</span><span data-lang="zh">在链上运行 HuggingFace 的 ML 模型</span><span data-lang="ja">HuggingFaceのMLモデルをオンチェーンで実行</span><span data-lang="es">Ejecuta modelos ML de HuggingFace on-chain</span><span data-lang="fr">Exécute des modèles ML de HuggingFace on-chain</span></div><span class="pre-badge pb-sync">SYNC</span></div>
+    <div class="pre-card show" data-type="short"><div class="pre-addr">0x0801</div><div class="pre-name">HTTP Call</div><div class="pre-desc"><span data-lang="en">Fetch data from any external API</span><span data-lang="id">Ambil data dari API eksternal manapun</span><span data-lang="zh">从任何外部 API 获取数据</span><span data-lang="ja">任意の外部APIからデータを取得</span><span data-lang="es">Obtén datos de cualquier API externa</span><span data-lang="fr">Récupère des données depuis n'importe quelle API externe</span></div><span class="pre-badge pb-short">SHORT ASYNC</span></div>
+    <div class="pre-card show" data-type="short"><div class="pre-addr">0x0802</div><div class="pre-name">LLM Call</div><div class="pre-desc"><span data-lang="en">Call AI on-chain. Active: <code style="color:var(--green);font-family:var(--font-mono);font-size:10px">GLM-4.7-FP8</code></span><span data-lang="id">Panggil AI on-chain. Aktif: <code style="color:var(--green);font-family:var(--font-mono);font-size:10px">GLM-4.7-FP8</code></span><span data-lang="zh">链上调用 AI。当前: <code style="color:var(--green);font-family:var(--font-mono);font-size:10px">GLM-4.7-FP8</code></span><span data-lang="ja">オンチェーンでAIを呼び出す。現行: <code style="color:var(--green);font-family:var(--font-mono);font-size:10px">GLM-4.7-FP8</code></span><span data-lang="es">Llama a IA on-chain. Activo: <code style="color:var(--green);font-family:var(--font-mono);font-size:10px">GLM-4.7-FP8</code></span><span data-lang="fr">Appelle une IA on-chain. Actif : <code style="color:var(--green);font-family:var(--font-mono);font-size:10px">GLM-4.7-FP8</code></span></div><span class="pre-badge pb-short">SHORT ASYNC</span></div>
+    <div class="pre-card show" data-type="sync"><div class="pre-addr">0x0803</div><div class="pre-name">JQ</div><div class="pre-desc"><span data-lang="en">Parse & filter JSON data on-chain</span><span data-lang="id">Parse & filter data JSON on-chain</span><span data-lang="zh">在链上解析和过滤 JSON 数据</span><span data-lang="ja">オンチェーンでJSONデータを解析・フィルタ</span><span data-lang="es">Parsea y filtra datos JSON on-chain</span><span data-lang="fr">Analyse et filtre des données JSON on-chain</span></div><span class="pre-badge pb-sync">SYNC</span></div>
+    <div class="pre-card show" data-type="long"><div class="pre-addr">0x0805</div><div class="pre-name">Long HTTP</div><div class="pre-desc"><span data-lang="en">Long-running HTTP with auto-polling</span><span data-lang="id">HTTP durasi panjang dengan polling otomatis</span><span data-lang="zh">带自动轮询的长时间 HTTP</span><span data-lang="ja">自動ポーリング付き長時間HTTP</span><span data-lang="es">HTTP de larga duración con auto-polling</span><span data-lang="fr">HTTP longue durée avec auto-polling</span></div><span class="pre-badge pb-long">LONG ASYNC</span></div>
+    <div class="pre-card show" data-type="long"><div class="pre-addr">0x0806</div><div class="pre-name">ZK Proof</div><div class="pre-desc"><span data-lang="en">Generate zero-knowledge proofs on-chain</span><span data-lang="id">Generate zero-knowledge proof on-chain</span><span data-lang="zh">在链上生成零知识证明</span><span data-lang="ja">オンチェーンでゼロ知識証明を生成</span><span data-lang="es">Genera pruebas de conocimiento cero on-chain</span><span data-lang="fr">Génère des preuves à divulgation nulle on-chain</span></div><span class="pre-badge pb-long">LONG ASYNC</span></div>
+    <div class="pre-card show" data-type="long"><div class="pre-addr">0x0807</div><div class="pre-name">FHE Inference</div><div class="pre-desc"><span data-lang="en">AI on fully encrypted data — total privacy</span><span data-lang="id">AI pada data terenkripsi sepenuhnya — privasi total</span><span data-lang="zh">在完全加密的数据上运行 AI——完全隐私</span><span data-lang="ja">完全暗号化データでAI—完全プライバシー</span><span data-lang="es">IA sobre datos totalmente cifrados — privacidad total</span><span data-lang="fr">IA sur données entièrement chiffrées — confidentialité totale</span></div><span class="pre-badge pb-long">LONG ASYNC</span></div>
+    <div class="pre-card show" data-type="long"><div class="pre-addr">0x0808</div><div class="pre-name">TEE Inference</div><div class="pre-desc"><span data-lang="en">AI in a secure enclave — private compute</span><span data-lang="id">AI dalam enklave aman — komputasi privat</span><span data-lang="zh">在安全飞地中运行 AI——私密计算</span><span data-lang="ja">安全なエンクレーブ内でAI—プライベートコンピュート</span><span data-lang="es">IA en un enclave seguro — cómputo privado</span><span data-lang="fr">IA dans une enclave sécurisée — calcul privé</span></div><span class="pre-badge pb-long">LONG ASYNC</span></div>
+    <div class="pre-card show" data-type="short"><div class="pre-addr">0x0809</div><div class="pre-name">Scheduler</div><div class="pre-desc"><span data-lang="en">Run contract functions on a timer</span><span data-lang="id">Jalankan fungsi contract secara terjadwal</span><span data-lang="zh">按计时器运行合约函数</span><span data-lang="ja">タイマーでコントラクト関数を実行</span><span data-lang="es">Ejecuta funciones del contrato con un temporizador</span><span data-lang="fr">Exécute des fonctions de contrat selon un timer</span></div><span class="pre-badge pb-short">SHORT ASYNC</span></div>
+    <div class="pre-card show" data-type="short"><div class="pre-addr">0x080A</div><div class="pre-name">Wallet</div><div class="pre-desc"><span data-lang="en">Create/manage wallets for your contract</span><span data-lang="id">Buat/kelola wallet untuk contract kamu</span><span data-lang="zh">为你的合约创建/管理钱包</span><span data-lang="ja">コントラクト用のウォレットを作成・管理</span><span data-lang="es">Crea/gestiona wallets para tu contrato</span><span data-lang="fr">Crée/gère des wallets pour votre contrat</span></div><span class="pre-badge pb-short">SHORT ASYNC</span></div>
+    <div class="pre-card show" data-type="long"><div class="pre-addr">0x080B</div><div class="pre-name">Custom Model</div><div class="pre-desc"><span data-lang="en">Call any model via OpenRouter</span><span data-lang="id">Panggil model apapun melalui OpenRouter</span><span data-lang="zh">通过 OpenRouter 调用任何模型</span><span data-lang="ja">OpenRouter経由で任意のモデルを呼び出す</span><span data-lang="es">Llama a cualquier modelo via OpenRouter</span><span data-lang="fr">Appelle n'importe quel modèle via OpenRouter</span></div><span class="pre-badge pb-long">LONG ASYNC</span></div>
+    <div class="pre-card show" data-type="long"><div class="pre-addr">0x080C</div><div class="pre-name">Sovereign Agent</div><div class="pre-desc"><span data-lang="en">Run Claude Code / Crush / ZeroClaw on-chain</span><span data-lang="id">Jalankan Claude Code / Crush / ZeroClaw on-chain</span><span data-lang="zh">在链上运行 Claude Code / Crush / ZeroClaw</span><span data-lang="ja">オンチェーンでClaude Code/Crush/ZeroClawを実行</span><span data-lang="es">Ejecuta Claude Code / Crush / ZeroClaw on-chain</span><span data-lang="fr">Exécute Claude Code / Crush / ZeroClaw on-chain</span></div><span class="pre-badge pb-long">LONG ASYNC</span></div>
+    <div class="pre-card show" data-type="long"><div class="pre-addr">0x0818</div><div class="pre-name">Image Call</div><div class="pre-desc"><span data-lang="en">Generate or process images on-chain</span><span data-lang="id">Generate atau proses gambar on-chain</span><span data-lang="zh">在链上生成或处理图像</span><span data-lang="ja">オンチェーンで画像を生成・処理</span><span data-lang="es">Genera o procesa imágenes on-chain</span><span data-lang="fr">Génère ou traite des images on-chain</span></div><span class="pre-badge pb-long">LONG ASYNC</span></div>
+    <div class="pre-card show" data-type="sync"><div class="pre-addr">0x0009</div><div class="pre-name">Ed25519</div><div class="pre-desc"><span data-lang="en">Verify cryptographic signatures</span><span data-lang="id">Verifikasi signature kriptografi</span><span data-lang="zh">验证密码学签名</span><span data-lang="ja">暗号署名を検証</span><span data-lang="es">Verifica firmas criptográficas</span><span data-lang="fr">Vérifie les signatures cryptographiques</span></div><span class="pre-badge pb-sync">SYNC</span></div>
+    <div class="pre-card show" data-type="sync"><div class="pre-addr">0x0100</div><div class="pre-name">SECP256R1</div><div class="pre-desc"><span data-lang="en">P-256 / WebAuthn / Passkey signatures</span><span data-lang="id">Signature P-256 / WebAuthn / Passkey</span><span data-lang="zh">P-256 / WebAuthn / 密钥签名</span><span data-lang="ja">P-256 / WebAuthn / パスキー署名</span><span data-lang="es">Firmas P-256 / WebAuthn / Passkey</span><span data-lang="fr">Signatures P-256 / WebAuthn / Passkey</span></div><span class="pre-badge pb-sync">SYNC</span></div>
+    <div class="pre-card show" data-type="long"><div class="pre-addr">0x0820</div><div class="pre-name">Persistent Agent</div><div class="pre-desc"><span data-lang="en">Always-on AI with memory. Supports Anthropic, OpenAI, Gemini, xAI</span><span data-lang="id">AI selalu aktif dengan memori. Support Anthropic, OpenAI, Gemini, xAI</span><span data-lang="zh">常开 AI，具有记忆。支持 Anthropic、OpenAI、Gemini、xAI</span><span data-lang="ja">メモリ付き常時稼働AI。Anthropic、OpenAI、Gemini、xAIに対応</span><span data-lang="es">IA siempre activa con memoria. Soporta Anthropic, OpenAI, Gemini, xAI</span><span data-lang="fr">IA toujours active avec mémoire. Supporte Anthropic, OpenAI, Gemini, xAI</span></div><span class="pre-badge pb-long">LONG ASYNC</span></div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- FAQ -->
+<div class="sw fade-up" id="faq">
+  <div class="sec-eyebrow"><div class="sec-eyebrow-line"></div>FAQ</div>
+  <h2 class="sec-h"><span data-lang="en">Questions every<br>beginner asks</span><span data-lang="id">Pertanyaan yang selalu<br>ditanya pemula</span><span data-lang="zh">每个初学者都会问<br>的问题</span><span data-lang="ja">初心者が必ず聞く<br>質問</span><span data-lang="es">Preguntas que hace<br>todo principiante</span><span data-lang="fr">Questions que se pose<br>chaque débutant</span></h2>
+  <p class="sec-p"><span data-lang="en">No dumb questions here.</span><span data-lang="id">Tidak ada pertanyaan bodoh di sini.</span><span data-lang="zh">这里没有愚蠢的问题。</span><span data-lang="ja">ここに愚問はない。</span><span data-lang="es">Aquí no hay preguntas tontas.</span><span data-lang="fr">Aucune question stupide ici.</span></p>
+  <div class="faq-list">
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text"><span data-lang="en">Do I need to know how to code?</span><span data-lang="id">Apakah saya perlu bisa coding?</span><span data-lang="zh">我需要会写代码吗？</span><span data-lang="ja">コーディングを知る必要がありますか？</span><span data-lang="es">¿Necesito saber programar?</span><span data-lang="fr">Dois-je savoir coder ?</span></span><span class="faq-icon">+</span></div><div class="faq-a"><span data-lang="en">No. That's the whole point. You describe what you want in plain language, and the AI agent writes all the Solidity code for you. You only need to understand what you want to build — not how to build it technically.</span><span data-lang="id">Tidak. Itu justru inti dari Ritual. Kamu mendeskripsikan apa yang kamu mau dalam bahasa biasa, dan agent AI menulis semua kode Solidity untukmu.</span><span data-lang="zh">不需要。这正是重点所在。你用普通语言描述你想要什么，AI 代理为你编写所有 Solidity 代码。你只需要知道你想构建什么——不需要知道如何技术性地构建它。</span><span data-lang="ja">必要ありません。それがまさにポイントです。普通の言葉で欲しいものを説明すれば、AIエージェントがすべてのSolidityコードを書いてくれます。</span><span data-lang="es">No. Ese es el punto principal. Describes lo que quieres en lenguaje simple y el agente de IA escribe todo el código Solidity por ti. Solo necesitas entender qué quieres construir.</span><span data-lang="fr">Non. C'est tout le principe. Vous décrivez ce que vous voulez en langage simple et l'agent IA écrit tout le code Solidity pour vous.</span></div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text"><span data-lang="en">Is this real money? Can I lose funds?</span><span data-lang="id">Ini uang sungguhan? Bisa rugi?</span><span data-lang="zh">这是真实的钱吗？我会损失资金吗？</span><span data-lang="ja">これは本物のお金ですか？資金を失う可能性がありますか？</span><span data-lang="es">¿Es dinero real? ¿Puedo perder fondos?</span><span data-lang="fr">Est-ce de l'argent réel ? Puis-je perdre des fonds ?</span></span><span class="faq-icon">+</span></div><div class="faq-a"><span data-lang="en">Ritual testnet uses CRAT test tokens with no real value — completely free via the faucet. The mainnet uses real RITUAL tokens. Start with testnet always. Never put in more than you can afford to lose on mainnet.</span><span data-lang="id">Testnet Ritual menggunakan token CRAT test tanpa nilai nyata — gratis via faucet. Mainnet menggunakan token RITUAL sungguhan. Selalu mulai dengan testnet.</span><span data-lang="zh">Ritual 测试网使用没有真实价值的 CRAT 测试代币——通过水龙头完全免费。主网使用真实的 RITUAL 代币。始终从测试网开始。</span><span data-lang="ja">RitualテストネットはCRATテストトークン（価値なし）を使用—蛇口から完全無料。メインネットは本物のRITUALトークンを使用。常にテストネットから始める。</span><span data-lang="es">El testnet de Ritual usa tokens CRAT de prueba sin valor real — completamente gratuitos via faucet. El mainnet usa tokens RITUAL reales. Siempre empieza en testnet.</span><span data-lang="fr">Le testnet Ritual utilise des tokens CRAT de test sans valeur réelle — gratuits via le faucet. Le mainnet utilise de vrais tokens RITUAL. Commencez toujours par le testnet.</span></div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text"><span data-lang="en">What's different from Ethereum?</span><span data-lang="id">Apa bedanya dengan Ethereum?</span><span data-lang="zh">与以太坊有什么区别？</span><span data-lang="ja">Ethereumとの違いは？</span><span data-lang="es">¿En qué se diferencia de Ethereum?</span><span data-lang="fr">Quelle différence avec Ethereum ?</span></span><span class="faq-icon">+</span></div><div class="faq-a"><span data-lang="en">Ethereum is a general blockchain. Ritual is built specifically for AI — it has native precompiles that let smart contracts call AI models, fetch web data, and generate images without any external service. On Ethereum, you'd need external oracles and APIs. On Ritual, it's all built in.</span><span data-lang="id">Ethereum adalah blockchain umum. Ritual dibangun khusus untuk AI — memiliki precompile native yang membiarkan smart contract memanggil model AI, mengambil data web, dan generate gambar tanpa layanan eksternal apapun.</span><span data-lang="zh">以太坊是通用区块链。Ritual 专为 AI 而构建——它有原生预编译，让智能合约无需任何外部服务即可调用 AI 模型、获取网络数据和生成图像。</span><span data-lang="ja">EthereumはAI対応なし。Ritualは特にAIのために構築されており、スマートコントラクトが外部サービスなしにAIモデルを呼び出し、ウェブデータを取得し、画像を生成できる。</span><span data-lang="es">Ethereum es una blockchain general. Ritual está construido específicamente para IA — tiene precompiles nativos que permiten a los smart contracts llamar modelos IA, obtener datos web y generar imágenes sin ningún servicio externo.</span><span data-lang="fr">Ethereum est une blockchain générale. Ritual est conçu spécifiquement pour l'IA — il dispose de precompiles natifs qui permettent aux smart contracts d'appeler des modèles IA, de récupérer des données web et de générer des images sans aucun service externe.</span></div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text"><span data-lang="en">What is a precompile, simply?</span><span data-lang="id">Apa itu precompile, sederhananya?</span><span data-lang="zh">简单来说，什么是预编译？</span><span data-lang="ja">プリコンパイルとは何ですか？簡単に言うと？</span><span data-lang="es">¿Qué es un precompile, en términos simples?</span><span data-lang="fr">Qu'est-ce qu'un precompile, simplement ?</span></span><span class="faq-icon">+</span></div><div class="faq-a"><span data-lang="en">Imagine a blockchain as a city. Normal smart contracts are buildings you construct. Precompiles are city infrastructure that's already built — roads, electricity, water. Ritual's precompiles include "call an AI model" or "fetch a URL" — superpowers you get for free.</span><span data-lang="id">Bayangkan blockchain seperti kota. Smart contract biasa seperti gedung yang kamu bangun. Precompile seperti infrastruktur kota yang sudah ada — jalan, listrik, air.</span><span data-lang="zh">把区块链想象成一座城市。普通智能合约是你建造的建筑物。预编译是已经建好的城市基础设施——道路、电力、水。Ritual 的预编译包括"调用 AI 模型"或"获取 URL"——你免费获得的超能力。</span><span data-lang="ja">ブロックチェーンを街に例えると、普通のスマートコントラクトは自分で建てる建物。プリコンパイルはすでに建設済みの都市インフラ（道路、電気、水道）。Ritualのプリコンパイルには「AIモデルを呼ぶ」や「URLを取得」が含まれる。</span><span data-lang="es">Imagina una blockchain como una ciudad. Los smart contracts normales son edificios que construyes. Los precompiles son la infraestructura de la ciudad ya construida — calles, electricidad, agua. Los precompiles de Ritual incluyen "llamar a un modelo IA" o "obtener una URL" — superpoderes gratuitos.</span><span data-lang="fr">Imaginez une blockchain comme une ville. Les smart contracts normaux sont des bâtiments que vous construisez. Les precompiles sont l'infrastructure de la ville déjà construite — routes, électricité, eau. Les precompiles de Ritual incluent "appeler un modèle IA" ou "récupérer une URL" — des superpouvoirs gratuits.</span></div></div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- GLOSSARY -->
+<div class="sw fade-up" id="glossary">
+  <div class="sec-eyebrow"><div class="sec-eyebrow-line"></div><span data-lang="en">GLOSSARY</span><span data-lang="id">KAMUS</span><span data-lang="zh">术语表</span><span data-lang="ja">用語集</span><span data-lang="es">GLOSARIO</span><span data-lang="fr">GLOSSAIRE</span></div>
+  <h2 class="sec-h"><span data-lang="en">Crypto terms,<br>explained simply</span><span data-lang="id">Istilah crypto,<br>dijelaskan mudah</span><span data-lang="zh">加密术语，<br>简单解释</span><span data-lang="ja">暗号用語を<br>シンプルに説明</span><span data-lang="es">Términos crypto,<br>explicados simplemente</span><span data-lang="fr">Termes crypto,<br>expliqués simplement</span></h2>
+  <p class="sec-p"><span data-lang="en">No fluff. Just what you need to know.</span><span data-lang="id">Langsung ke intinya.</span><span data-lang="zh">没有废话。只是你需要知道的。</span><span data-lang="ja">無駄なし。必要なことだけ。</span><span data-lang="es">Sin rodeos. Solo lo que necesitas saber.</span><span data-lang="fr">Sans fioritures. Juste ce que vous devez savoir.</span></p>
+  <div class="gloss-grid">
+    <div class="gloss-card"><div class="gloss-term">Blockchain</div><div class="gloss-def"><span data-lang="en">A database no one controls. Data written to it is permanent and tamper-proof.</span><span data-lang="id">Database yang tidak dikontrol siapapun. Data yang ditulis bersifat permanen.</span><span data-lang="zh">没有人控制的数据库。写入其中的数据是永久且防篡改的。</span><span data-lang="ja">誰も管理しないデータベース。書き込んだデータは永久に改ざん不可。</span><span data-lang="es">Una base de datos que nadie controla. Los datos escritos en ella son permanentes e inalterables.</span><span data-lang="fr">Une base de données que personne ne contrôle. Les données qui y sont écrites sont permanentes et inviolables.</span></div></div>
+    <div class="gloss-card"><div class="gloss-term">Smart Contract</div><div class="gloss-def"><span data-lang="en">A program on a blockchain. Like a vending machine: once deployed, it follows its rules automatically.</span><span data-lang="id">Program yang berjalan di blockchain. Seperti mesin penjual otomatis: setelah deploy, mengikuti aturannya otomatis.</span><span data-lang="zh">区块链上的程序。像自动售货机：部署后，它自动遵循规则。</span><span data-lang="ja">ブロックチェーン上のプログラム。自動販売機のように：デプロイ後、自動的にルールに従う。</span><span data-lang="es">Un programa en una blockchain. Como una máquina expendedora: una vez desplegado, sigue sus reglas automáticamente.</span><span data-lang="fr">Un programme sur une blockchain. Comme un distributeur automatique : une fois déployé, il suit ses règles automatiquement.</span></div></div>
+    <div class="gloss-card"><div class="gloss-term">Gas Fee</div><div class="gloss-def"><span data-lang="en">Transaction cost on a blockchain. A small fee for every action your dApp takes. Paid in CRAT tokens on Ritual.</span><span data-lang="id">Biaya transaksi di blockchain. Dibayar dalam token CRAT di Ritual.</span><span data-lang="zh">区块链上的交易成本。dApp 每次操作的小额费用。在 Ritual 上以 CRAT 代币支付。</span><span data-lang="ja">ブロックチェーンのトランザクション費用。dAppのすべての操作の小額料金。RitualではCRATトークンで支払う。</span><span data-lang="es">Costo de transacción en una blockchain. Una pequeña tarifa por cada acción de tu dApp. Pagada en tokens CRAT en Ritual.</span><span data-lang="fr">Coût de transaction sur une blockchain. Petite redevance pour chaque action de votre dApp. Payée en tokens CRAT sur Ritual.</span></div></div>
+    <div class="gloss-card"><div class="gloss-term">Wallet</div><div class="gloss-def"><span data-lang="en">Your identity on the blockchain. Public address = username. Private key = password. NEVER share your private key.</span><span data-lang="id">Identitasmu di blockchain. Alamat publik = username. Private key = password. JANGAN PERNAH bagikan private key.</span><span data-lang="zh">你在区块链上的身份。公共地址 = 用户名。私钥 = 密码。切勿分享你的私钥。</span><span data-lang="ja">ブロックチェーン上のあなたの身元。公開アドレス = ユーザー名。秘密鍵 = パスワード。秘密鍵は絶対に共有しない。</span><span data-lang="es">Tu identidad en la blockchain. Dirección pública = nombre de usuario. Clave privada = contraseña. NUNCA compartas tu clave privada.</span><span data-lang="fr">Votre identité sur la blockchain. Adresse publique = nom d'utilisateur. Clé privée = mot de passe. Ne JAMAIS partager votre clé privée.</span></div></div>
+    <div class="gloss-card"><div class="gloss-term">TEE</div><div class="gloss-def"><span data-lang="en">Trusted Execution Environment. A secure enclave that processes sensitive data (like API keys) privately — even the server operator can't see inside.</span><span data-lang="id">Enklave aman yang memproses data sensitif secara privat — bahkan operator server tidak bisa melihat ke dalamnya.</span><span data-lang="zh">可信执行环境。安全飞地，私密处理敏感数据（如 API 密钥）——即使是服务器运营商也看不到里面。</span><span data-lang="ja">信頼された実行環境。APIキーなどの機密データをプライベートに処理するセキュアエンクレーブ—サーバー運営者でも見えない。</span><span data-lang="es">Entorno de Ejecución Confiable. Un enclave seguro que procesa datos sensibles (como claves API) de forma privada — ni el operador del servidor puede ver dentro.</span><span data-lang="fr">Environnement d'Exécution de Confiance. Une enclave sécurisée qui traite les données sensibles (comme les clés API) en privé — même l'opérateur du serveur ne peut pas voir à l'intérieur.</span></div></div>
+    <div class="gloss-card"><div class="gloss-term">Deploy</div><div class="gloss-def"><span data-lang="en">Publishing your smart contract to the blockchain. Once deployed, it runs forever and can't be stopped.</span><span data-lang="id">Mempublikasikan smart contract ke blockchain. Setelah deploy, berjalan selamanya.</span><span data-lang="zh">将你的智能合约发布到区块链上。一旦部署，它就永久运行，无法停止。</span><span data-lang="ja">スマートコントラクトをブロックチェーンに公開すること。デプロイ後、永遠に実行され、止められない。</span><span data-lang="es">Publicar tu smart contract en la blockchain. Una vez desplegado, funciona para siempre y no puede detenerse.</span><span data-lang="fr">Publier votre smart contract sur la blockchain. Une fois déployé, il tourne pour toujours et ne peut pas être arrêté.</span></div></div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-wrap fade-up">
+  <div class="cta-inner">
+    <h2 class="cta-h">
+      <span data-lang="en">Build something that<br><span style="color:var(--green)">outlasts you.</span></span>
+      <span data-lang="id">Bangun sesuatu yang<br><span style="color:var(--green)">lebih tahan lama darimu.</span></span>
+      <span data-lang="zh">构建一些<br><span style="color:var(--green)">比你更持久的东西。</span></span>
+      <span data-lang="ja">あなたを超えて<br><span style="color:var(--green)">生き続けるものを作れ。</span></span>
+      <span data-lang="es">Construye algo que<br><span style="color:var(--green)">te sobreviva.</span></span>
+      <span data-lang="fr">Construisez quelque chose<br><span style="color:var(--green)">qui vous survive.</span></span>
+    </h2>
+    <p class="cta-p">
+      <span data-lang="en">Your first dApp is waiting. Start with Step 1 — it takes less than 10 minutes to have Claude Code running on your machine.</span>
+      <span data-lang="id">dApp pertamamu menunggu. Mulai dari Langkah 1 — butuh kurang dari 10 menit untuk menjalankan Claude Code.</span>
+      <span data-lang="zh">你的第一个 dApp 在等待。从第 1 步开始——不到 10 分钟就能让 Claude Code 在你的机器上运行。</span>
+      <span data-lang="ja">最初のdAppが待っている。ステップ1から始めよう—Claude Codeを動かすのに10分もかからない。</span>
+      <span data-lang="es">Tu primera dApp está esperando. Empieza con el Paso 1 — menos de 10 minutos para tener Claude Code funcionando.</span>
+      <span data-lang="fr">Votre première dApp vous attend. Commencez par l'étape 1 — moins de 10 minutes pour avoir Claude Code en marche.</span>
+    </p>
+    <div class="cta-btns">
+      <a href="#tutorial" class="btn-main"><span data-lang="en">Start Tutorial →</span><span data-lang="id">Mulai Tutorial →</span><span data-lang="zh">开始教程 →</span><span data-lang="ja">チュートリアル開始 →</span><span data-lang="es">Iniciar Tutorial →</span><span data-lang="fr">Démarrer le tutoriel →</span></a>
+      <a href="https://docs.ritualfoundation.org" target="_blank" class="btn-out">Official Docs ↗</a>
+      <a href="https://faucet.ritualfoundation.org" target="_blank" class="btn-out"><span data-lang="en">Get Free Tokens ↗</span><span data-lang="id">Dapatkan Token Gratis ↗</span><span data-lang="zh">获取免费代币 ↗</span><span data-lang="ja">無料トークンを取得 ↗</span><span data-lang="es">Obtener Tokens Gratis ↗</span><span data-lang="fr">Obtenir des Tokens Gratuits ↗</span></a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-logo">
+    <svg width="18" height="18" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="200" fill="#00FF8C"/><g fill="#000"><rect x="78" y="78" width="44" height="44"/><rect x="86" y="40" width="28" height="16"/><rect x="78" y="56" width="44" height="22"/><rect x="86" y="144" width="28" height="16"/><rect x="78" y="122" width="44" height="22"/><rect x="40" y="86" width="16" height="28"/><rect x="56" y="78" width="22" height="44"/><rect x="144" y="86" width="16" height="28"/><rect x="122" y="78" width="22" height="44"/><rect x="40" y="40" width="22" height="22"/><rect x="138" y="40" width="22" height="22"/><rect x="40" y="138" width="22" height="22"/><rect x="138" y="138" width="22" height="22"/><rect x="62" y="40" width="24" height="14"/><rect x="114" y="40" width="24" height="14"/><rect x="62" y="146" width="24" height="14"/><rect x="114" y="146" width="24" height="14"/><rect x="40" y="62" width="14" height="24"/><rect x="146" y="62" width="14" height="24"/><rect x="40" y="114" width="14" height="24"/><rect x="146" y="114" width="14" height="24"/><rect x="62" y="54" width="16" height="24" fill="#00FF8C"/><rect x="122" y="54" width="16" height="24" fill="#00FF8C"/><rect x="62" y="122" width="16" height="24" fill="#00FF8C"/><rect x="122" y="122" width="16" height="24" fill="#00FF8C"/><rect x="54" y="62" width="24" height="16" fill="#00FF8C"/><rect x="122" y="62" width="24" height="16" fill="#00FF8C"/><rect x="54" y="122" width="24" height="16" fill="#00FF8C"/><rect x="122" y="122" width="24" height="16" fill="#00FF8C"/></g></svg>
+    Ritual Learn — Community Guide · Not Official
+  </div>
+  <div class="foot-links">
+    <a href="https://docs.ritualfoundation.org" target="_blank" class="foot-link">Docs</a>
+    <a href="https://faucet.ritualfoundation.org" target="_blank" class="foot-link">Faucet</a>
+    <a href="https://explorer.ritualfoundation.org" target="_blank" class="foot-link">Explorer</a>
+    <a href="https://rpc.ritualfoundation.org" target="_blank" class="foot-link">RPC</a>
+    <a href="https://skills.ritualfoundation.org" target="_blank" class="foot-link">Skills</a>
+    <a href="https://github.com/ritual-foundation/ritual-dapp-skills" target="_blank" class="foot-link">GitHub</a>
+  </div>
+  <div class="foot-disclaimer">
+    <span data-lang="en">This is an unofficial community learning resource. Not affiliated with Ritual Foundation. Always DYOR and never invest more than you can afford to lose.</span>
+    <span data-lang="id">Ini adalah sumber belajar komunitas tidak resmi. Bukan afiliasi Ritual Foundation. Selalu DYOR dan jangan pernah investasikan lebih dari yang bisa kamu tanggung rugi.</span>
+    <span data-lang="zh">这是非官方的社区学习资源。与 Ritual Foundation 无关。请自行研究，切勿投入超出承受能力的资金。</span>
+    <span data-lang="ja">これは非公式のコミュニティ学習リソースです。Ritual Foundationとは無関係。常に自己調査し、失っても大丈夫な額以上は投資しないでください。</span>
+    <span data-lang="es">Este es un recurso de aprendizaje comunitario no oficial. No afiliado a Ritual Foundation. Siempre haz tu propia investigación y nunca inviertas más de lo que puedas permitirte perder.</span>
+    <span data-lang="fr">Il s'agit d'une ressource d'apprentissage communautaire non officielle. Non affiliée à Ritual Foundation. Faites toujours vos propres recherches et n'investissez jamais plus que ce que vous pouvez vous permettre de perdre.</span>
+  </div>
+</footer>
+
+<script>
+// ─── LANGUAGE SYSTEM ─────────────────────────────────────────────
+var currentLang = 'en';
+
+function setLang(lang, flag) {
+  currentLang = lang;
+  // Update all [data-lang] elements
+  document.querySelectorAll('[data-lang]').forEach(function(el) {
+    el.classList.toggle('lang-active', el.getAttribute('data-lang') === lang);
+  });
+  // Update lang toggle UI
+  document.getElementById('currentFlag').textContent = flag;
+  document.getElementById('currentLangCode').textContent = lang.toUpperCase();
+  // Update active state in dropdown
+  document.querySelectorAll('.lang-opt').forEach(function(opt) {
+    opt.classList.toggle('active', opt.getAttribute('onclick').includes("'"+lang+"'"));
+  });
+  // Close dropdown
+  document.getElementById('langSelect').classList.remove('open');
+}
+
+function toggleLangMenu() {
+  document.getElementById('langSelect').classList.toggle('open');
+}
+// Close dropdown on outside click
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.lang-select')) {
+    document.getElementById('langSelect').classList.remove('open');
+  }
+});
+// Init
+setLang('en', '🇺🇸');
+
+// ─── AGENT TABS ──────────────────────────────────────────────────
+function showAgent(name, btn) {
+  ['cc','cur','cod','her','oc','cg'].forEach(function(id) {
+    var p = document.getElementById('ag-'+id);
+    if (p) { p.style.display = 'none'; p.classList.remove('show'); }
+  });
+  var active = document.getElementById('ag-'+name);
+  if (active) { active.style.display = 'block'; active.classList.add('show'); }
+  document.querySelectorAll('.atab').forEach(function(t) { t.classList.remove('on'); });
+  if (btn) btn.classList.add('on');
+}
+
+// ─── EXPAND PANELS ───────────────────────────────────────────────
+function xp(id, btn) {
+  var el = document.getElementById(id);
+  el.classList.toggle('open');
+}
+
+// ─── CODE COPY ───────────────────────────────────────────────────
+function cp(btn) {
+  var block = btn.parentElement;
+  var txt = block.innerText.replace(/^COPY\n?/, '').replace(/COPIED!\n?/, '').trim();
+  navigator.clipboard.writeText(txt).then(function() {
+    btn.textContent = 'COPIED!';
+    setTimeout(function() { btn.textContent = 'COPY'; }, 2000);
+  });
+}
+
+// ─── PRECOMPILE FILTER ───────────────────────────────────────────
+function filterPre(type, btn) {
+  document.querySelectorAll('.ptab').forEach(function(t) { t.classList.remove('on'); });
+  btn.classList.add('on');
+  document.querySelectorAll('.pre-card').forEach(function(c) {
+    c.classList.toggle('show', type === 'all' || c.dataset.type === type);
+  });
+}
+
+// ─── FAQ ─────────────────────────────────────────────────────────
+function toggleFaq(el) {
+  el.parentElement.classList.toggle('open');
+}
+
+// ─── LIVE DEPLOY DEMO ────────────────────────────────────────────
+var isSimulated = false;
+var web3Provider = null;
+
+var contracts = {
+  hello: {
+    name: 'HelloRitual',
+    bytecode: '0x608060405234801561001057600080fd5b506040518060400160405280600e81526020017f48656c6c6f2c20526974756c2100000000000000000000000000000000000000815250600090816100559190610108565b506101d7565b600081519050919050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052604160045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052602260045260246000fd5b600060028204905060018216806100d957607f821691505b6020821081036100ec576100eb610092565b5b50919050565b6000819050815f5260205f209050919050565b5f6020601f8301049050919050565b5f82821b905092915050565b5f600883026101527fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff82610115565b61015c8683610115565b95508019841693508086168417925050509392505050565b5f819050919050565b5f819050919050565b5f61015c61018561018084610174565b61017e565b610174565b9050919050565b5f819050919050565b61019f83838361019a565b80600052505050565b5f8201905092915050565b5f6101bd8261005b565b6101c781856101a7565b93506101d7818560208601610191565b80840191505092915050565b61025b806101f45f395ff3fe608060405234801561000f575f80fd5b5060043610610034575f3560e01c80630d8e6e2c14610038578063368b87721461005657806357c7eb4414610072575b5f80fd5b610040610090565b60405161004d9190610193565b60405180910390f35b610070600480360381019061006b91906102bf565b61011c565b005b61008a6004803603810190610085919061031b565b61012e565b005b5f805461009c90610388565b80601f01602080910402602001604051908101604052809291908181526020018280546100c890610388565b80156101135780601f106100ea57610100808354040283529160200191610113565b820191905f5260205f20905b8154815290600101906020018083116100f657829003601f168201915b5050505050905090565b805f908161012a9190610569565b5050565b5050565b5f81519050919050565b5f82825260208201905092915050565b8281835e5f83830152505050565b5f601f19601f8301169050919050565b5f6101748261013a565b61017e8185610144565b935061018e818560208601610154565b61019781610162565b840191505092915050565b5f6020820190508181035f8301526101ba818461016a565b905092915050565b5f604051905090565b5f80fd5b5f80fd5b5f80fd5b5f80fd5b5f601f19601f8301169050919050565b7f4e487b71000000000000000000000000000000000000000000000000000000005f52604160045260246000fd5b61022c826101d6565b810181811067ffffffffffffffff8211171561024b5761024a6101e6565b5b80604052505050565b5f61025d6101c2565b90506102698282610223565b919050565b5f67ffffffffffffffff82111561028857610287610186565b5b610291826101d6565b9050602081019050919050565b828183375f83830152505050565b5f6102be6102b98461026e565b610254565b9050828152602081018484840111156102da576102d96101d2565b5b6102e584828561029e565b509392505050565b5f82601f830112610301576103006101ce565b5b81356103118482602086016102ac565b91505092915050565b5f6020828403121561032f5761032e6101cb565b5b5f82013567ffffffffffffffff81111561034c5761034b6101cf565b5b610358848285016102ed565b91505092915050565b7f4e487b71000000000000000000000000000000000000000000000000000000005f52602260045260246000fd5b5f600282049050600182168061038057607f821691505b6020821081036103935761039261035f565b5b50919050565b5f819050815f5260205f209050919050565b5f6020601f8301049050919050565b5f82821b905092915050565b5f600883026103f57fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff826103ba565b6103ff86836103ba565b95508019841693508086168417925050509392505050565b5f819050919050565b5f819050919050565b5f610440610448610440846103e3565b610440565b6103e3565b9050919050565b5f819050919050565b61045a83838361043f565b80600052505050565b5f8201905092915050565b5f6104788261013a565b610482818561013a565b9350610492818560208601610154565b61049b81610162565b840191505092915050565b5f6104b1838561013a565b93506104be83858461029e565b6104c783610162565b840190509392505050565b5f6020820190508181035f8301526104ea818461046e565b905092915050565b5f6020820190508181035f83015261050c81848661046e565b9050949350505050565b5f6040820190508181035f8301526105308185876104a6565b9050949350505050565b7f4e487b71000000000000000000000000000000000000000000000000000000005f52601160045260246000fd5b5f610572826103e3565b915061057d836103e3565b925082820190508082111561059557610594610539565b5b9250929050565b6104ab806105a85f395ff3fe',
+    abi: [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[],"name":"message","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"string","name":"m","type":"string"}],"name":"setMessage","outputs":[],"stateMutability":"nonpayable","type":"function"}]
+  },
+  counter: {
+    name: 'RitualCounter',
+    bytecode: '0x608060405234801561001057600080fd5b50600160008190555060d5806100276000396000f3fe6080604052348015600f57600080fd5b506004361060325760003560e01c806361bc221a146037578063d09de08a146051575b600080fd5b603d6059565b6040518082815260200191505060405180910390f35b60576060565b005b60005481565b60016000540160008190555056',
+    abi: [{"inputs":[],"name":"count","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"increment","outputs":[],"stateMutability":"nonpayable","type":"function"}]
+  },
+  timestamp: {
+    name: 'BlockTimeStamp',
+    bytecode: '0x608060405234801561001057600080fd5b5060b3806100256000396000f3fe6080604052348015600f57600080fd5b506004361060285760003560e01c8063557ed1ba14602d575b600080fd5b6033604f565b6040518082815260200191505060405180910390f35b600042905090565b',
+    abi: [{"inputs":[],"name":"getTime","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]
+  }
+};
+
+var contractPreviews = {
+  hello: [
+    ['<span style="color:var(--purple)">// SPDX-License-Identifier: MIT</span>',''],
+    ['<span style="color:var(--amber)">pragma</span> solidity ^0.8.19;',''],
+    ['&nbsp;',''],
+    ['<span style="color:var(--teal)">contract</span> <span style="color:var(--green)">HelloRitual</span> {',''],
+    ['&nbsp;&nbsp;string public message;',''],
+    ['&nbsp;&nbsp;<span style="color:var(--teal)">constructor</span>() { message = <span style="color:var(--amber)">"Hello, Ritual!"</span>; }',''],
+    ['&nbsp;&nbsp;<span style="color:var(--teal)">function</span> <span style="color:var(--green)">setMessage</span>(string memory m) external {',''],
+    ['&nbsp;&nbsp;&nbsp;&nbsp;message = m;',''],
+    ['&nbsp;&nbsp;}',''],
+    ['}','']
+  ],
+  counter: [
+    ['<span style="color:var(--purple)">// SPDX-License-Identifier: MIT</span>',''],
+    ['<span style="color:var(--amber)">pragma</span> solidity ^0.8.19;',''],
+    ['&nbsp;',''],
+    ['<span style="color:var(--teal)">contract</span> <span style="color:var(--green)">RitualCounter</span> {',''],
+    ['&nbsp;&nbsp;uint256 public count = 1;',''],
+    ['&nbsp;&nbsp;<span style="color:var(--teal)">function</span> <span style="color:var(--green)">increment</span>() external {',''],
+    ['&nbsp;&nbsp;&nbsp;&nbsp;count++;',''],
+    ['&nbsp;&nbsp;}',''],
+    ['}','']
+  ],
+  timestamp: [
+    ['<span style="color:var(--purple)">// SPDX-License-Identifier: MIT</span>',''],
+    ['<span style="color:var(--amber)">pragma</span> solidity ^0.8.19;',''],
+    ['&nbsp;',''],
+    ['<span style="color:var(--teal)">contract</span> <span style="color:var(--green)">BlockTimeStamp</span> {',''],
+    ['&nbsp;&nbsp;<span style="color:var(--teal)">function</span> <span style="color:var(--green)">getTime</span>() external view returns (uint256) {',''],
+    ['&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--amber)">return</span> block.timestamp;',''],
+    ['&nbsp;&nbsp;}',''],
+    ['}','']
+  ]
+};
+
+function updateContractPreview() {
+  var sel = document.getElementById('contractTemplate').value;
+  var prev = document.getElementById('contractPreview');
+  var lines = contractPreviews[sel];
+  prev.innerHTML = lines.map(function(l) {
+    return '<div class="t-line"><span class="t-text">' + l[0] + '</span></div>';
+  }).join('');
+  document.getElementById('reviewContractName').textContent = contracts[sel].name;
+}
+
+function goToStep(n) {
+  [0,1,2,3].forEach(function(i) {
+    var el = document.getElementById('demo-step-'+i);
+    if (el) el.style.display = i === n ? 'block' : 'none';
+    var dot = document.getElementById('sdot'+i);
+    if (dot) {
+      dot.classList.toggle('active', i === n);
+      dot.classList.toggle('done', i < n);
+    }
+  });
+}
+
+function skipToDemo() {
+  isSimulated = true;
+  document.getElementById('walletAddr').innerHTML = '<span style="color:var(--green);font-family:var(--font-mono);font-size:11px">0xDemo...1234 (Simulated)</span>';
+  document.getElementById('walletStatus').className = 'demo-wallet-status ws-connected';
+  document.getElementById('walletStatus').innerHTML = '<span data-lang="'+currentLang+'">CONNECTED</span>';
+  goToStep(1);
+}
+
+async function connectWallet() {
+  var btn = document.getElementById('btnConnect');
+  if (typeof window.ethereum === 'undefined') {
+    // No MetaMask — show install prompt
+    btn.textContent = '← Install MetaMask first';
+    window.open('https://metamask.io/download', '_blank');
+    return;
+  }
+  try {
+    btn.textContent = 'Connecting...';
+    btn.disabled = true;
+    var accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    var addr = accounts[0];
+    // Add Ritual network
+    try {
+      await window.ethereum.request({
+        method: 'wallet_addEthereumChain',
+        params: [{
+          chainId: '0x7BB',
+          chainName: 'Ritual Testnet',
+          nativeCurrency: { name: 'CRAT', symbol: 'CRAT', decimals: 18 },
+          rpcUrls: ['https://rpc.ritualfoundation.org'],
+          blockExplorerUrls: ['https://explorer.ritualfoundation.org']
+        }]
+      });
+    } catch(e) { /* already added */ }
+    // Switch to Ritual
+    await window.ethereum.request({
+      method: 'wallet_switchEthereumChain',
+      params: [{ chainId: '0x7BB' }]
+    });
+    document.getElementById('walletAddr').innerHTML = '<span style="color:var(--green);font-family:var(--font-mono);font-size:11px">' + addr.slice(0,6) + '...' + addr.slice(-4) + '</span>';
+    document.getElementById('walletStatus').className = 'demo-wallet-status ws-connected';
+    document.getElementById('walletStatus').textContent = 'CONNECTED';
+    isSimulated = false;
+    web3Provider = window.ethereum;
+    goToStep(1);
+  } catch(e) {
+    btn.disabled = false;
+    btn.textContent = 'Try Again';
+    console.error(e);
+  }
+}
+
+async function deployContract() {
+  var sel = document.getElementById('contractTemplate').value;
+  var contract = contracts[sel];
+  var btn = document.getElementById('btnDeploy');
+  btn.disabled = true;
+  btn.innerHTML = '⟳ Deploying...';
+
+  var log = document.getElementById('deployLog');
+
+  function addLog(text, cls) {
+    var line = document.createElement('div');
+    line.className = 't-line';
+    line.innerHTML = '<span class="t-prompt">▶</span><span class="t-text ' + (cls||'') + '">' + text + '</span>';
+    log.appendChild(line);
+    log.scrollTop = log.scrollHeight;
+  }
+
+  addLog('Compiling ' + contract.name + '...', '');
+  await sleep(600);
+  addLog('✓ Compilation successful', 't-success');
+  await sleep(400);
+  addLog('Connecting to RPC: rpc.ritualfoundation.org', '');
+  await sleep(700);
+
+  if (isSimulated) {
+    // Simulated deploy
+    await sleep(800);
+    addLog('Broadcasting transaction...', '');
+    await sleep(1200);
+    var fakeTx = '0x' + randomHex(64);
+    var fakeAddr = '0x' + randomHex(40);
+    var fakeBlock = Math.floor(Math.random() * 900000) + 100000;
+    var fakeGas = (Math.floor(Math.random() * 80000) + 120000).toLocaleString();
+    addLog('✓ Transaction broadcast!', 't-success');
+    await sleep(500);
+    addLog('⛏ Waiting for confirmation...', '');
+    await sleep(1200);
+    addLog('✓ Confirmed in block #' + fakeBlock + ' (SIMULATED)', 't-success');
+    showResult(fakeTx, fakeAddr, fakeBlock, fakeGas, true);
+  } else {
+    // Real deploy with MetaMask
+    try {
+      var provider = window.ethereum;
+      var accounts = await provider.request({ method: 'eth_accounts' });
+      var from = accounts[0];
+      addLog('Deploying from: ' + from.slice(0,8) + '...', '');
+      var txHash = await provider.request({
+        method: 'eth_sendTransaction',
+        params: [{
+          from: from,
+          data: contract.bytecode,
+          gas: '0x493E0', // 300000
+        }]
+      });
+      addLog('✓ TX Hash: ' + txHash.slice(0,16) + '...', 't-success');
+      addLog('⛏ Waiting for mining...', '');
+      // Poll for receipt
+      var receipt = null;
+      for (var i = 0; i < 30; i++) {
+        await sleep(2000);
+        receipt = await provider.request({
+          method: 'eth_getTransactionReceipt',
+          params: [txHash]
+        });
+        if (receipt) break;
+        addLog('Still waiting... (attempt ' + (i+1) + ')', '');
+      }
+      if (receipt) {
+        var blockNum = parseInt(receipt.blockNumber, 16);
+        var gasUsed = parseInt(receipt.gasUsed, 16).toLocaleString();
+        addLog('✓ Confirmed in block #' + blockNum, 't-success');
+        showResult(txHash, receipt.contractAddress, blockNum, gasUsed, false);
+      } else {
+        addLog('⚠ Transaction pending. Check explorer.', 't-warn');
+        btn.disabled = false;
+        btn.innerHTML = '🚀 Retry';
+      }
+    } catch(e) {
+      addLog('✗ Error: ' + (e.message || 'Unknown error'), 't-error');
+      btn.disabled = false;
+      btn.innerHTML = '🚀 Try Again';
+    }
+  }
+}
+
+function showResult(txHash, contractAddr, block, gas, simulated) {
+  document.getElementById('txHash').textContent = txHash.slice(0,18) + '...' + txHash.slice(-6);
+  document.getElementById('contractAddr').textContent = contractAddr;
+  document.getElementById('txBlock').textContent = '#' + block;
+  document.getElementById('txGas').textContent = gas + ' gas' + (simulated ? ' (simulated)' : '');
+
+  var explorerBase = 'https://explorer.ritualfoundation.org';
+  var el = document.getElementById('explorerLink');
+  if (simulated) {
+    el.innerHTML = '<a href="' + explorerBase + '" target="_blank">explorer.ritualfoundation.org (demo) ↗</a>';
+  } else {
+    el.innerHTML = '<a href="' + explorerBase + '/tx/' + txHash + '" target="_blank">View TX on Explorer ↗</a>';
+  }
+  goToStep(3);
+}
+
+function resetDemo() {
+  goToStep(isSimulated ? 1 : 0);
+  document.getElementById('deployLog').innerHTML = '<div class="t-line"><span class="t-prompt">▶</span><span class="t-text"><span data-lang="en">Ready to deploy to Ritual Chain (1979)</span></span></div><div class="t-line"><span class="t-prompt">▶</span><span class="t-text">RPC: <span style="color:var(--teal)">https://rpc.ritualfoundation.org</span></span></div><div class="t-line"><span class="t-prompt">▶</span><span class="t-text">Click Deploy to broadcast transaction</span></div><div class="t-line"><span class="t-blink"></span></div>';
+  document.getElementById('btnDeploy').disabled = false;
+  document.getElementById('btnDeploy').innerHTML = '🚀 <span data-lang="en">Deploy Contract</span>';
+  // Re-apply lang
+  setLang(currentLang, document.getElementById('currentFlag').textContent);
+}
+
+function sleep(ms) { return new Promise(function(r) { setTimeout(r, ms); }); }
+function randomHex(len) {
+  var chars = '0123456789abcdef';
+  var out = '';
+  for (var i = 0; i < len; i++) out += chars[Math.floor(Math.random() * 16)];
+  return out;
+}
+
+// ─── SCROLL REVEAL ───────────────────────────────────────────────
+var obs = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
+    if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); }
+  });
+}, { threshold: 0.06 });
+document.querySelectorAll('.fade-up').forEach(function(el) { obs.observe(el); });
+</script>
+</body>
+</html>
