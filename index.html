@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ritual Learn — Build AI dApps Without Code</title>
+<title>BuildonRitual — Build AI dApps Without Code</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Grotesk:wght@300;400;500;600&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -381,11 +381,17 @@ a[data-lang].lang-active{display:inline-block}
 <div class="orb orb-2"></div>
 <div class="orb orb-3"></div>
 
+<!-- FLOATING DISCONNECT BAR -->
+<div id="floatDisconnect" style="display:none;position:fixed;bottom:24px;right:24px;z-index:9999;align-items:center;gap:10px;background:var(--card2);border:1px solid var(--border2);border-radius:12px;padding:10px 16px;box-shadow:0 8px 32px rgba(0,0,0,.5);backdrop-filter:blur(16px)">
+  <div style="width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px rgba(0,255,140,.6)"></div>
+  <span style="font-family:var(--font-mono);font-size:11px;color:var(--green)" id="floatAddr"></span>
+  <span style="font-family:var(--font-mono);font-size:9px;color:var(--muted)">· Ritual Testnet</span>
+  <button onclick="disconnectWallet()" style="font-family:var(--font-mono);font-size:10px;padding:5px 12px;background:transparent;border:1px solid rgba(255,61,107,.35);color:var(--crimson);border-radius:6px;cursor:pointer;transition:all .2s;letter-spacing:.3px" onmouseover="this.style.background='rgba(255,61,107,.12)';this.style.borderColor='rgba(255,61,107,.6)'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(255,61,107,.35)'">✕ Disconnect</button>
+</div>
+
 <!-- NAV -->
 <nav>
-  <a class="logo" href="#">
-    <span class="logo-text">RitualLearn</span>
-  </a>
+
   <div class="nav-links">
     <a href="#how" class="nav-link" data-lang="en">How It Works</a>
     <a href="#how" class="nav-link" data-lang="id">Cara Kerja</a>
@@ -452,7 +458,7 @@ a[data-lang].lang-active{display:inline-block}
 <div class="hero">
   <div class="hero-eyebrow">
     <div class="pulse"></div>
-    <span>Chain ID 1979 · CRAT · ~350ms blocks · Live Now</span>
+    <span>Chain ID 1979 · Ritual · ~350ms blocks · Live Now</span>
   </div>
   <div class="hero-grid">
     <div>
@@ -701,12 +707,12 @@ a[data-lang].lang-active{display:inline-block}
             <span data-lang="fr">Déployeur Testnet Ritual</span>
           </div>
           <div class="demo-subtitle">
-            <span data-lang="en">Chain ID: 1979 · RPC: rpc.ritualfoundation.org · Symbol: CRAT</span>
-            <span data-lang="id">Chain ID: 1979 · RPC: rpc.ritualfoundation.org · Simbol: CRAT</span>
-            <span data-lang="zh">链 ID: 1979 · RPC: rpc.ritualfoundation.org · 符号: CRAT</span>
-            <span data-lang="ja">チェーン ID: 1979 · RPC: rpc.ritualfoundation.org · シンボル: CRAT</span>
-            <span data-lang="es">Chain ID: 1979 · RPC: rpc.ritualfoundation.org · Símbolo: CRAT</span>
-            <span data-lang="fr">Chain ID: 1979 · RPC: rpc.ritualfoundation.org · Symbole: CRAT</span>
+            <span data-lang="en">Chain ID: 1979 · RPC: rpc.ritualfoundation.org · Symbol: Ritual</span>
+            <span data-lang="id">Chain ID: 1979 · RPC: rpc.ritualfoundation.org · Simbol: Ritual</span>
+            <span data-lang="zh">链 ID: 1979 · RPC: rpc.ritualfoundation.org · 符号: Ritual</span>
+            <span data-lang="ja">チェーン ID: 1979 · RPC: rpc.ritualfoundation.org · シンボル: Ritual</span>
+            <span data-lang="es">Chain ID: 1979 · RPC: rpc.ritualfoundation.org · Símbolo: Ritual</span>
+            <span data-lang="fr">Chain ID: 1979 · RPC: rpc.ritualfoundation.org · Symbole: Ritual</span>
           </div>
         </div>
       </div>
@@ -752,12 +758,12 @@ a[data-lang].lang-active{display:inline-block}
           <div class="tip tip-a">
             <div class="tip-head">💡 <span data-lang="en">NEED TESTNET TOKENS?</span><span data-lang="id">BUTUH TOKEN TESTNET?</span><span data-lang="zh">需要测试网代币？</span><span data-lang="ja">テストネットトークンが必要？</span><span data-lang="es">¿NECESITAS TOKENS DE TESTNET?</span><span data-lang="fr">BESOIN DE TOKENS TESTNET ?</span></div>
             <div class="tip-body">
-              <span data-lang="en">Get free CRAT tokens at <a href="https://faucet.ritualfoundation.org" target="_blank">faucet.ritualfoundation.org ↗</a> — enough to deploy many contracts.</span>
-              <span data-lang="id">Dapatkan token CRAT gratis di <a href="https://faucet.ritualfoundation.org" target="_blank">faucet.ritualfoundation.org ↗</a> — cukup untuk deploy banyak contract.</span>
-              <span data-lang="zh">在 <a href="https://faucet.ritualfoundation.org" target="_blank">faucet.ritualfoundation.org ↗</a> 获取免费 CRAT 代币——足以部署许多合约。</span>
-              <span data-lang="ja"><a href="https://faucet.ritualfoundation.org" target="_blank">faucet.ritualfoundation.org ↗</a> で無料のCRATトークンを取得—多くのコントラクトのデプロイに十分。</span>
-              <span data-lang="es">Obtén tokens CRAT gratis en <a href="https://faucet.ritualfoundation.org" target="_blank">faucet.ritualfoundation.org ↗</a> — suficientes para desplegar muchos contratos.</span>
-              <span data-lang="fr">Obtenez des tokens CRAT gratuits sur <a href="https://faucet.ritualfoundation.org" target="_blank">faucet.ritualfoundation.org ↗</a> — suffisant pour déployer de nombreux contrats.</span>
+              <span data-lang="en">Get free Ritual tokens at <a href="https://faucet.ritualfoundation.org" target="_blank">faucet.ritualfoundation.org ↗</a> — enough to deploy many contracts.</span>
+              <span data-lang="id">Dapatkan token Ritual gratis di <a href="https://faucet.ritualfoundation.org" target="_blank">faucet.ritualfoundation.org ↗</a> — cukup untuk deploy banyak contract.</span>
+              <span data-lang="zh">在 <a href="https://faucet.ritualfoundation.org" target="_blank">faucet.ritualfoundation.org ↗</a> 获取免费 Ritual 代币——足以部署许多合约。</span>
+              <span data-lang="ja"><a href="https://faucet.ritualfoundation.org" target="_blank">faucet.ritualfoundation.org ↗</a> で無料のRitualトークンを取得—多くのコントラクトのデプロイに十分。</span>
+              <span data-lang="es">Obtén tokens Ritual gratis en <a href="https://faucet.ritualfoundation.org" target="_blank">faucet.ritualfoundation.org ↗</a> — suficientes para desplegar muchos contratos.</span>
+              <span data-lang="fr">Obtenez des tokens Ritual gratuits sur <a href="https://faucet.ritualfoundation.org" target="_blank">faucet.ritualfoundation.org ↗</a> — suffisant pour déployer de nombreux contrats.</span>
             </div>
           </div>
           <div class="demo-actions">
@@ -852,7 +858,7 @@ a[data-lang].lang-active{display:inline-block}
             </div>
             <div class="demo-info">
               <div class="demo-info-label">GAS TOKEN</div>
-              <div class="demo-info-val">CRAT</div>
+              <div class="demo-info-val">Ritual</div>
             </div>
             <div class="demo-info">
               <div class="demo-info-label">CONTRACT</div>
@@ -1040,12 +1046,12 @@ a[data-lang].lang-active{display:inline-block}
           <div class="wpill"><span class="wp-l">Network:</span><span class="wp-v">Ritual Testnet</span></div>
           <div class="wpill"><span class="wp-l">Chain ID:</span><span class="wp-v">1979</span></div>
           <div class="wpill"><span class="wp-l">RPC:</span><span class="wp-v">https://rpc.ritualfoundation.org</span></div>
-          <div class="wpill"><span class="wp-l">Symbol:</span><span class="wp-v">CRAT</span></div>
+          <div class="wpill"><span class="wp-l">Symbol:</span><span class="wp-v">Ritual</span></div>
           <div class="wpill"><span class="wp-l">Explorer:</span><span class="wp-v">https://explorer.ritualfoundation.org</span></div>
         </div>
         <div class="wallet-btns">
           <a href="https://metamask.io/download" target="_blank" class="wbtn wbtn-g"><span data-lang="en">Download MetaMask</span><span data-lang="id">Download MetaMask</span><span data-lang="zh">下载 MetaMask</span><span data-lang="ja">MetaMaskをダウンロード</span><span data-lang="es">Descargar MetaMask</span><span data-lang="fr">Télécharger MetaMask</span></a>
-          <a href="https://faucet.ritualfoundation.org" target="_blank" class="wbtn wbtn-o"><span data-lang="en">Get Free CRAT Tokens</span><span data-lang="id">Dapatkan CRAT Gratis</span><span data-lang="zh">获取免费 CRAT 代币</span><span data-lang="ja">無料CRATトークンを取得</span><span data-lang="es">Obtener tokens CRAT gratis</span><span data-lang="fr">Obtenir des tokens CRAT gratuits</span></a>
+          <a href="https://faucet.ritualfoundation.org" target="_blank" class="wbtn wbtn-o"><span data-lang="en">Get Free Ritual Tokens</span><span data-lang="id">Dapatkan Ritual Gratis</span><span data-lang="zh">获取免费 Ritual 代币</span><span data-lang="ja">無料Ritualトークンを取得</span><span data-lang="es">Obtener tokens Ritual gratis</span><span data-lang="fr">Obtenir des tokens Ritual gratuits</span></a>
         </div>
       </div>
     </div>
@@ -1142,7 +1148,7 @@ a[data-lang].lang-active{display:inline-block}
   <p class="sec-p"><span data-lang="en">No dumb questions here.</span><span data-lang="id">Tidak ada pertanyaan bodoh di sini.</span><span data-lang="zh">这里没有愚蠢的问题。</span><span data-lang="ja">ここに愚問はない。</span><span data-lang="es">Aquí no hay preguntas tontas.</span><span data-lang="fr">Aucune question stupide ici.</span></p>
   <div class="faq-list">
     <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text"><span data-lang="en">Do I need to know how to code?</span><span data-lang="id">Apakah saya perlu bisa coding?</span><span data-lang="zh">我需要会写代码吗？</span><span data-lang="ja">コーディングを知る必要がありますか？</span><span data-lang="es">¿Necesito saber programar?</span><span data-lang="fr">Dois-je savoir coder ?</span></span><span class="faq-icon">+</span></div><div class="faq-a"><span data-lang="en">No. That's the whole point. You describe what you want in plain language, and the AI agent writes all the Solidity code for you. You only need to understand what you want to build — not how to build it technically.</span><span data-lang="id">Tidak. Itu justru inti dari Ritual. Kamu mendeskripsikan apa yang kamu mau dalam bahasa biasa, dan agent AI menulis semua kode Solidity untukmu.</span><span data-lang="zh">不需要。这正是重点所在。你用普通语言描述你想要什么，AI 代理为你编写所有 Solidity 代码。你只需要知道你想构建什么——不需要知道如何技术性地构建它。</span><span data-lang="ja">必要ありません。それがまさにポイントです。普通の言葉で欲しいものを説明すれば、AIエージェントがすべてのSolidityコードを書いてくれます。</span><span data-lang="es">No. Ese es el punto principal. Describes lo que quieres en lenguaje simple y el agente de IA escribe todo el código Solidity por ti. Solo necesitas entender qué quieres construir.</span><span data-lang="fr">Non. C'est tout le principe. Vous décrivez ce que vous voulez en langage simple et l'agent IA écrit tout le code Solidity pour vous.</span></div></div>
-    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text"><span data-lang="en">Is this real money? Can I lose funds?</span><span data-lang="id">Ini uang sungguhan? Bisa rugi?</span><span data-lang="zh">这是真实的钱吗？我会损失资金吗？</span><span data-lang="ja">これは本物のお金ですか？資金を失う可能性がありますか？</span><span data-lang="es">¿Es dinero real? ¿Puedo perder fondos?</span><span data-lang="fr">Est-ce de l'argent réel ? Puis-je perdre des fonds ?</span></span><span class="faq-icon">+</span></div><div class="faq-a"><span data-lang="en">Ritual testnet uses CRAT test tokens with no real value — completely free via the faucet. The mainnet uses real RITUAL tokens. Start with testnet always. Never put in more than you can afford to lose on mainnet.</span><span data-lang="id">Testnet Ritual menggunakan token CRAT test tanpa nilai nyata — gratis via faucet. Mainnet menggunakan token RITUAL sungguhan. Selalu mulai dengan testnet.</span><span data-lang="zh">Ritual 测试网使用没有真实价值的 CRAT 测试代币——通过水龙头完全免费。主网使用真实的 RITUAL 代币。始终从测试网开始。</span><span data-lang="ja">RitualテストネットはCRATテストトークン（価値なし）を使用—蛇口から完全無料。メインネットは本物のRITUALトークンを使用。常にテストネットから始める。</span><span data-lang="es">El testnet de Ritual usa tokens CRAT de prueba sin valor real — completamente gratuitos via faucet. El mainnet usa tokens RITUAL reales. Siempre empieza en testnet.</span><span data-lang="fr">Le testnet Ritual utilise des tokens CRAT de test sans valeur réelle — gratuits via le faucet. Le mainnet utilise de vrais tokens RITUAL. Commencez toujours par le testnet.</span></div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text"><span data-lang="en">Is this real money? Can I lose funds?</span><span data-lang="id">Ini uang sungguhan? Bisa rugi?</span><span data-lang="zh">这是真实的钱吗？我会损失资金吗？</span><span data-lang="ja">これは本物のお金ですか？資金を失う可能性がありますか？</span><span data-lang="es">¿Es dinero real? ¿Puedo perder fondos?</span><span data-lang="fr">Est-ce de l'argent réel ? Puis-je perdre des fonds ?</span></span><span class="faq-icon">+</span></div><div class="faq-a"><span data-lang="en">Ritual testnet uses Ritual test tokens with no real value — completely free via the faucet. The mainnet uses real RITUAL tokens. Start with testnet always. Never put in more than you can afford to lose on mainnet.</span><span data-lang="id">Testnet Ritual menggunakan token Ritual test tanpa nilai nyata — gratis via faucet. Mainnet menggunakan token RITUAL sungguhan. Selalu mulai dengan testnet.</span><span data-lang="zh">Ritual 测试网使用没有真实价值的 Ritual 测试代币——通过水龙头完全免费。主网使用真实的 RITUAL 代币。始终从测试网开始。</span><span data-lang="ja">RitualテストネットはRitualテストトークン（価値なし）を使用—蛇口から完全無料。メインネットは本物のRITUALトークンを使用。常にテストネットから始める。</span><span data-lang="es">El testnet de Ritual usa tokens Ritual de prueba sin valor real — completamente gratuitos via faucet. El mainnet usa tokens RITUAL reales. Siempre empieza en testnet.</span><span data-lang="fr">Le testnet Ritual utilise des tokens Ritual de test sans valeur réelle — gratuits via le faucet. Le mainnet utilise de vrais tokens RITUAL. Commencez toujours par le testnet.</span></div></div>
     <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text"><span data-lang="en">What's different from Ethereum?</span><span data-lang="id">Apa bedanya dengan Ethereum?</span><span data-lang="zh">与以太坊有什么区别？</span><span data-lang="ja">Ethereumとの違いは？</span><span data-lang="es">¿En qué se diferencia de Ethereum?</span><span data-lang="fr">Quelle différence avec Ethereum ?</span></span><span class="faq-icon">+</span></div><div class="faq-a"><span data-lang="en">Ethereum is a general blockchain. Ritual is built specifically for AI — it has native precompiles that let smart contracts call AI models, fetch web data, and generate images without any external service. On Ethereum, you'd need external oracles and APIs. On Ritual, it's all built in.</span><span data-lang="id">Ethereum adalah blockchain umum. Ritual dibangun khusus untuk AI — memiliki precompile native yang membiarkan smart contract memanggil model AI, mengambil data web, dan generate gambar tanpa layanan eksternal apapun.</span><span data-lang="zh">以太坊是通用区块链。Ritual 专为 AI 而构建——它有原生预编译，让智能合约无需任何外部服务即可调用 AI 模型、获取网络数据和生成图像。</span><span data-lang="ja">EthereumはAI対応なし。Ritualは特にAIのために構築されており、スマートコントラクトが外部サービスなしにAIモデルを呼び出し、ウェブデータを取得し、画像を生成できる。</span><span data-lang="es">Ethereum es una blockchain general. Ritual está construido específicamente para IA — tiene precompiles nativos que permiten a los smart contracts llamar modelos IA, obtener datos web y generar imágenes sin ningún servicio externo.</span><span data-lang="fr">Ethereum est une blockchain générale. Ritual est conçu spécifiquement pour l'IA — il dispose de precompiles natifs qui permettent aux smart contracts d'appeler des modèles IA, de récupérer des données web et de générer des images sans aucun service externe.</span></div></div>
     <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text"><span data-lang="en">What is a precompile, simply?</span><span data-lang="id">Apa itu precompile, sederhananya?</span><span data-lang="zh">简单来说，什么是预编译？</span><span data-lang="ja">プリコンパイルとは何ですか？簡単に言うと？</span><span data-lang="es">¿Qué es un precompile, en términos simples?</span><span data-lang="fr">Qu'est-ce qu'un precompile, simplement ?</span></span><span class="faq-icon">+</span></div><div class="faq-a"><span data-lang="en">Imagine a blockchain as a city. Normal smart contracts are buildings you construct. Precompiles are city infrastructure that's already built — roads, electricity, water. Ritual's precompiles include "call an AI model" or "fetch a URL" — superpowers you get for free.</span><span data-lang="id">Bayangkan blockchain seperti kota. Smart contract biasa seperti gedung yang kamu bangun. Precompile seperti infrastruktur kota yang sudah ada — jalan, listrik, air.</span><span data-lang="zh">把区块链想象成一座城市。普通智能合约是你建造的建筑物。预编译是已经建好的城市基础设施——道路、电力、水。Ritual 的预编译包括"调用 AI 模型"或"获取 URL"——你免费获得的超能力。</span><span data-lang="ja">ブロックチェーンを街に例えると、普通のスマートコントラクトは自分で建てる建物。プリコンパイルはすでに建設済みの都市インフラ（道路、電気、水道）。Ritualのプリコンパイルには「AIモデルを呼ぶ」や「URLを取得」が含まれる。</span><span data-lang="es">Imagina una blockchain como una ciudad. Los smart contracts normales son edificios que construyes. Los precompiles son la infraestructura de la ciudad ya construida — calles, electricidad, agua. Los precompiles de Ritual incluyen "llamar a un modelo IA" o "obtener una URL" — superpoderes gratuitos.</span><span data-lang="fr">Imaginez une blockchain comme une ville. Les smart contracts normaux sont des bâtiments que vous construisez. Les precompiles sont l'infrastructure de la ville déjà construite — routes, électricité, eau. Les precompiles de Ritual incluent "appeler un modèle IA" ou "récupérer une URL" — des superpouvoirs gratuits.</span></div></div>
   </div>
@@ -1158,7 +1164,7 @@ a[data-lang].lang-active{display:inline-block}
   <div class="gloss-grid">
     <div class="gloss-card"><div class="gloss-term">Blockchain</div><div class="gloss-def"><span data-lang="en">A database no one controls. Data written to it is permanent and tamper-proof.</span><span data-lang="id">Database yang tidak dikontrol siapapun. Data yang ditulis bersifat permanen.</span><span data-lang="zh">没有人控制的数据库。写入其中的数据是永久且防篡改的。</span><span data-lang="ja">誰も管理しないデータベース。書き込んだデータは永久に改ざん不可。</span><span data-lang="es">Una base de datos que nadie controla. Los datos escritos en ella son permanentes e inalterables.</span><span data-lang="fr">Une base de données que personne ne contrôle. Les données qui y sont écrites sont permanentes et inviolables.</span></div></div>
     <div class="gloss-card"><div class="gloss-term">Smart Contract</div><div class="gloss-def"><span data-lang="en">A program on a blockchain. Like a vending machine: once deployed, it follows its rules automatically.</span><span data-lang="id">Program yang berjalan di blockchain. Seperti mesin penjual otomatis: setelah deploy, mengikuti aturannya otomatis.</span><span data-lang="zh">区块链上的程序。像自动售货机：部署后，它自动遵循规则。</span><span data-lang="ja">ブロックチェーン上のプログラム。自動販売機のように：デプロイ後、自動的にルールに従う。</span><span data-lang="es">Un programa en una blockchain. Como una máquina expendedora: una vez desplegado, sigue sus reglas automáticamente.</span><span data-lang="fr">Un programme sur une blockchain. Comme un distributeur automatique : une fois déployé, il suit ses règles automatiquement.</span></div></div>
-    <div class="gloss-card"><div class="gloss-term">Gas Fee</div><div class="gloss-def"><span data-lang="en">Transaction cost on a blockchain. A small fee for every action your dApp takes. Paid in CRAT tokens on Ritual.</span><span data-lang="id">Biaya transaksi di blockchain. Dibayar dalam token CRAT di Ritual.</span><span data-lang="zh">区块链上的交易成本。dApp 每次操作的小额费用。在 Ritual 上以 CRAT 代币支付。</span><span data-lang="ja">ブロックチェーンのトランザクション費用。dAppのすべての操作の小額料金。RitualではCRATトークンで支払う。</span><span data-lang="es">Costo de transacción en una blockchain. Una pequeña tarifa por cada acción de tu dApp. Pagada en tokens CRAT en Ritual.</span><span data-lang="fr">Coût de transaction sur une blockchain. Petite redevance pour chaque action de votre dApp. Payée en tokens CRAT sur Ritual.</span></div></div>
+    <div class="gloss-card"><div class="gloss-term">Gas Fee</div><div class="gloss-def"><span data-lang="en">Transaction cost on a blockchain. A small fee for every action your dApp takes. Paid in Ritual tokens on Ritual.</span><span data-lang="id">Biaya transaksi di blockchain. Dibayar dalam token Ritual di Ritual.</span><span data-lang="zh">区块链上的交易成本。dApp 每次操作的小额费用。在 Ritual 上以 Ritual 代币支付。</span><span data-lang="ja">ブロックチェーンのトランザクション費用。dAppのすべての操作の小額料金。RitualではRitualトークンで支払う。</span><span data-lang="es">Costo de transacción en una blockchain. Una pequeña tarifa por cada acción de tu dApp. Pagada en tokens Ritual en Ritual.</span><span data-lang="fr">Coût de transaction sur une blockchain. Petite redevance pour chaque action de votre dApp. Payée en tokens Ritual sur Ritual.</span></div></div>
     <div class="gloss-card"><div class="gloss-term">Wallet</div><div class="gloss-def"><span data-lang="en">Your identity on the blockchain. Public address = username. Private key = password. NEVER share your private key.</span><span data-lang="id">Identitasmu di blockchain. Alamat publik = username. Private key = password. JANGAN PERNAH bagikan private key.</span><span data-lang="zh">你在区块链上的身份。公共地址 = 用户名。私钥 = 密码。切勿分享你的私钥。</span><span data-lang="ja">ブロックチェーン上のあなたの身元。公開アドレス = ユーザー名。秘密鍵 = パスワード。秘密鍵は絶対に共有しない。</span><span data-lang="es">Tu identidad en la blockchain. Dirección pública = nombre de usuario. Clave privada = contraseña. NUNCA compartas tu clave privada.</span><span data-lang="fr">Votre identité sur la blockchain. Adresse publique = nom d'utilisateur. Clé privée = mot de passe. Ne JAMAIS partager votre clé privée.</span></div></div>
     <div class="gloss-card"><div class="gloss-term">TEE</div><div class="gloss-def"><span data-lang="en">Trusted Execution Environment. A secure enclave that processes sensitive data (like API keys) privately — even the server operator can't see inside.</span><span data-lang="id">Enklave aman yang memproses data sensitif secara privat — bahkan operator server tidak bisa melihat ke dalamnya.</span><span data-lang="zh">可信执行环境。安全飞地，私密处理敏感数据（如 API 密钥）——即使是服务器运营商也看不到里面。</span><span data-lang="ja">信頼された実行環境。APIキーなどの機密データをプライベートに処理するセキュアエンクレーブ—サーバー運営者でも見えない。</span><span data-lang="es">Entorno de Ejecución Confiable. Un enclave seguro que procesa datos sensibles (como claves API) de forma privada — ni el operador del servidor puede ver dentro.</span><span data-lang="fr">Environnement d'Exécution de Confiance. Une enclave sécurisée qui traite les données sensibles (comme les clés API) en privé — même l'opérateur du serveur ne peut pas voir à l'intérieur.</span></div></div>
     <div class="gloss-card"><div class="gloss-term">Deploy</div><div class="gloss-def"><span data-lang="en">Publishing your smart contract to the blockchain. Once deployed, it runs forever and can't be stopped.</span><span data-lang="id">Mempublikasikan smart contract ke blockchain. Setelah deploy, berjalan selamanya.</span><span data-lang="zh">将你的智能合约发布到区块链上。一旦部署，它就永久运行，无法停止。</span><span data-lang="ja">スマートコントラクトをブロックチェーンに公開すること。デプロイ後、永遠に実行され、止められない。</span><span data-lang="es">Publicar tu smart contract en la blockchain. Una vez desplegado, funciona para siempre y no puede detenerse.</span><span data-lang="fr">Publier votre smart contract sur la blockchain. Une fois déployé, il tourne pour toujours et ne peut pas être arrêté.</span></div></div>
@@ -1195,7 +1201,7 @@ a[data-lang].lang-active{display:inline-block}
 <!-- FOOTER -->
 <footer>
   <div class="foot-logo">
-    Ritual Learn — Community Guide · Not Official
+    BuildonRitual — Community Guide · Not Official
   </div>
   <div class="foot-links">
     <a href="https://docs.ritualfoundation.org" target="_blank" class="foot-link">Docs</a>
@@ -1383,53 +1389,100 @@ async function connectWallet() {
   if (typeof window.ethereum === 'undefined') {
     btn.textContent = '← Install MetaMask first';
     window.open('https://metamask.io/download', '_blank');
+    setTimeout(function() {
+      btn.disabled = false;
+      btn.innerHTML = '<span data-lang="en">Connect MetaMask</span><span data-lang="id">Hubungkan MetaMask</span><span data-lang="zh">连接 MetaMask</span><span data-lang="ja">MetaMaskを接続</span><span data-lang="es">Conectar MetaMask</span><span data-lang="fr">Connecter MetaMask</span>';
+      setLang(currentLang, document.getElementById('currentFlag').textContent);
+    }, 3000);
     return;
   }
   try {
-    btn.textContent = 'Connecting...';
+    btn.innerHTML = '⟳ Connecting...';
     btn.disabled = true;
+
+    // Request accounts
     var accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
     var addr = accounts[0];
-    // Add Ritual network
+
+    // Add Ritual Testnet network (ignore error if already added)
     try {
       await window.ethereum.request({
         method: 'wallet_addEthereumChain',
         params: [{
           chainId: '0x7BB',
           chainName: 'Ritual Testnet',
-          nativeCurrency: { name: 'CRAT', symbol: 'CRAT', decimals: 18 },
+          nativeCurrency: { name: 'Ritual', symbol: 'Ritual', decimals: 18 },
           rpcUrls: ['https://rpc.ritualfoundation.org'],
           blockExplorerUrls: ['https://explorer.ritualfoundation.org']
         }]
       });
-    } catch(e) { /* already added */ }
-    // Switch to Ritual
-    await window.ethereum.request({
-      method: 'wallet_switchEthereumChain',
-      params: [{ chainId: '0x7BB' }]
-    });
-    document.getElementById('walletAddr').innerHTML = '<span style="color:var(--green);font-family:var(--font-mono);font-size:11px">' + addr.slice(0,6) + '...' + addr.slice(-4) + '</span>';
-    document.getElementById('walletStatus').className = 'demo-wallet-status ws-connected';
-    document.getElementById('walletStatus').textContent = 'CONNECTED';
-    document.getElementById('btnDisconnect').style.display = 'inline-block';
-    btn.style.display = 'none';
+    } catch(addErr) { /* already added or user dismissed */ }
+
+    // Switch to Ritual chain
+    try {
+      await window.ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: '0x7BB' }]
+      });
+    } catch(switchErr) {
+      // If switch fails, warn but continue — user might already be on it
+      console.warn('Chain switch warning:', switchErr);
+    }
+
+    // Verify we're on the right chain
+    var chainId = await window.ethereum.request({ method: 'eth_chainId' });
+    if (chainId !== '0x7bb' && chainId !== '0x7BB') {
+      throw new Error('Please switch to Ritual Testnet (Chain ID 1979) in MetaMask');
+    }
+
+    // Update UI
+    setWalletConnected(addr);
     isSimulated = false;
     web3Provider = window.ethereum;
+
+    // Listen for account/chain changes
+    window.ethereum.on('accountsChanged', function(accs) {
+      if (!accs.length) { disconnectWallet(); }
+      else { setWalletConnected(accs[0]); }
+    });
+    window.ethereum.on('chainChanged', function(id) {
+      if (id !== '0x7bb' && id !== '0x7BB') { disconnectWallet(); }
+    });
+
     goToStep(1);
   } catch(e) {
     btn.disabled = false;
-    btn.textContent = 'Try Again';
+    var errMsg = e.message || 'Connection failed';
+    if (e.code === 4001) errMsg = 'Connection rejected';
+    btn.innerHTML = '⚠ ' + errMsg.slice(0, 40) + (errMsg.length > 40 ? '…' : '') + ' — Retry';
+    setTimeout(function() {
+      btn.disabled = false;
+      btn.innerHTML = '<span data-lang="en">Connect MetaMask</span><span data-lang="id">Hubungkan MetaMask</span><span data-lang="zh">连接 MetaMask</span><span data-lang="ja">MetaMaskを接続</span><span data-lang="es">Conectar MetaMask</span><span data-lang="fr">Connecter MetaMask</span>';
+      setLang(currentLang, document.getElementById('currentFlag').textContent);
+    }, 4000);
     console.error(e);
   }
+}
+
+function setWalletConnected(addr) {
+  document.getElementById('walletAddr').innerHTML = '<span style="color:var(--green);font-family:var(--font-mono);font-size:11px">' + addr.slice(0,6) + '...' + addr.slice(-4) + '</span>';
+  document.getElementById('walletStatus').className = 'demo-wallet-status ws-connected';
+  document.getElementById('walletStatus').textContent = 'CONNECTED';
+  document.getElementById('btnDisconnect').style.display = 'inline-block';
+  document.getElementById('btnConnect').style.display = 'none';
+  // Show floating disconnect bar
+  document.getElementById('floatDisconnect').style.display = 'flex';
+  document.getElementById('floatAddr').textContent = addr.slice(0,6) + '...' + addr.slice(-4);
 }
 
 function disconnectWallet() {
   isSimulated = false;
   web3Provider = null;
-  document.getElementById('walletAddr').innerHTML = '<span data-lang="en">Not connected</span>';
+  document.getElementById('walletAddr').innerHTML = '<span data-lang="en">Not connected</span><span data-lang="id">Belum terhubung</span><span data-lang="zh">未连接</span><span data-lang="ja">未接続</span><span data-lang="es">No conectado</span><span data-lang="fr">Non connecté</span>';
   document.getElementById('walletStatus').className = 'demo-wallet-status ws-disconnected';
-  document.getElementById('walletStatus').innerHTML = '<span>DISCONNECTED</span>';
+  document.getElementById('walletStatus').innerHTML = '<span data-lang="en">DISCONNECTED</span><span data-lang="id">TERPUTUS</span><span data-lang="zh">未连接</span><span data-lang="ja">未接続</span><span data-lang="es">DESCONECTADO</span><span data-lang="fr">DÉCONNECTÉ</span>';
   document.getElementById('btnDisconnect').style.display = 'none';
+  document.getElementById('floatDisconnect').style.display = 'none';
   var btn = document.getElementById('btnConnect');
   btn.style.display = '';
   btn.disabled = false;
@@ -1460,9 +1513,10 @@ async function deployContract() {
   addLog('✓ Compilation successful', 't-success');
   await sleep(400);
   addLog('Connecting to RPC: rpc.ritualfoundation.org', '');
-  await sleep(700);
+  await sleep(500);
 
   if (isSimulated) {
+    addLog('🔵 Running in simulation mode...', '');
     await sleep(800);
     addLog('Broadcasting transaction...', '');
     await sleep(1200);
@@ -1479,64 +1533,83 @@ async function deployContract() {
   } else {
     try {
       var provider = window.ethereum;
+
+      // Verify still connected & on right chain
       var accounts = await provider.request({ method: 'eth_accounts' });
+      if (!accounts || !accounts.length) throw new Error('Wallet disconnected. Please reconnect.');
       var from = accounts[0];
-      addLog('Deploying from: ' + from.slice(0,8) + '...', '');
 
-      // Build tx params — no gas field so MetaMask estimates it
-      var txParams = {
-        from: from,
-        data: contract.bytecode,
-        // gasPrice: omitted → MetaMask uses network default
-        // gas: omitted → MetaMask estimates (avoids "Unknown transaction" / fee error)
-      };
+      var chainId = await provider.request({ method: 'eth_chainId' });
+      if (chainId !== '0x7bb' && chainId !== '0x7BB') {
+        addLog('⚠ Wrong network detected. Switching to Ritual...', 't-warn');
+        await provider.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x7BB' }] });
+        await sleep(500);
+      }
 
-      // Try to estimate gas ourselves first for a cleaner UX
+      addLog('✓ Connected to Ritual Testnet', 't-success');
+      addLog('Deploying from: ' + from.slice(0,6) + '...' + from.slice(-4), '');
+
+      var txParams = { from: from, data: contract.bytecode };
+
+      // Estimate gas with buffer
       try {
         var gasEst = await provider.request({
           method: 'eth_estimateGas',
           params: [{ from: from, data: contract.bytecode }]
         });
-        // Add 20% buffer
-        var gasWithBuffer = '0x' + Math.floor(parseInt(gasEst, 16) * 1.2).toString(16);
+        var gasWithBuffer = '0x' + Math.floor(parseInt(gasEst, 16) * 1.3).toString(16);
         txParams.gas = gasWithBuffer;
-        addLog('Gas estimate: ' + parseInt(gasEst, 16).toLocaleString() + ' (+20% buffer)', '');
+        addLog('Gas estimate: ' + parseInt(gasEst, 16).toLocaleString() + ' (+30% buffer)', '');
       } catch(gasErr) {
-        addLog('⚠ Gas estimate skipped — MetaMask will estimate', 't-warn');
-        // Don't set gas — let MetaMask handle it
+        addLog('⚠ Gas estimate failed — MetaMask will estimate', 't-warn');
       }
 
+      addLog('📤 Sending transaction to MetaMask...', '');
       var txHash = await provider.request({
         method: 'eth_sendTransaction',
         params: [txParams]
       });
 
-      addLog('✓ TX Hash: ' + txHash.slice(0,16) + '...', 't-success');
+      addLog('✓ TX submitted: ' + txHash.slice(0,10) + '...' + txHash.slice(-6), 't-success');
       addLog('⛏ Waiting for confirmation (~350ms blocks)...', '');
 
+      // Poll for receipt
       var receipt = null;
-      for (var i = 0; i < 30; i++) {
+      var maxAttempts = 60; // ~2 min timeout
+      for (var i = 0; i < maxAttempts; i++) {
         await sleep(2000);
-        receipt = await provider.request({
-          method: 'eth_getTransactionReceipt',
-          params: [txHash]
-        });
+        try {
+          receipt = await provider.request({
+            method: 'eth_getTransactionReceipt',
+            params: [txHash]
+          });
+        } catch(rErr) { /* rpc hiccup, continue */ }
         if (receipt) break;
-        if (i < 5) addLog('Still waiting... (' + (i+1) + ')', '');
+        if (i % 5 === 4) addLog('Still waiting... (' + Math.round((i+1)*2) + 's)', '');
       }
+
       if (receipt) {
+        if (receipt.status === '0x0') {
+          addLog('✗ Transaction reverted on-chain', 't-error');
+          btn.disabled = false;
+          btn.innerHTML = '🚀 Try Again';
+          return;
+        }
         var blockNum = parseInt(receipt.blockNumber, 16);
         var gasUsed = parseInt(receipt.gasUsed, 16).toLocaleString();
-        addLog('✓ Confirmed in block #' + blockNum, 't-success');
+        addLog('✓ Confirmed in block #' + blockNum + ' 🎉', 't-success');
         showResult(txHash, receipt.contractAddress, blockNum, gasUsed, false);
       } else {
-        addLog('⚠ TX pending — check explorer manually', 't-warn');
+        addLog('⚠ TX pending — check explorer for status', 't-warn');
+        addLog('TX: ' + txHash, '');
         btn.disabled = false;
         btn.innerHTML = '🚀 Retry';
       }
     } catch(e) {
       var msg = e.message || 'Unknown error';
-      if (e.code === 4001) msg = 'User rejected transaction';
+      if (e.code === 4001) msg = 'User rejected transaction in MetaMask';
+      else if (e.code === -32603) msg = 'RPC error — check you have enough Ritual tokens';
+      else if (msg.includes('insufficient funds')) msg = 'Insufficient funds — get tokens from faucet.ritualfoundation.org';
       addLog('✗ ' + msg, 't-error');
       btn.disabled = false;
       btn.innerHTML = '🚀 Try Again';
