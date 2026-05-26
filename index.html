@@ -43,7 +43,7 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 .lang-current{display:flex;align-items:center;gap:6px;padding:6px 12px;background:var(--surface);border:1px solid var(--border);border-radius:6px;font-family:var(--font-mono);font-size:11px;color:var(--soft);cursor:pointer;transition:all .2s;user-select:none}
 .lang-current:hover{border-color:var(--border2);color:var(--text)}
 .lang-flag{font-size:13px}
-.lang-dropdown{position:absolute;top:calc(100% + 8px);right:0;background:var(--card2);border:1px solid var(--border2);border-radius:10px;padding:6px;min-width:160px;z-index:600;display:none;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.lang-dropdown{position:absolute;top:calc(100% + 8px);right:0;background:var(--card2);border:1px solid var(--border2);border-radius:10px;padding:6px;min-width:160px;z-index:600;display:none;box-shadow:0 20px 60px rgba(0,0,0,.6);max-height:320px;overflow-y:auto}
 .lang-select.open .lang-dropdown{display:block}
 .lang-opt{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:6px;font-size:13px;cursor:pointer;transition:background .15s}
 .lang-opt:hover{background:rgba(255,255,255,.04)}
@@ -410,8 +410,14 @@ a[data-lang].lang-active{display:inline-block}
         <div class="lang-opt" onclick="setLang('id','🇮🇩')"><span class="lang-opt-flag">🇮🇩</span><span class="lang-opt-name">Bahasa Indonesia</span><span class="lang-opt-code">ID</span></div>
         <div class="lang-opt" onclick="setLang('zh','🇨🇳')"><span class="lang-opt-flag">🇨🇳</span><span class="lang-opt-name">中文</span><span class="lang-opt-code">ZH</span></div>
         <div class="lang-opt" onclick="setLang('ja','🇯🇵')"><span class="lang-opt-flag">🇯🇵</span><span class="lang-opt-name">日本語</span><span class="lang-opt-code">JA</span></div>
+        <div class="lang-opt" onclick="setLang('ko','🇰🇷')"><span class="lang-opt-flag">🇰🇷</span><span class="lang-opt-name">한국어</span><span class="lang-opt-code">KO</span></div>
         <div class="lang-opt" onclick="setLang('es','🇪🇸')"><span class="lang-opt-flag">🇪🇸</span><span class="lang-opt-name">Español</span><span class="lang-opt-code">ES</span></div>
+        <div class="lang-opt" onclick="setLang('pt','🇧🇷')"><span class="lang-opt-flag">🇧🇷</span><span class="lang-opt-name">Português</span><span class="lang-opt-code">PT</span></div>
         <div class="lang-opt" onclick="setLang('fr','🇫🇷')"><span class="lang-opt-flag">🇫🇷</span><span class="lang-opt-name">Français</span><span class="lang-opt-code">FR</span></div>
+        <div class="lang-opt" onclick="setLang('de','🇩🇪')"><span class="lang-opt-flag">🇩🇪</span><span class="lang-opt-name">Deutsch</span><span class="lang-opt-code">DE</span></div>
+        <div class="lang-opt" onclick="setLang('ar','🇸🇦')"><span class="lang-opt-flag">🇸🇦</span><span class="lang-opt-name">العربية</span><span class="lang-opt-code">AR</span></div>
+        <div class="lang-opt" onclick="setLang('tr','🇹🇷')"><span class="lang-opt-flag">🇹🇷</span><span class="lang-opt-name">Türkçe</span><span class="lang-opt-code">TR</span></div>
+        <div class="lang-opt" onclick="setLang('hi','🇮🇳')"><span class="lang-opt-flag">🇮🇳</span><span class="lang-opt-name">हिन्दी</span><span class="lang-opt-code">HI</span></div>
       </div>
     </div>
     <a href="https://skills.ritualfoundation.org" target="_blank" class="nav-cta">
@@ -671,12 +677,12 @@ a[data-lang].lang-active{display:inline-block}
     <span data-lang="fr">Déployez votre premier smart<br>contract — <span style="color:var(--green)">maintenant</span></span>
   </h2>
   <p class="sec-p">
-    <span data-lang="en">Connect MetaMask, pick a contract template, and deploy to Ritual testnet. Real transaction. Real block. Real explorer link.</span>
-    <span data-lang="id">Hubungkan MetaMask, pilih template contract, dan deploy ke testnet Ritual. Transaksi nyata. Blok nyata. Link explorer nyata.</span>
-    <span data-lang="zh">连接 MetaMask，选择合约模板，部署到 Ritual 测试网。真实交易。真实区块。真实浏览器链接。</span>
-    <span data-lang="ja">MetaMaskを接続し、コントラクトテンプレートを選択してRitualテストネットにデプロイ。本物のトランザクション。本物のブロック。本物のエクスプローラーリンク。</span>
-    <span data-lang="es">Conecta MetaMask, elige una plantilla de contrato y despliégala en el testnet de Ritual. Transacción real. Bloque real. Enlace al explorador real.</span>
-    <span data-lang="fr">Connectez MetaMask, choisissez un modèle de contrat, et déployez sur le testnet Ritual. Transaction réelle. Bloc réel. Lien explorateur réel.</span>
+    <span data-lang="en">Pick a contract template and deploy to Ritual testnet. Real transaction. Real block. Real explorer link.</span>
+    <span data-lang="id">Pilih template contract dan deploy ke testnet Ritual. Transaksi nyata. Blok nyata. Link explorer nyata.</span>
+    <span data-lang="zh">选择合约模板，部署到 Ritual 测试网。真实交易。真实区块。真实浏览器链接。</span>
+    <span data-lang="ja">コントラクトテンプレートを選択してRitualテストネットにデプロイ。本物のトランザクション。本物のブロック。本物のエクスプローラーリンク。</span>
+    <span data-lang="es">Elige una plantilla de contrato y despliégala en el testnet de Ritual. Transacción real. Bloque real. Enlace al explorador real.</span>
+    <span data-lang="fr">Choisissez un modèle de contrat, et déployez sur le testnet Ritual. Transaction réelle. Bloc réel. Lien explorateur réel.</span>
   </p>
 
   <div class="demo-wrap">
@@ -710,71 +716,12 @@ a[data-lang].lang-active{display:inline-block}
         <div class="demo-step-dot active" id="sdot0"></div>
         <div class="demo-step-dot" id="sdot1"></div>
         <div class="demo-step-dot" id="sdot2"></div>
-        <div class="demo-step-dot" id="sdot3"></div>
       </div>
 
-      <!-- STEP 0: Connect wallet -->
-      <div id="demo-step-0">
-        <div class="demo-form">
-          <div class="demo-wallet-row">
-            <div class="demo-wallet-icon">🦊</div>
-            <div class="demo-wallet-text">
-              <div class="demo-wallet-name">MetaMask</div>
-              <div class="demo-wallet-sub" id="walletAddr">
-                <span data-lang="en">Not connected</span>
-                <span data-lang="id">Belum terhubung</span>
-                <span data-lang="zh">未连接</span>
-                <span data-lang="ja">未接続</span>
-                <span data-lang="es">No conectado</span>
-                <span data-lang="fr">Non connecté</span>
-              </div>
+      <!-- STEP 0: REMOVED (was Connect Wallet) -->
             </div>
-            <div style="display:flex;align-items:center;gap:8px">
-              <div class="demo-wallet-status ws-disconnected" id="walletStatus">
-                <span data-lang="en">DISCONNECTED</span>
-                <span data-lang="id">TERPUTUS</span>
-                <span data-lang="zh">未连接</span>
-                <span data-lang="ja">未接続</span>
-                <span data-lang="es">DESCONECTADO</span>
-                <span data-lang="fr">DÉCONNECTÉ</span>
-              </div>
-              <button id="btnDisconnect" onclick="disconnectWallet()" style="display:none;font-family:var(--font-mono);font-size:10px;padding:4px 10px;background:transparent;border:1px solid rgba(255,61,107,.3);color:var(--crimson);border-radius:5px;cursor:pointer;transition:all .2s" onmouseover="this.style.background='rgba(255,61,107,.1)'" onmouseout="this.style.background='transparent'">✕ Disconnect</button>
-            </div>
-          </div>
-          <div class="tip tip-a">
-            <div class="tip-head">💡 <span data-lang="en">NEED TESTNET TOKENS?</span><span data-lang="id">BUTUH TOKEN TESTNET?</span><span data-lang="zh">需要测试网代币？</span><span data-lang="ja">テストネットトークンが必要？</span><span data-lang="es">¿NECESITAS TOKENS DE TESTNET?</span><span data-lang="fr">BESOIN DE TOKENS TESTNET ?</span></div>
-            <div class="tip-body">
-              <span data-lang="en">Get free Ritual tokens at <a href="https://faucet.ritualfoundation.org" target="_blank">faucet.ritualfoundation.org ↗</a> — enough to deploy many contracts.</span>
-              <span data-lang="id">Dapatkan token Ritual gratis di <a href="https://faucet.ritualfoundation.org" target="_blank">faucet.ritualfoundation.org ↗</a> — cukup untuk deploy banyak contract.</span>
-              <span data-lang="zh">在 <a href="https://faucet.ritualfoundation.org" target="_blank">faucet.ritualfoundation.org ↗</a> 获取免费 Ritual 代币——足以部署许多合约。</span>
-              <span data-lang="ja"><a href="https://faucet.ritualfoundation.org" target="_blank">faucet.ritualfoundation.org ↗</a> で無料のRitualトークンを取得—多くのコントラクトのデプロイに十分。</span>
-              <span data-lang="es">Obtén tokens Ritual gratis en <a href="https://faucet.ritualfoundation.org" target="_blank">faucet.ritualfoundation.org ↗</a> — suficientes para desplegar muchos contratos.</span>
-              <span data-lang="fr">Obtenez des tokens Ritual gratuits sur <a href="https://faucet.ritualfoundation.org" target="_blank">faucet.ritualfoundation.org ↗</a> — suffisant pour déployer de nombreux contrats.</span>
-            </div>
-          </div>
-          <div class="demo-actions">
-            <button class="demo-btn-primary" id="btnConnect" onclick="connectWallet()">
-              <span data-lang="en">Connect MetaMask</span>
-              <span data-lang="id">Hubungkan MetaMask</span>
-              <span data-lang="zh">连接 MetaMask</span>
-              <span data-lang="ja">MetaMaskを接続</span>
-              <span data-lang="es">Conectar MetaMask</span>
-              <span data-lang="fr">Connecter MetaMask</span>
-            </button>
-            <button class="demo-btn-secondary" onclick="skipToDemo()">
-              <span data-lang="en">Try Demo (Simulated)</span>
-              <span data-lang="id">Coba Demo (Simulasi)</span>
-              <span data-lang="zh">试用演示（模拟）</span>
-              <span data-lang="ja">デモを試す（シミュレート）</span>
-              <span data-lang="es">Probar Demo (Simulado)</span>
-              <span data-lang="fr">Essayer le Démo (Simulé)</span>
-            </button>
-          </div>
-        </div>
-      </div>
-
       <!-- STEP 1: Choose contract template -->
-      <div id="demo-step-1" style="display:none">
+      <div id="demo-step-1">
         <div class="demo-form">
           <div class="demo-field">
             <div class="demo-label">
@@ -825,7 +772,7 @@ a[data-lang].lang-active{display:inline-block}
               <span data-lang="es">Siguiente: Revisar y Desplegar →</span>
               <span data-lang="fr">Suivant: Réviser et Déployer →</span>
             </button>
-            <button class="demo-btn-secondary" onclick="goToStep(0)">← Back</button>
+
           </div>
         </div>
       </div>
@@ -1123,9 +1070,48 @@ a[data-lang].lang-active{display:inline-block}
 
 <!-- PRECOMPILE PLAYGROUND -->
 <div class="sw fade-up" id="playground">
-  <div class="sec-eyebrow"><div class="sec-eyebrow-line"></div>PRECOMPILE PLAYGROUND</div>
-  <h2 class="sec-h">Pick a precompile,<br>see the <span style="color:var(--green)">code.</span></h2>
-  <p class="sec-p">Klik precompile yang ingin kamu pakai — langsung muncul contoh Solidity siap pakai. Copy dan kasih ke Claude Code.</p>
+  <div class="sec-eyebrow"><div class="sec-eyebrow-line"></div>
+    <span data-lang="en">PRECOMPILE PLAYGROUND</span>
+    <span data-lang="id">PLAYGROUND PRECOMPILE</span>
+    <span data-lang="zh">预编译游乐场</span>
+    <span data-lang="ja">プリコンパイル プレイグラウンド</span>
+    <span data-lang="ko">프리컴파일 플레이그라운드</span>
+    <span data-lang="es">PLAYGROUND DE PRECOMPILES</span>
+    <span data-lang="pt">PLAYGROUND DE PRECOMPILES</span>
+    <span data-lang="fr">TERRAIN DE JEU PRECOMPILE</span>
+    <span data-lang="de">PRECOMPILE SPIELPLATZ</span>
+    <span data-lang="ar">ملعب البريكومبايل</span>
+    <span data-lang="tr">PRECOMPİLE OYUN ALANI</span>
+    <span data-lang="hi">प्रीकंपाइल प्लेग्राउंड</span>
+  </div>
+  <h2 class="sec-h">
+    <span data-lang="en">Pick a precompile,<br>see the <span style="color:var(--green)">code.</span></span>
+    <span data-lang="id">Pilih precompile,<br>lihat <span style="color:var(--green)">kodenya.</span></span>
+    <span data-lang="zh">选择预编译，<br>查看<span style="color:var(--green)">代码。</span></span>
+    <span data-lang="ja">プリコンパイルを選んで<br><span style="color:var(--green)">コードを見る。</span></span>
+    <span data-lang="ko">프리컴파일을 골라<br><span style="color:var(--green)">코드를 확인하세요.</span></span>
+    <span data-lang="es">Elige un precompile,<br>ve el <span style="color:var(--green)">código.</span></span>
+    <span data-lang="pt">Escolha um precompile,<br>veja o <span style="color:var(--green)">código.</span></span>
+    <span data-lang="fr">Choisissez un precompile,<br>voyez le <span style="color:var(--green)">code.</span></span>
+    <span data-lang="de">Wähle ein Precompile,<br>sieh den <span style="color:var(--green)">Code.</span></span>
+    <span data-lang="ar">اختر بريكومبايل،<br>شاهد <span style="color:var(--green)">الكود.</span></span>
+    <span data-lang="tr">Bir precompile seç,<br><span style="color:var(--green)">kodu</span> gör.</span>
+    <span data-lang="hi">एक प्रीकंपाइल चुनें,<br><span style="color:var(--green)">कोड देखें।</span></span>
+  </h2>
+  <p class="sec-p">
+    <span data-lang="en">Click a precompile to see a ready-to-use Solidity example. Copy and hand it to Claude Code.</span>
+    <span data-lang="id">Klik precompile untuk lihat contoh Solidity siap pakai. Copy dan kasih ke Claude Code.</span>
+    <span data-lang="zh">点击预编译查看即用 Solidity 示例。复制后交给 Claude Code。</span>
+    <span data-lang="ja">プリコンパイルをクリックして、すぐ使えるSolidityサンプルを確認。コピーしてClaude Codeに渡すだけ。</span>
+    <span data-lang="ko">프리컴파일을 클릭하면 바로 쓸 수 있는 Solidity 예제가 나옵니다. 복사해서 Claude Code에 전달하세요.</span>
+    <span data-lang="es">Haz clic en un precompile para ver un ejemplo Solidity listo para usar. Cópialo y dáselo a Claude Code.</span>
+    <span data-lang="pt">Clique em um precompile para ver um exemplo Solidity pronto. Copie e entregue ao Claude Code.</span>
+    <span data-lang="fr">Cliquez sur un precompile pour voir un exemple Solidity prêt à l'emploi. Copiez et donnez-le à Claude Code.</span>
+    <span data-lang="de">Klicke auf ein Precompile, um ein fertiges Solidity-Beispiel zu sehen. Kopieren und an Claude Code übergeben.</span>
+    <span data-lang="ar">انقر على بريكومبايل لرؤية مثال Solidity جاهز للاستخدام. انسخه وأعطه لـ Claude Code.</span>
+    <span data-lang="tr">Hazır bir Solidity örneği görmek için bir precompile'a tıkla. Kopyala ve Claude Code'a ver.</span>
+    <span data-lang="hi">रेडी-टू-यूज़ Solidity उदाहरण देखने के लिए प्रीकंपाइल पर क्लिक करें। कॉपी करके Claude Code को दें।</span>
+  </p>
 
   <div style="display:grid;grid-template-columns:280px 1fr;gap:20px;align-items:start">
 
@@ -1138,8 +1124,34 @@ a[data-lang].lang-active{display:inline-block}
     <div id="pgPanel" style="background:var(--card);border:1px solid var(--border2);border-radius:18px;overflow:hidden;position:sticky;top:80px">
       <div id="pgPanelHeader" style="padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px">
         <div>
-          <div id="pgPanelName" style="font-family:var(--font-head);font-size:18px;font-weight:700;margin-bottom:4px">← Pilih precompile</div>
-          <div id="pgPanelDesc" style="font-size:13px;color:var(--soft)">Klik salah satu precompile di kiri untuk lihat contoh kodenya</div>
+          <div id="pgPanelName" style="font-family:var(--font-head);font-size:18px;font-weight:700;margin-bottom:4px">
+            <span data-lang="en">← Select a precompile</span>
+            <span data-lang="id">← Pilih precompile</span>
+            <span data-lang="zh">← 选择预编译</span>
+            <span data-lang="ja">← プリコンパイルを選択</span>
+            <span data-lang="ko">← 프리컴파일 선택</span>
+            <span data-lang="es">← Selecciona un precompile</span>
+            <span data-lang="pt">← Selecione um precompile</span>
+            <span data-lang="fr">← Sélectionnez un precompile</span>
+            <span data-lang="de">← Precompile auswählen</span>
+            <span data-lang="ar">← اختر بريكومبايل</span>
+            <span data-lang="tr">← Bir precompile seçin</span>
+            <span data-lang="hi">← प्रीकंपाइल चुनें</span>
+          </div>
+          <div id="pgPanelDesc" style="font-size:13px;color:var(--soft)">
+            <span data-lang="en">Click a precompile on the left to see code examples</span>
+            <span data-lang="id">Klik salah satu precompile di kiri untuk lihat contoh kodenya</span>
+            <span data-lang="zh">点击左侧的预编译查看代码示例</span>
+            <span data-lang="ja">左のプリコンパイルをクリックしてコード例を見る</span>
+            <span data-lang="ko">왼쪽 프리컴파일을 클릭하면 코드 예제가 나옵니다</span>
+            <span data-lang="es">Haz clic en un precompile a la izquierda para ver ejemplos de código</span>
+            <span data-lang="pt">Clique em um precompile à esquerda para ver exemplos de código</span>
+            <span data-lang="fr">Cliquez sur un precompile à gauche pour voir les exemples de code</span>
+            <span data-lang="de">Klicke links auf ein Precompile, um Codebeispiele zu sehen</span>
+            <span data-lang="ar">انقر على بريكومبايل في اليسار لرؤية أمثلة الكود</span>
+            <span data-lang="tr">Kod örneklerini görmek için soldaki bir precompile'a tıklayın</span>
+            <span data-lang="hi">कोड उदाहरण देखने के लिए बाईं ओर प्रीकंपाइल पर क्लिक करें</span>
+          </div>
         </div>
         <div style="display:flex;align-items:center;gap:8px">
           <span id="pgPanelBadge" style="display:none;font-family:var(--font-mono);font-size:9px;padding:4px 10px;border-radius:4px;letter-spacing:1px"></span>
@@ -1150,7 +1162,9 @@ a[data-lang].lang-active{display:inline-block}
       <!-- tabs -->
       <div id="pgTabs" style="display:none;padding:0 24px;border-bottom:1px solid var(--border);display:flex;gap:0">
         <button class="pgtab on" onclick="pgTab('code',this)" style="font-family:var(--font-mono);font-size:11px;padding:12px 16px;background:transparent;border:none;border-bottom:2px solid var(--green);color:var(--green);cursor:pointer;letter-spacing:.5px">CODE</button>
-        <button class="pgtab" onclick="pgTab('explain',this)" style="font-family:var(--font-mono);font-size:11px;padding:12px 16px;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--soft);cursor:pointer;letter-spacing:.5px">EXPLAIN</button>
+        <button class="pgtab" onclick="pgTab('explain',this)" style="font-family:var(--font-mono);font-size:11px;padding:12px 16px;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--soft);cursor:pointer;letter-spacing:.5px">
+          <span data-lang="en">EXPLAIN</span><span data-lang="id">PENJELASAN</span><span data-lang="zh">说明</span><span data-lang="ja">解説</span><span data-lang="ko">설명</span><span data-lang="es">EXPLICAR</span><span data-lang="pt">EXPLICAR</span><span data-lang="fr">EXPLIQUER</span><span data-lang="de">ERKLÄREN</span><span data-lang="ar">شرح</span><span data-lang="tr">AÇIKLA</span><span data-lang="hi">समझाएं</span>
+        </button>
         <button class="pgtab" onclick="pgTab('prompt',this)" style="font-family:var(--font-mono);font-size:11px;padding:12px 16px;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--soft);cursor:pointer;letter-spacing:.5px">PROMPT</button>
       </div>
 
@@ -1158,7 +1172,20 @@ a[data-lang].lang-active{display:inline-block}
       <div id="pgCode" style="padding:0;font-family:var(--font-mono);font-size:12px;line-height:1.85;max-height:520px;overflow-y:auto">
         <div style="padding:48px 24px;text-align:center;color:var(--muted)">
           <div style="font-size:36px;margin-bottom:12px">⚡</div>
-          <div style="font-size:13px">Pilih precompile untuk mulai</div>
+          <div style="font-size:13px">
+            <span data-lang="en">Select a precompile to get started</span>
+            <span data-lang="id">Pilih precompile untuk mulai</span>
+            <span data-lang="zh">选择一个预编译开始</span>
+            <span data-lang="ja">プリコンパイルを選んで始めよう</span>
+            <span data-lang="ko">프리컴파일을 선택하여 시작하세요</span>
+            <span data-lang="es">Selecciona un precompile para empezar</span>
+            <span data-lang="pt">Selecione um precompile para começar</span>
+            <span data-lang="fr">Sélectionnez un precompile pour commencer</span>
+            <span data-lang="de">Wähle ein Precompile zum Starten</span>
+            <span data-lang="ar">اختر بريكومبايل للبدء</span>
+            <span data-lang="tr">Başlamak için bir precompile seçin</span>
+            <span data-lang="hi">शुरू करने के लिए एक प्रीकंपाइल चुनें</span>
+          </div>
         </div>
       </div>
 
@@ -1167,9 +1194,35 @@ a[data-lang].lang-active{display:inline-block}
 
       <!-- prompt view -->
       <div id="pgPrompt" style="display:none;padding:24px;max-height:520px;overflow-y:auto">
-        <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:2px;margin-bottom:12px">CLAUDE CODE PROMPT</div>
+        <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:2px;margin-bottom:12px">
+          <span data-lang="en">CLAUDE CODE PROMPT</span>
+          <span data-lang="id">PROMPT CLAUDE CODE</span>
+          <span data-lang="zh">CLAUDE CODE 提示词</span>
+          <span data-lang="ja">CLAUDE CODE プロンプト</span>
+          <span data-lang="ko">CLAUDE CODE 프롬프트</span>
+          <span data-lang="es">PROMPT DE CLAUDE CODE</span>
+          <span data-lang="pt">PROMPT DO CLAUDE CODE</span>
+          <span data-lang="fr">INVITE CLAUDE CODE</span>
+          <span data-lang="de">CLAUDE CODE EINGABE</span>
+          <span data-lang="ar">موجه CLAUDE CODE</span>
+          <span data-lang="tr">CLAUDE CODE PROMPTU</span>
+          <span data-lang="hi">CLAUDE CODE प्रॉम्प्ट</span>
+        </div>
         <div id="pgPromptText" style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;font-size:13px;color:var(--text);line-height:1.85;white-space:pre-wrap"></div>
-        <button onclick="pgCopyPrompt()" style="margin-top:12px;font-family:var(--font-mono);font-size:11px;padding:8px 18px;background:transparent;border:1px solid var(--border2);color:var(--soft);border-radius:6px;cursor:pointer;transition:all .2s" onmouseover="this.style.color='var(--text)';this.style.borderColor='rgba(0,255,140,.4)'" onmouseout="this.style.color='var(--soft)';this.style.borderColor='var(--border2)'">Copy Prompt</button>
+        <button onclick="pgCopyPrompt()" style="margin-top:12px;font-family:var(--font-mono);font-size:11px;padding:8px 18px;background:transparent;border:1px solid var(--border2);color:var(--soft);border-radius:6px;cursor:pointer;transition:all .2s" onmouseover="this.style.color='var(--text)';this.style.borderColor='rgba(0,255,140,.4)'" onmouseout="this.style.color='var(--soft)';this.style.borderColor='var(--border2)'">
+          <span data-lang="en">Copy Prompt</span>
+          <span data-lang="id">Salin Prompt</span>
+          <span data-lang="zh">复制提示词</span>
+          <span data-lang="ja">プロンプトをコピー</span>
+          <span data-lang="ko">프롬프트 복사</span>
+          <span data-lang="es">Copiar Prompt</span>
+          <span data-lang="pt">Copiar Prompt</span>
+          <span data-lang="fr">Copier l'invite</span>
+          <span data-lang="de">Eingabe kopieren</span>
+          <span data-lang="ar">نسخ الموجه</span>
+          <span data-lang="tr">Promptu Kopyala</span>
+          <span data-lang="hi">प्रॉम्प्ट कॉपी करें</span>
+        </button>
       </div>
     </div>
   </div>
@@ -1191,6 +1244,7 @@ a[data-lang].lang-active{display:inline-block}
 .pg-line{display:flex}
 .pg-ln{width:32px;text-align:right;color:var(--muted);font-size:11px;padding-right:16px;user-select:none;flex-shrink:0;opacity:.4}
 .pg-code-area{background:#020406;padding:20px 0}
+[data-lang="ar"].lang-active { direction: rtl; text-align: right; }
 </style>
 
 <hr class="divider">
@@ -1999,6 +2053,132 @@ function pgCopyPrompt() {
 }
 
 pgBuildList();
+
+// ─── DEMO DEPLOYER ───────────────────────────────────────────────
+var currentStep = 0;
+
+var contractTemplates = {
+  hello: {
+    name: 'HelloRitual',
+    code: [
+      '<div class="t-line"><span class="t-text"><span style="color:var(--purple)">// SPDX-License-Identifier: MIT</span></span></div>',
+      '<div class="t-line"><span class="t-text"><span style="color:var(--amber)">pragma</span> solidity ^0.8.19;</span></div>',
+      '<div class="t-line"><span class="t-text">&nbsp;</span></div>',
+      '<div class="t-line"><span class="t-text"><span style="color:var(--teal)">contract</span> <span style="color:var(--green)">HelloRitual</span> {</span></div>',
+      '<div class="t-line"><span class="t-text">&nbsp;&nbsp;string public message;</span></div>',
+      '<div class="t-line"><span class="t-text">&nbsp;&nbsp;<span style="color:var(--teal)">constructor</span>() { message = <span style="color:var(--amber)">"Hello, Ritual!"</span>; }</span></div>',
+      '<div class="t-line"><span class="t-text">&nbsp;&nbsp;<span style="color:var(--teal)">function</span> <span style="color:var(--green)">setMessage</span>(string memory m) external {</span></div>',
+      '<div class="t-line"><span class="t-text">&nbsp;&nbsp;&nbsp;&nbsp;message = m;</span></div>',
+      '<div class="t-line"><span class="t-text">&nbsp;&nbsp;}</span></div>',
+      '<div class="t-line"><span class="t-text">}</span></div>'
+    ]
+  },
+  counter: {
+    name: 'Counter',
+    code: [
+      '<div class="t-line"><span class="t-text"><span style="color:var(--purple)">// SPDX-License-Identifier: MIT</span></span></div>',
+      '<div class="t-line"><span class="t-text"><span style="color:var(--amber)">pragma</span> solidity ^0.8.19;</span></div>',
+      '<div class="t-line"><span class="t-text">&nbsp;</span></div>',
+      '<div class="t-line"><span class="t-text"><span style="color:var(--teal)">contract</span> <span style="color:var(--green)">Counter</span> {</span></div>',
+      '<div class="t-line"><span class="t-text">&nbsp;&nbsp;uint256 public count;</span></div>',
+      '<div class="t-line"><span class="t-text">&nbsp;&nbsp;<span style="color:var(--teal)">function</span> <span style="color:var(--green)">increment</span>() external { count++; }</span></div>',
+      '<div class="t-line"><span class="t-text">&nbsp;&nbsp;<span style="color:var(--teal)">function</span> <span style="color:var(--green)">decrement</span>() external { count--; }</span></div>',
+      '<div class="t-line"><span class="t-text">}</span></div>'
+    ]
+  },
+  timestamp: {
+    name: 'TimeStamp',
+    code: [
+      '<div class="t-line"><span class="t-text"><span style="color:var(--purple)">// SPDX-License-Identifier: MIT</span></span></div>',
+      '<div class="t-line"><span class="t-text"><span style="color:var(--amber)">pragma</span> solidity ^0.8.19;</span></div>',
+      '<div class="t-line"><span class="t-text">&nbsp;</span></div>',
+      '<div class="t-line"><span class="t-text"><span style="color:var(--teal)">contract</span> <span style="color:var(--green)">TimeStamp</span> {</span></div>',
+      '<div class="t-line"><span class="t-text">&nbsp;&nbsp;uint256 public lastRecorded;</span></div>',
+      '<div class="t-line"><span class="t-text">&nbsp;&nbsp;<span style="color:var(--teal)">function</span> <span style="color:var(--green)">record</span>() external {</span></div>',
+      '<div class="t-line"><span class="t-text">&nbsp;&nbsp;&nbsp;&nbsp;lastRecorded = block.timestamp;</span></div>',
+      '<div class="t-line"><span class="t-text">&nbsp;&nbsp;}</span></div>',
+      '<div class="t-line"><span class="t-text">}</span></div>'
+    ]
+  }
+};
+
+function updateContractPreview() {
+  var val = document.getElementById('contractTemplate').value;
+  var tpl = contractTemplates[val];
+  document.getElementById('contractPreview').innerHTML = tpl.code.join('');
+  document.getElementById('reviewContractName').textContent = tpl.name;
+}
+
+function goToStep(n) {
+  // Hide all steps
+  [0,1,2,3].forEach(function(i) {
+    var el = document.getElementById('demo-step-' + i);
+    if (el) el.style.display = 'none';
+  });
+  // Update dots (3 dots for steps 1,2,3 → dots 0,1,2)
+  var dotIdx = n - 1; // step 1 = dot 0, step 2 = dot 1, step 3 = dot 2
+  [0,1,2].forEach(function(i) {
+    var dot = document.getElementById('sdot' + i);
+    if (!dot) return;
+    dot.classList.remove('active','done');
+    if (i < dotIdx) dot.classList.add('done');
+    else if (i === dotIdx) dot.classList.add('active');
+  });
+  // Show target step
+  var target = document.getElementById('demo-step-' + n);
+  if (target) target.style.display = 'block';
+  currentStep = n;
+}
+
+function deployContract() {
+  var btn = document.getElementById('btnDeploy');
+  btn.disabled = true;
+  var log = document.getElementById('deployLog');
+  var val = document.getElementById('contractTemplate').value;
+  var tpl = contractTemplates[val];
+  var fakeAddr = '0x' + Array.from({length:40}, function() { return '0123456789abcdef'[Math.floor(Math.random()*16)]; }).join('');
+  var fakeTx = '0x' + Array.from({length:64}, function() { return '0123456789abcdef'[Math.floor(Math.random()*16)]; }).join('');
+  var fakeBlock = (Math.floor(Math.random() * 500000) + 100000).toString();
+
+  var lines = [
+    {cls:'t-text', txt:'Compiling ' + tpl.name + '.sol...', delay:400},
+    {cls:'t-success', txt:'✓ Compiled successfully', delay:900},
+    {cls:'t-text', txt:'Estimating gas...', delay:1400},
+    {cls:'t-text', txt:'Sending transaction to Ritual Chain (1979)...', delay:1900},
+    {cls:'t-hash', txt:'tx: ' + fakeTx.slice(0,34) + '...', delay:2600},
+    {cls:'t-text', txt:'Waiting for confirmation...', delay:3000},
+    {cls:'t-success', txt:'✓ Block #' + fakeBlock + ' confirmed', delay:4200},
+    {cls:'t-success', txt:'✓ Contract deployed at ' + fakeAddr.slice(0,18) + '...', delay:4700},
+  ];
+
+  log.innerHTML = '';
+  lines.forEach(function(l) {
+    setTimeout(function() {
+      log.innerHTML += '<div class="t-line"><span class="t-prompt">▶</span><span class="' + l.cls + '">' + l.txt + '</span></div>';
+      log.scrollTop = log.scrollHeight;
+    }, l.delay);
+  });
+
+  setTimeout(function() {
+    // Fill in result fields
+    document.getElementById('txHash').textContent = fakeTx.slice(0,20) + '...';
+    document.getElementById('contractAddr').textContent = fakeAddr.slice(0,20) + '...';
+    document.getElementById('txBlock').textContent = fakeBlock;
+    document.getElementById('txGas').textContent = (Math.floor(Math.random() * 200000) + 80000).toLocaleString();
+    document.getElementById('explorerLink').innerHTML = '<a href="https://explorer.ritualfoundation.org/tx/' + fakeTx + '" target="_blank" style="color:var(--green);text-decoration:underline;text-decoration-color:rgba(0,255,140,.3)">View on Explorer ↗</a>';
+    goToStep(3);
+  }, 5400);
+}
+
+function resetDemo() {
+  document.getElementById('btnDeploy').disabled = false;
+  document.getElementById('deployLog').innerHTML = '<div class="t-line"><span class="t-prompt">▶</span><span class="t-text"><span data-lang="en">Ready to deploy to Ritual Chain (1979)</span></span></div><div class="t-line"><span class="t-prompt">▶</span><span class="t-text">RPC: <span style="color:var(--teal)">https://rpc.ritualfoundation.org</span></span></div><div class="t-line"><span class="t-prompt">▶</span><span class="t-text">Click Deploy to broadcast transaction</span></div><div class="t-line"><span class="t-blink"></span></div>';
+  goToStep(1);
+}
+
+// Init demo: start at step 1
+goToStep(1);
+updateContractPreview();
 
 // ─── SCROLL REVEAL ───────────────────────────────────────────────
 var obs = new IntersectionObserver(function(entries) {
