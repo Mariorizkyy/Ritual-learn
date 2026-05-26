@@ -381,16 +381,9 @@ a[data-lang].lang-active{display:inline-block}
 <div class="orb orb-2"></div>
 <div class="orb orb-3"></div>
 
-<!-- FLOATING DISCONNECT BAR -->
-<div id="floatDisconnect" style="display:none;position:fixed;bottom:24px;right:24px;z-index:9999;align-items:center;gap:10px;background:var(--card2);border:1px solid var(--border2);border-radius:12px;padding:10px 16px;box-shadow:0 8px 32px rgba(0,0,0,.5);backdrop-filter:blur(16px)">
-  <div style="width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px rgba(0,255,140,.6)"></div>
-  <span style="font-family:var(--font-mono);font-size:11px;color:var(--green)" id="floatAddr"></span>
-  <span style="font-family:var(--font-mono);font-size:9px;color:var(--muted)">· Ritual Testnet</span>
-  <button onclick="disconnectWallet()" style="font-family:var(--font-mono);font-size:10px;padding:5px 12px;background:transparent;border:1px solid rgba(255,61,107,.35);color:var(--crimson);border-radius:6px;cursor:pointer;transition:all .2s;letter-spacing:.3px" onmouseover="this.style.background='rgba(255,61,107,.12)';this.style.borderColor='rgba(255,61,107,.6)'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(255,61,107,.35)'">✕ Disconnect</button>
-</div>
-
 <!-- NAV -->
 <nav>
+  <a href="#" style="font-family:var(--font-head);font-size:16px;font-weight:800;letter-spacing:-0.3px;color:var(--text);text-decoration:none;user-select:none;flex-shrink:0">Buildon<span style="color:var(--green)">Ritual</span></a>
 
   <div class="nav-links">
     <a href="#how" class="nav-link" data-lang="en">How It Works</a>
@@ -400,13 +393,9 @@ a[data-lang].lang-active{display:inline-block}
     <a href="#how" class="nav-link" data-lang="es">Cómo Funciona</a>
     <a href="#how" class="nav-link" data-lang="fr">Comment ça marche</a>
     <a href="#tutorial" class="nav-link">Tutorial</a>
-    <a href="#demo" class="nav-link" data-lang="en">Live Demo</a>
-    <a href="#demo" class="nav-link" data-lang="id">Demo Langsung</a>
-    <a href="#demo" class="nav-link" data-lang="zh">实时演示</a>
-    <a href="#demo" class="nav-link" data-lang="ja">ライブデモ</a>
-    <a href="#demo" class="nav-link" data-lang="es">Demo en Vivo</a>
-    <a href="#demo" class="nav-link" data-lang="fr">Démo Live</a>
+
     <a href="#precompiles" class="nav-link">Precompiles</a>
+    <a href="#playground" class="nav-link">Playground</a>
     <a href="#faq" class="nav-link">FAQ</a>
   </div>
   <div class="nav-right">
@@ -669,10 +658,7 @@ a[data-lang].lang-active{display:inline-block}
   </div>
 </div>
 
-<hr class="divider">
-
-<!-- LIVE DEPLOY DEMO -->
-<div class="sw fade-up" id="demo">
+<!-- TUTORIAL -->
   <div class="sec-eyebrow"><div class="sec-eyebrow-line"></div>
     <span data-lang="en">LIVE DEMO</span><span data-lang="id">DEMO LANGSUNG</span><span data-lang="zh">实时演示</span><span data-lang="ja">ライブデモ</span><span data-lang="es">DEMO EN VIVO</span><span data-lang="fr">DÉMO EN DIRECT</span>
   </div>
@@ -947,12 +933,6 @@ a[data-lang].lang-active{display:inline-block}
         </div>
       </div>
 
-    </div><!-- end demo-body -->
-  </div><!-- end demo-wrap -->
-</div>
-
-<hr class="divider">
-
 <!-- TUTORIAL -->
 <div class="sw fade-up" id="tutorial">
   <div class="sec-eyebrow"><div class="sec-eyebrow-line"></div>
@@ -1141,6 +1121,80 @@ a[data-lang].lang-active{display:inline-block}
 
 <hr class="divider">
 
+<!-- PRECOMPILE PLAYGROUND -->
+<div class="sw fade-up" id="playground">
+  <div class="sec-eyebrow"><div class="sec-eyebrow-line"></div>PRECOMPILE PLAYGROUND</div>
+  <h2 class="sec-h">Pick a precompile,<br>see the <span style="color:var(--green)">code.</span></h2>
+  <p class="sec-p">Klik precompile yang ingin kamu pakai — langsung muncul contoh Solidity siap pakai. Copy dan kasih ke Claude Code.</p>
+
+  <div style="display:grid;grid-template-columns:280px 1fr;gap:20px;align-items:start">
+
+    <!-- LEFT: precompile list -->
+    <div style="display:flex;flex-direction:column;gap:6px" id="pgList">
+      <!-- filled by JS -->
+    </div>
+
+    <!-- RIGHT: code panel -->
+    <div id="pgPanel" style="background:var(--card);border:1px solid var(--border2);border-radius:18px;overflow:hidden;position:sticky;top:80px">
+      <div id="pgPanelHeader" style="padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px">
+        <div>
+          <div id="pgPanelName" style="font-family:var(--font-head);font-size:18px;font-weight:700;margin-bottom:4px">← Pilih precompile</div>
+          <div id="pgPanelDesc" style="font-size:13px;color:var(--soft)">Klik salah satu precompile di kiri untuk lihat contoh kodenya</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span id="pgPanelBadge" style="display:none;font-family:var(--font-mono);font-size:9px;padding:4px 10px;border-radius:4px;letter-spacing:1px"></span>
+          <button id="pgCopyBtn" onclick="pgCopy()" style="display:none;font-family:var(--font-mono);font-size:11px;padding:7px 16px;background:var(--green);color:#000;border:none;border-radius:6px;cursor:pointer;font-weight:700;transition:all .2s" onmouseover="this.style.background='var(--green2)'" onmouseout="this.style.background='var(--green)'">COPY</button>
+        </div>
+      </div>
+
+      <!-- tabs -->
+      <div id="pgTabs" style="display:none;padding:0 24px;border-bottom:1px solid var(--border);display:flex;gap:0">
+        <button class="pgtab on" onclick="pgTab('code',this)" style="font-family:var(--font-mono);font-size:11px;padding:12px 16px;background:transparent;border:none;border-bottom:2px solid var(--green);color:var(--green);cursor:pointer;letter-spacing:.5px">CODE</button>
+        <button class="pgtab" onclick="pgTab('explain',this)" style="font-family:var(--font-mono);font-size:11px;padding:12px 16px;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--soft);cursor:pointer;letter-spacing:.5px">EXPLAIN</button>
+        <button class="pgtab" onclick="pgTab('prompt',this)" style="font-family:var(--font-mono);font-size:11px;padding:12px 16px;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--soft);cursor:pointer;letter-spacing:.5px">PROMPT</button>
+      </div>
+
+      <!-- code view -->
+      <div id="pgCode" style="padding:0;font-family:var(--font-mono);font-size:12px;line-height:1.85;max-height:520px;overflow-y:auto">
+        <div style="padding:48px 24px;text-align:center;color:var(--muted)">
+          <div style="font-size:36px;margin-bottom:12px">⚡</div>
+          <div style="font-size:13px">Pilih precompile untuk mulai</div>
+        </div>
+      </div>
+
+      <!-- explain view -->
+      <div id="pgExplain" style="display:none;padding:24px;font-size:13px;color:var(--soft);line-height:1.85;max-height:520px;overflow-y:auto"></div>
+
+      <!-- prompt view -->
+      <div id="pgPrompt" style="display:none;padding:24px;max-height:520px;overflow-y:auto">
+        <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:2px;margin-bottom:12px">CLAUDE CODE PROMPT</div>
+        <div id="pgPromptText" style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;font-size:13px;color:var(--text);line-height:1.85;white-space:pre-wrap"></div>
+        <button onclick="pgCopyPrompt()" style="margin-top:12px;font-family:var(--font-mono);font-size:11px;padding:8px 18px;background:transparent;border:1px solid var(--border2);color:var(--soft);border-radius:6px;cursor:pointer;transition:all .2s" onmouseover="this.style.color='var(--text)';this.style.borderColor='rgba(0,255,140,.4)'" onmouseout="this.style.color='var(--soft)';this.style.borderColor='var(--border2)'">Copy Prompt</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.pg-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:var(--surface);cursor:pointer;transition:all .2s;user-select:none}
+.pg-item:hover{border-color:var(--border2);background:var(--card)}
+.pg-item.active{border-color:rgba(0,255,140,.4);background:rgba(0,255,140,.04)}
+.pg-item-addr{font-family:var(--font-mono);font-size:9px;color:var(--muted);letter-spacing:.5px;flex-shrink:0}
+.pg-item-name{font-size:13px;font-weight:600;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pg-item-badge{font-family:var(--font-mono);font-size:8px;padding:2px 6px;border-radius:3px;flex-shrink:0;letter-spacing:.5px}
+.pg-badge-sync{background:rgba(0,255,140,.12);color:var(--green)}
+.pg-badge-short{background:rgba(0,229,204,.12);color:var(--teal)}
+.pg-badge-long{background:rgba(157,111,255,.12);color:var(--purple)}
+.pgtab{transition:color .2s,border-color .2s}
+.pgtab:hover{color:var(--text) !important}
+.pgtab.on{color:var(--green) !important;border-bottom-color:var(--green) !important}
+.pg-line{display:flex}
+.pg-ln{width:32px;text-align:right;color:var(--muted);font-size:11px;padding-right:16px;user-select:none;flex-shrink:0;opacity:.4}
+.pg-code-area{background:#020406;padding:20px 0}
+</style>
+
+<hr class="divider">
+
 <!-- FAQ -->
 <div class="sw fade-up" id="faq">
   <div class="sec-eyebrow"><div class="sec-eyebrow-line"></div>FAQ</div>
@@ -1296,359 +1350,655 @@ function toggleFaq(el) {
   el.parentElement.classList.toggle('open');
 }
 
-// ─── LIVE DEPLOY DEMO ────────────────────────────────────────────
-var isSimulated = false;
-var web3Provider = null;
+// ─── PRECOMPILE PLAYGROUND ───────────────────────────────────────
+var pgData = [
+  {
+    addr:'0x0800', name:'ONNX Inference', type:'sync', badge:'SYNC',
+    desc:'Jalankan model ML dari HuggingFace langsung on-chain — tanpa server eksternal. Cocok untuk klasifikasi, scoring, prediksi.',
+    code:`// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.19;
 
-var contracts = {
-  hello: {
-    name: 'HelloRitual',
-    bytecode: '0x608060405234801561001057600080fd5b506040518060400160405280600e81526020017f48656c6c6f2c20526974756c2100000000000000000000000000000000000000815250600090816100559190610108565b506101d7565b600081519050919050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052604160045260246000fd5b7f4e487b7100000000000000000000000000000000000000000000000000000000600052602260045260246000fd5b600060028204905060018216806100d957607f821691505b6020821081036100ec576100eb610092565b5b50919050565b6000819050815f5260205f209050919050565b5f6020601f8301049050919050565b5f82821b905092915050565b5f600883026101527fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff82610115565b61015c8683610115565b95508019841693508086168417925050509392505050565b5f819050919050565b5f819050919050565b5f61015c61018561018084610174565b61017e565b610174565b9050919050565b5f819050919050565b61019f83838361019a565b80600052505050565b5f8201905092915050565b5f6101bd8261005b565b6101c781856101a7565b93506101d7818560208601610191565b80840191505092915050565b61025b806101f45f395ff3fe608060405234801561000f575f80fd5b5060043610610034575f3560e01c80630d8e6e2c14610038578063368b87721461005657806357c7eb4414610072575b5f80fd5b610040610090565b60405161004d9190610193565b60405180910390f35b610070600480360381019061006b91906102bf565b61011c565b005b61008a6004803603810190610085919061031b565b61012e565b005b5f805461009c90610388565b80601f01602080910402602001604051908101604052809291908181526020018280546100c890610388565b80156101135780601f106100ea57610100808354040283529160200191610113565b820191905f5260205f20905b8154815290600101906020018083116100f657829003601f168201915b5050505050905090565b805f908161012a9190610569565b5050565b5050565b5f81519050919050565b5f82825260208201905092915050565b8281835e5f83830152505050565b5f601f19601f8301169050919050565b5f6101748261013a565b61017e8185610144565b935061018e818560208601610154565b61019781610162565b840191505092915050565b5f6020820190508181035f8301526101ba818461016a565b905092915050565b5f604051905090565b5f80fd5b5f80fd5b5f80fd5b5f80fd5b5f601f19601f8301169050919050565b7f4e487b71000000000000000000000000000000000000000000000000000000005f52604160045260246000fd5b61022c826101d6565b810181811067ffffffffffffffff8211171561024b5761024a6101e6565b5b80604052505050565b5f61025d6101c2565b90506102698282610223565b919050565b5f67ffffffffffffffff82111561028857610287610186565b5b610291826101d6565b9050602081019050919050565b828183375f83830152505050565b5f6102be6102b98461026e565b610254565b9050828152602081018484840111156102da576102d96101d2565b5b6102e584828561029e565b509392505050565b5f82601f830112610301576103006101ce565b5b81356103118482602086016102ac565b91505092915050565b5f6020828403121561032f5761032e6101cb565b5b5f82013567ffffffffffffffff81111561034c5761034b6101cf565b5b610358848285016102ed565b91505092915050565b7f4e487b71000000000000000000000000000000000000000000000000000000005f52602260045260246000fd5b5f600282049050600182168061038057607f821691505b6020821081036103935761039261035f565b5b50919050565b5f819050815f5260205f209050919050565b5f6020601f8301049050919050565b5f82821b905092915050565b5f600883026103f57fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff826103ba565b6103ff86836103ba565b95508019841693508086168417925050509392505050565b5f819050919050565b5f819050919050565b5f610440610448610440846103e3565b610440565b6103e3565b9050919050565b5f819050919050565b61045a83838361043f565b80600052505050565b5f8201905092915050565b5f6104788261013a565b610482818561013a565b9350610492818560208601610154565b61049b81610162565b840191505092915050565b5f6104b1838561013a565b93506104be83858461029e565b6104c783610162565b840190509392505050565b5f6020820190508181035f8301526104ea818461046e565b905092915050565b5f6020820190508181035f83015261050c81848661046e565b9050949350505050565b5f6040820190508181035f8301526105308185876104a6565b9050949350505050565b7f4e487b71000000000000000000000000000000000000000000000000000000005f52601160045260246000fd5b5f610572826103e3565b915061057d836103e3565b925082820190508082111561059557610594610539565b5b9250929050565b6104ab806105a85f395ff3fe',
-    abi: [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[],"name":"message","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"string","name":"m","type":"string"}],"name":"setMessage","outputs":[],"stateMutability":"nonpayable","type":"function"}]
-  },
-  counter: {
-    name: 'RitualCounter',
-    bytecode: '0x608060405234801561001057600080fd5b50600160008190555060d5806100276000396000f3fe6080604052348015600f57600080fd5b506004361060325760003560e01c806361bc221a146037578063d09de08a146051575b600080fd5b603d6059565b6040518082815260200191505060405180910390f35b60576060565b005b60005481565b60016000540160008190555056',
-    abi: [{"inputs":[],"name":"count","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"increment","outputs":[],"stateMutability":"nonpayable","type":"function"}]
-  },
-  timestamp: {
-    name: 'BlockTimeStamp',
-    bytecode: '0x608060405234801561001057600080fd5b5060b3806100256000396000f3fe6080604052348015600f57600080fd5b506004361060285760003560e01c8063557ed1ba14602d575b600080fd5b6033604f565b6040518082815260200191505060405180910390f35b600042905090565b',
-    abi: [{"inputs":[],"name":"getTime","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]
-  }
-};
-
-var contractPreviews = {
-  hello: [
-    ['<span style="color:var(--purple)">// SPDX-License-Identifier: MIT</span>',''],
-    ['<span style="color:var(--amber)">pragma</span> solidity ^0.8.19;',''],
-    ['&nbsp;',''],
-    ['<span style="color:var(--teal)">contract</span> <span style="color:var(--green)">HelloRitual</span> {',''],
-    ['&nbsp;&nbsp;string public message;',''],
-    ['&nbsp;&nbsp;<span style="color:var(--teal)">constructor</span>() { message = <span style="color:var(--amber)">"Hello, Ritual!"</span>; }',''],
-    ['&nbsp;&nbsp;<span style="color:var(--teal)">function</span> <span style="color:var(--green)">setMessage</span>(string memory m) external {',''],
-    ['&nbsp;&nbsp;&nbsp;&nbsp;message = m;',''],
-    ['&nbsp;&nbsp;}',''],
-    ['}','']
-  ],
-  counter: [
-    ['<span style="color:var(--purple)">// SPDX-License-Identifier: MIT</span>',''],
-    ['<span style="color:var(--amber)">pragma</span> solidity ^0.8.19;',''],
-    ['&nbsp;',''],
-    ['<span style="color:var(--teal)">contract</span> <span style="color:var(--green)">RitualCounter</span> {',''],
-    ['&nbsp;&nbsp;uint256 public count = 1;',''],
-    ['&nbsp;&nbsp;<span style="color:var(--teal)">function</span> <span style="color:var(--green)">increment</span>() external {',''],
-    ['&nbsp;&nbsp;&nbsp;&nbsp;count++;',''],
-    ['&nbsp;&nbsp;}',''],
-    ['}','']
-  ],
-  timestamp: [
-    ['<span style="color:var(--purple)">// SPDX-License-Identifier: MIT</span>',''],
-    ['<span style="color:var(--amber)">pragma</span> solidity ^0.8.19;',''],
-    ['&nbsp;',''],
-    ['<span style="color:var(--teal)">contract</span> <span style="color:var(--green)">BlockTimeStamp</span> {',''],
-    ['&nbsp;&nbsp;<span style="color:var(--teal)">function</span> <span style="color:var(--green)">getTime</span>() external view returns (uint256) {',''],
-    ['&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--amber)">return</span> block.timestamp;',''],
-    ['&nbsp;&nbsp;}',''],
-    ['}','']
-  ]
-};
-
-function updateContractPreview() {
-  var sel = document.getElementById('contractTemplate').value;
-  var prev = document.getElementById('contractPreview');
-  var lines = contractPreviews[sel];
-  prev.innerHTML = lines.map(function(l) {
-    return '<div class="t-line"><span class="t-text">' + l[0] + '</span></div>';
-  }).join('');
-  document.getElementById('reviewContractName').textContent = contracts[sel].name;
+interface IONNXInference {
+    function run(
+        string calldata modelId,
+        bytes calldata inputTensor
+    ) external view returns (bytes memory output);
 }
 
-function goToStep(n) {
-  [0,1,2,3].forEach(function(i) {
-    var el = document.getElementById('demo-step-'+i);
-    if (el) el.style.display = i === n ? 'block' : 'none';
-    var dot = document.getElementById('sdot'+i);
-    if (dot) {
-      dot.classList.toggle('active', i === n);
-      dot.classList.toggle('done', i < n);
+contract SentimentClassifier {
+    IONNXInference constant ONNX =
+        IONNXInference(0x0000000000000000000000000000000000000800);
+
+    // Model dari HuggingFace, misal: "cardiffnlp/twitter-roberta-base-sentiment"
+    string public modelId = "cardiffnlp/twitter-roberta-base-sentiment";
+
+    event Classified(string text, string label, uint256 score);
+
+    function classify(
+        string calldata text,
+        bytes calldata encodedInput
+    ) external {
+        bytes memory result = ONNX.run(modelId, encodedInput);
+        // Parse output tensor (float32[3]: neg, neu, pos)
+        (uint256 neg, uint256 neu, uint256 pos) =
+            abi.decode(result, (uint256, uint256, uint256));
+
+        string memory label = pos > neg ? "POSITIVE" : "NEGATIVE";
+        uint256 score = pos > neg ? pos : neg;
+        emit Classified(text, label, score);
     }
+}`,
+    explain:`**ONNX Inference (0x0800)** memungkinkan smart contract menjalankan model machine learning langsung on-chain.\n\n**Cara kerja:**\n• Interface dipanggil seperti contract biasa — tapi di baliknya Ritual menjalankan model ONNX.\n• Input berupa encoded tensor (biasanya float32 array).\n• Output berupa raw bytes yang bisa di-decode sesuai shape model.\n\n**Kapan dipakai:**\n• Scoring / klasifikasi konten\n• Deteksi anomali harga\n• Model prediksi sederhana\n\n**Catatan:** Pakai tipe SYNC — berarti hasilnya langsung tersedia dalam satu transaksi.`,
+    prompt:`Tolong buat smart contract Ritual yang pakai precompile ONNX Inference (address 0x0800) untuk mengklasifikasi sentimen teks.\n\nRequirements:\n- Interface IONNXInference dengan fungsi run(string modelId, bytes inputTensor)\n- Kontrak menyimpan modelId dari HuggingFace\n- Fungsi classify() yang emit event dengan label (POSITIVE/NEGATIVE) dan score\n- Gunakan Solidity 0.8.19\n\nPakai Ritual SKILL.md untuk detail encoding tensor yang benar.`
+  },
+  {
+    addr:'0x0801', name:'HTTP Call', type:'short', badge:'SHORT ASYNC',
+    desc:'Fetch data dari API manapun di internet — harga token, cuaca, berita, apapun — langsung dari dalam smart contract.',
+    code:`// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.19;
+
+interface IHTTPCall {
+    struct Request {
+        string url;
+        string method;   // "GET" | "POST"
+        string[] headers;
+        bytes body;
+    }
+    struct Response {
+        uint16 statusCode;
+        bytes body;
+    }
+    function call(Request calldata req)
+        external returns (bytes32 requestId);
+}
+
+interface IHTTPCallback {
+    function onHTTPResponse(
+        bytes32 requestId,
+        IHTTPCall.Response calldata resp
+    ) external;
+}
+
+contract ETHPriceFetcher is IHTTPCallback {
+    IHTTPCall constant HTTP =
+        IHTTPCall(0x0000000000000000000000000000000000000801);
+
+    uint256 public lastPrice;
+    bytes32 public pendingReqId;
+
+    event PriceFetched(uint256 price, uint256 timestamp);
+
+    function fetchPrice() external {
+        IHTTPCall.Request memory req;
+        req.url = "https://api.binance.com/api/v3/ticker/price?symbol=ETHUSDT";
+        req.method = "GET";
+        pendingReqId = HTTP.call(req);
+    }
+
+    // Dipanggil otomatis oleh Ritual setelah HTTP selesai
+    function onHTTPResponse(
+        bytes32 requestId,
+        IHTTPCall.Response calldata resp
+    ) external override {
+        require(requestId == pendingReqId, "Unknown request");
+        // Parse JSON: {"symbol":"ETHUSDT","price":"3421.50"}
+        // Gunakan precompile JQ untuk parsing lebih mudah
+        uint256 price = _parsePrice(resp.body);
+        lastPrice = price;
+        emit PriceFetched(price, block.timestamp);
+    }
+
+    function _parsePrice(bytes memory data)
+        internal pure returns (uint256) {
+        // Simplified — gunakan JQ precompile untuk production
+        return 3400 * 1e18; // placeholder
+    }
+}`,
+    explain:`**HTTP Call (0x0801)** adalah precompile Short Async — contract mengirim request HTTP ke URL manapun, dan Ritual akan memanggil callback setelah response diterima.\n\n**Flow:**\n1. Contract panggil \`HTTP.call(req)\` → dapat \`requestId\`\n2. Ritual node fetch URL secara off-chain\n3. Ritual panggil \`onHTTPResponse()\` di contract kamu otomatis\n\n**Tips:**\n• Simpan \`requestId\` untuk verifikasi di callback\n• Kombinasikan dengan **JQ (0x0803)** untuk parse JSON response\n• Kombinasikan dengan **Scheduler (0x0809)** untuk fetch berkala otomatis\n\n**Use case terbaik:** Price feeds, cuaca, data berita, API publik apapun.`,
+    prompt:`Buat smart contract Ritual yang pakai HTTP Call precompile (0x0801) untuk fetch harga ETH dari Binance API setiap 5 menit.\n\nRequirements:\n- Interface IHTTPCall dan IHTTPCallback\n- Fungsi fetchPrice() yang call API Binance\n- Callback onHTTPResponse() yang parse harga dari JSON\n- Kombinasikan dengan Scheduler precompile (0x0809) agar auto-fetch tiap 5 menit\n- Emit event setiap harga baru didapat\n- Simpan riwayat 10 harga terakhir\n\nGunakan Ritual SKILL.md sebagai referensi implementasi callback pattern yang benar.`
+  },
+  {
+    addr:'0x0802', name:'LLM Call', type:'short', badge:'SHORT ASYNC',
+    desc:'Panggil AI language model (GLM-4.7-FP8) langsung dari smart contract. Buat chatbot on-chain, analisis teks, keputusan berbasis AI.',
+    code:`// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.19;
+
+interface ILLMCall {
+    struct Message {
+        string role;    // "system" | "user" | "assistant"
+        string content;
+    }
+    struct Request {
+        string model;   // "GLM-4.7-FP8"
+        Message[] messages;
+        uint32 maxTokens;
+    }
+    function call(Request calldata req)
+        external returns (bytes32 requestId);
+}
+
+interface ILLMCallback {
+    function onLLMResponse(
+        bytes32 requestId,
+        string calldata response
+    ) external;
+}
+
+contract OnChainAnalyst is ILLMCallback {
+    ILLMCall constant LLM =
+        ILLMCall(0x0000000000000000000000000000000000000802);
+
+    mapping(bytes32 => address) public requesters;
+    mapping(address => string) public lastAnalysis;
+
+    event AnalysisDone(address user, string analysis);
+
+    function analyzeMarket(string calldata marketData) external {
+        ILLMCall.Message[] memory msgs = new ILLMCall.Message[](2);
+        msgs[0] = ILLMCall.Message({
+            role: "system",
+            content: "Kamu adalah analis kripto. Berikan analisis singkat dan rekomendasi (BUY/HOLD/SELL) berdasarkan data yang diberikan. Max 2 kalimat."
+        });
+        msgs[1] = ILLMCall.Message({
+            role: "user",
+            content: marketData
+        });
+
+        ILLMCall.Request memory req = ILLMCall.Request({
+            model: "GLM-4.7-FP8",
+            messages: msgs,
+            maxTokens: 150
+        });
+
+        bytes32 rid = LLM.call(req);
+        requesters[rid] = msg.sender;
+    }
+
+    function onLLMResponse(
+        bytes32 requestId,
+        string calldata response
+    ) external override {
+        address user = requesters[requestId];
+        require(user != address(0), "Unknown request");
+        lastAnalysis[user] = response;
+        emit AnalysisDone(user, response);
+        delete requesters[requestId];
+    }
+}`,
+    explain:`**LLM Call (0x0802)** memungkinkan smart contract memanggil AI language model on-chain.\n\n**Model aktif:** GLM-4.7-FP8 (multilingue, context window besar)\n\n**Pattern:**\n1. Buat array \`Message[]\` dengan role system + user\n2. Panggil \`LLM.call(req)\` → dapat requestId\n3. Ritual inference node jalankan model\n4. \`onLLMResponse()\` dipanggil otomatis dengan hasil teks\n\n**Ide use case:**\n• Chatbot on-chain yang responsnya disimpan di chain\n• Content moderation otomatis untuk NFT\n• AI DAO — anggota submit proposal, AI analisis dan vote\n• Sentiment analysis berita untuk trading bot\n\n**Tips:** Gunakan system prompt yang jelas dan singkat untuk hasil terbaik.`,
+    prompt:`Buat smart contract Ritual yang pakai LLM Call precompile (0x0802) untuk membuat AI news analyst on-chain.\n\nRequirements:\n- Interface ILLMCall dengan struct Message dan Request\n- Callback ILLMCallback\n- Fungsi submitNews(string headline) yang minta AI analisis sentimen headline\n- AI harus jawab BULLISH / BEARISH / NEUTRAL + 1 kalimat alasan\n- Simpan hasil analisis on-chain per headline\n- Event setiap ada analisis baru\n- Model: GLM-4.7-FP8, maxTokens: 100\n\nGunakan Ritual SKILL.md untuk pattern callback yang benar.`
+  },
+  {
+    addr:'0x0803', name:'JQ', type:'sync', badge:'SYNC',
+    desc:'Parse dan filter JSON data on-chain menggunakan jq query language. Sempurna dikombinasikan dengan HTTP Call.',
+    code:`// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.19;
+
+interface IJQ {
+    function run(
+        string calldata query,
+        bytes calldata jsonData
+    ) external view returns (bytes memory result);
+}
+
+contract JSONParser {
+    IJQ constant JQ =
+        IJQ(0x0000000000000000000000000000000000000803);
+
+    // Parse harga ETH dari response Binance:
+    // {"symbol":"ETHUSDT","price":"3421.50"}
+    function parsePrice(bytes calldata jsonBytes)
+        external view returns (string memory price) {
+        bytes memory result = JQ.run('.price', jsonBytes);
+        price = string(result);
+    }
+
+    // Extract semua symbol dari array:
+    // [{"symbol":"BTC"},{"symbol":"ETH"}]
+    function extractSymbols(bytes calldata jsonArray)
+        external view returns (bytes memory symbols) {
+        symbols = JQ.run('[.[].symbol]', jsonArray);
+    }
+
+    // Filter hanya item dengan volume > 1000000
+    function filterHighVolume(bytes calldata jsonArray)
+        external view returns (bytes memory filtered) {
+        filtered = JQ.run(
+            '[.[] | select(.volume > 1000000)]',
+            jsonArray
+        );
+    }
+
+    // Kombinasi: ambil field tertentu dan format ulang
+    function reshapeData(bytes calldata jsonBytes)
+        external view returns (bytes memory) {
+        return JQ.run(
+            '{price: .price, time: .closeTime, vol: .volume}',
+            jsonBytes
+        );
+    }
+}`,
+    explain:`**JQ (0x0803)** adalah precompile SYNC yang menjalankan jq query language on-chain untuk parsing JSON.\n\n**Query jq yang sering dipakai:**\n• \`.field\` — ambil satu field\n• \`.[].field\` — iterasi array, ambil field\n• \`select(.x > n)\` — filter kondisi\n• \`{a:.b, c:.d}\` — reshape objek\n\n**Kenapa penting:**\nHTTP Call (0x0801) mengembalikan raw bytes JSON. JQ memungkinkan parsing langsung on-chain tanpa off-chain middleware.\n\n**Pattern populer:**\n\`\`\`\nHTTP.call(req)  →  onHTTPResponse()  →  JQ.run(query, resp.body)\n\`\`\`\n\n**Keunggulan SYNC:** hasilnya langsung tersedia, tidak perlu callback.`,
+    prompt:`Buat smart contract Ritual yang mengkombinasikan HTTP Call (0x0801) dan JQ (0x0803) untuk:\n1. Fetch data dari CoinGecko API: https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin,ethereum\n2. Parse JSON response menggunakan JQ untuk extract: id, current_price, price_change_percentage_24h\n3. Simpan data on-chain dalam mapping\n4. Emit event ketika ada token dengan perubahan harga > 5%\n\nGunakan Ritual SKILL.md untuk implementasi yang benar.`
+  },
+  {
+    addr:'0x0809', name:'Scheduler', type:'short', badge:'SHORT ASYNC',
+    desc:'Jadwalkan fungsi contract berjalan otomatis secara berkala — setiap N blok, setiap jam, dll. Tidak butuh server cron.',
+    code:`// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.19;
+
+interface IScheduler {
+    // Jadwalkan panggilan fungsi secara berkala
+    function schedule(
+        address target,      // contract yang dipanggil
+        bytes4 selector,     // function selector
+        uint256 intervalBlocks, // setiap berapa blok
+        uint256 maxCalls     // 0 = selamanya
+    ) external returns (bytes32 jobId);
+
+    function cancel(bytes32 jobId) external;
+    function getJob(bytes32 jobId) external view
+        returns (address target, uint256 interval, uint256 callsLeft);
+}
+
+contract AutoPriceTracker {
+    IScheduler constant SCHED =
+        IScheduler(0x0000000000000000000000000000000000000809);
+
+    // ~1 blok = 350ms → 1 menit ≈ 171 blok
+    uint256 constant BLOCKS_PER_MINUTE = 171;
+
+    bytes32 public jobId;
+    uint256 public lastPrice;
+    uint256 public updateCount;
+    address public owner;
+
+    event PriceUpdated(uint256 price, uint256 blockNumber);
+    event AlertTriggered(string reason, uint256 price);
+
+    constructor() {
+        owner = msg.sender;
+    }
+
+    // Mulai tracking setiap 5 menit
+    function startTracking() external {
+        require(msg.sender == owner, "Only owner");
+        jobId = SCHED.schedule(
+            address(this),
+            this.tick.selector,
+            BLOCKS_PER_MINUTE * 5, // setiap 5 menit
+            0  // selamanya
+        );
+    }
+
+    // Dipanggil otomatis oleh Scheduler
+    function tick() external {
+        require(msg.sender == address(SCHED), "Only Scheduler");
+        updateCount++;
+        // Di sini biasanya kombinasi dengan HTTP precompile
+        // untuk fetch harga aktual
+        uint256 mockPrice = 3000e18 + (block.timestamp % 500) * 1e18;
+        uint256 prev = lastPrice;
+        lastPrice = mockPrice;
+        emit PriceUpdated(mockPrice, block.number);
+
+        // Alert jika drop > 5%
+        if (prev > 0 && mockPrice < (prev * 95) / 100) {
+            emit AlertTriggered("DROP_5PCT", mockPrice);
+        }
+    }
+
+    function stopTracking() external {
+        require(msg.sender == owner, "Only owner");
+        SCHED.cancel(jobId);
+    }
+}`,
+    explain:`**Scheduler (0x0809)** adalah precompile yang memungkinkan fungsi smart contract berjalan otomatis secara berkala — seperti cron job, tapi on-chain dan tidak butuh server.\n\n**Parameter schedule():**\n• \`target\` — address contract yang fungsinya ingin dipanggil\n• \`selector\` — 4-byte function selector (gunakan \`this.fn.selector\`)\n• \`intervalBlocks\` — setiap berapa blok (1 blok ≈ 350ms di Ritual)\n• \`maxCalls\` — batas jumlah panggilan, 0 = tanpa batas\n\n**Konversi waktu ke blok:**\n| Waktu | Blok |\n|-------|------|\n| 1 menit | ~171 |\n| 1 jam | ~10,286 |\n| 1 hari | ~246,857 |\n\n**Kombinasi terbaik:** Scheduler + HTTP Call + JQ = trading bot/price alert yang fully autonomous.`,
+    prompt:`Buat smart contract Ritual yang pakai Scheduler (0x0809) dikombinasikan dengan HTTP Call (0x0801) untuk membuat price alert bot:\n\n1. Setiap 5 menit, fetch harga ETH dari Binance API\n2. Bandingkan dengan harga sebelumnya\n3. Jika turun > 3%, emit event ALERT_DROP\n4. Jika naik > 5%, emit event ALERT_PUMP  \n5. Simpan history 24 jam terakhir (288 data point)\n6. Fungsi owner untuk start/stop scheduling\n7. Fungsi public getHistory() untuk baca data\n\nGunakan Ritual SKILL.md untuk implementasi Scheduler + HTTP callback pattern.`
+  },
+  {
+    addr:'0x0807', name:'FHE Inference', type:'long', badge:'LONG ASYNC',
+    desc:'Jalankan AI pada data yang sepenuhnya terenkripsi — input tidak pernah terdekripsi bahkan saat diproses. Privacy maksimal.',
+    code:`// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.19;
+
+interface IFHEInference {
+    struct FHERequest {
+        string modelId;
+        bytes encryptedInput;  // FHE-encrypted tensor
+        bytes publicKey;       // Client's FHE public key
+    }
+    function run(FHERequest calldata req)
+        external returns (bytes32 requestId);
+}
+
+interface IFHECallback {
+    function onFHEResponse(
+        bytes32 requestId,
+        bytes calldata encryptedOutput  // masih terenkripsi
+    ) external;
+}
+
+contract PrivateMedicalScorer is IFHECallback {
+    IFHEInference constant FHE =
+        IFHEInference(0x0000000000000000000000000000000000000807);
+
+    // Model untuk prediksi risiko kesehatan
+    string constant MODEL = "health-risk-classifier-v1";
+
+    mapping(bytes32 => address) private pendingUsers;
+    // Output tetap terenkripsi — hanya pemilik yang bisa decrypt
+    mapping(address => bytes) public encryptedScores;
+
+    event ScoreReady(address indexed user, bytes32 requestId);
+
+    // User submit data kesehatan yang sudah di-encrypt client-side
+    function submitHealthData(
+        bytes calldata encryptedData,
+        bytes calldata myPublicKey
+    ) external {
+        IFHEInference.FHERequest memory req = IFHEInference.FHERequest({
+            modelId: MODEL,
+            encryptedInput: encryptedData,
+            publicKey: myPublicKey
+        });
+        bytes32 rid = FHE.run(req);
+        pendingUsers[rid] = msg.sender;
+    }
+
+    // Output masih terenkripsi — hanya user yang punya private key
+    // yang bisa decrypt hasilnya
+    function onFHEResponse(
+        bytes32 requestId,
+        bytes calldata encryptedOutput
+    ) external override {
+        address user = pendingUsers[requestId];
+        require(user != address(0), "Unknown");
+        encryptedScores[user] = encryptedOutput;
+        emit ScoreReady(user, requestId);
+        delete pendingUsers[requestId];
+    }
+
+    // User decrypt sendiri menggunakan private key mereka (off-chain)
+    function getMyScore() external view returns (bytes memory) {
+        return encryptedScores[msg.sender];
+    }
+}`,
+    explain:`**FHE Inference (0x0807)** adalah precompile paling canggih Ritual — menjalankan AI pada data yang **terenkripsi sepenuhnya** menggunakan Fully Homomorphic Encryption.\n\n**Apa itu FHE?**\nFHE memungkinkan komputasi pada data terenkripsi tanpa mendekripsinya dulu. Artinya:\n• Data kamu tidak pernah terbuka bahkan ke node Ritual\n• AI inference tetap berjalan\n• Hasilnya tetap terenkripsi, hanya kamu yang bisa decrypt\n\n**Flow lengkap:**\n1. Client encrypt data menggunakan FHE library (client-side)\n2. Submit encrypted data ke contract\n3. Ritual jalankan model AI pada ciphertext\n4. Hasil balik masih terenkripsi\n5. Client decrypt hasilnya dengan private key mereka\n\n**Use case:** Data medis, data keuangan pribadi, data identitas — apapun yang sensitif.`,
+    prompt:`Buat smart contract Ritual yang pakai FHE Inference (0x0807) untuk membuat private credit scoring system:\n\n1. Interface IFHEInference dan IFHECallback\n2. User submit financial data yang sudah di-encrypt (FHE ciphertext)\n3. Model AI menghitung credit score on encrypted data\n4. Hasil score tetap terenkripsi, disimpan on-chain per user\n5. Hanya user yang punya FHE private key bisa decrypt hasilnya\n6. Emit event ketika score siap (tanpa expose nilainya)\n7. Fungsi bagi lender untuk request akses (user harus approve)\n\nGunakan Ritual SKILL.md untuk FHE interface yang benar.`
+  },
+  {
+    addr:'0x0820', name:'Persistent Agent', type:'long', badge:'LONG ASYNC',
+    desc:'AI dengan memori permanen on-chain. Mendukung Anthropic, OpenAI, Gemini, xAI. Ideal untuk agent otonom jangka panjang.',
+    code:`// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.19;
+
+interface IPersistentAgent {
+    struct AgentConfig {
+        string provider;    // "anthropic" | "openai" | "gemini" | "xai"
+        string model;       // "claude-3-5-sonnet", "gpt-4o", dll
+        string systemPrompt;
+        uint32 maxTokens;
+        uint32 memorySlots; // jumlah context window tersimpan
+    }
+    function create(AgentConfig calldata config)
+        external returns (bytes32 agentId);
+
+    function chat(
+        bytes32 agentId,
+        string calldata userMessage
+    ) external returns (bytes32 requestId);
+
+    function getMemory(bytes32 agentId)
+        external view returns (string[] memory history);
+}
+
+interface IAgentCallback {
+    function onAgentResponse(
+        bytes32 agentId,
+        bytes32 requestId,
+        string calldata response
+    ) external;
+}
+
+contract AutonomousTradingAdvisor is IAgentCallback {
+    IPersistentAgent constant AGENT =
+        IPersistentAgent(0x0000000000000000000000000000000000000820);
+
+    bytes32 public agentId;
+    mapping(bytes32 => string) public pendingContext;
+    string[] public adviceHistory;
+    address public owner;
+
+    event AgentCreated(bytes32 agentId);
+    event AdviceGiven(string marketContext, string advice);
+
+    constructor() {
+        owner = msg.sender;
+    }
+
+    function initAgent() external {
+        require(msg.sender == owner);
+        IPersistentAgent.AgentConfig memory cfg = IPersistentAgent.AgentConfig({
+            provider: "anthropic",
+            model: "claude-3-5-sonnet-20241022",
+            systemPrompt: "Kamu adalah trading advisor kripto yang berpengalaman. Analisis data pasar yang diberikan dan berikan rekomendasi konkret: BUY/SELL/HOLD dengan alasan singkat. Ingat konteks percakapan sebelumnya untuk analisis yang lebih baik.",
+            maxTokens: 300,
+            memorySlots: 20  // ingat 20 interaksi terakhir
+        });
+        agentId = AGENT.create(cfg);
+        emit AgentCreated(agentId);
+    }
+
+    // Kirim data market, agent ingat konteks sebelumnya
+    function consultAgent(string calldata marketData) external {
+        require(msg.sender == owner);
+        bytes32 rid = AGENT.chat(agentId, marketData);
+        pendingContext[rid] = marketData;
+    }
+
+    function onAgentResponse(
+        bytes32 _agentId,
+        bytes32 requestId,
+        string calldata response
+    ) external override {
+        require(_agentId == agentId);
+        string memory ctx = pendingContext[requestId];
+        adviceHistory.push(response);
+        emit AdviceGiven(ctx, response);
+        delete pendingContext[requestId];
+    }
+
+    function getAdviceHistory() external view
+        returns (string[] memory) {
+        return adviceHistory;
+    }
+
+    // Lihat memori agent (context window)
+    function getAgentMemory() external view
+        returns (string[] memory) {
+        return AGENT.getMemory(agentId);
+    }
+}`,
+    explain:`**Persistent Agent (0x0820)** adalah precompile paling powerful Ritual — AI dengan memori jangka panjang yang hidup on-chain.\n\n**Yang membedakannya dari LLM Call biasa:**\n• Agent punya **memori permanen** — ingat semua percakapan sebelumnya\n• Support multi-provider: Anthropic, OpenAI, Gemini, xAI\n• Context window tersimpan on-chain di slot memori\n• Ideal untuk use case yang butuh konteks panjang\n\n**Provider & model yang tersedia:**\n| Provider | Model |\n|----------|-------|\n| anthropic | claude-3-5-sonnet-20241022 |\n| openai | gpt-4o, gpt-4o-mini |\n| gemini | gemini-1.5-pro |\n| xai | grok-2 |\n\n**Use case terbaik:**\n• Trading agent yang belajar dari sejarah market\n• DAO governance assistant\n• Customer service bot on-chain\n• Research agent yang akumulasi pengetahuan`,
+    prompt:`Buat smart contract Ritual dengan Persistent Agent (0x0820) untuk membuat DAO Governance AI:\n\n1. Init agent dengan provider "anthropic", model "claude-3-5-sonnet-20241022"\n2. System prompt: agent adalah analis DAO yang evaluasi proposal berdasarkan dampak komunitas\n3. Fungsi submitProposal(string description) — kirim ke agent untuk analisis\n4. Agent ingat semua proposal sebelumnya (memorySlots: 50)\n5. Response agent berisi: APPROVE/REJECT + skor 1-10 + alasan\n6. Simpan keputusan on-chain per proposal\n7. Fungsi getAnalysis(uint proposalId) untuk baca hasil\n\nGunakan Ritual SKILL.md untuk implementasi Persistent Agent yang benar.`
+  },
+  {
+    addr:'0x080A', name:'Wallet', type:'short', badge:'SHORT ASYNC',
+    desc:'Buat dan kelola wallet milik contract itu sendiri. Contract bisa punya alamat ETH, tanda tangan transaksi, dan kirim aset secara otonom.',
+    code:`// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.19;
+
+interface IWalletPrecompile {
+    function createWallet(
+        bytes32 seed   // deterministic dari seed
+    ) external returns (address walletAddr, bytes32 walletId);
+
+    function signMessage(
+        bytes32 walletId,
+        bytes32 messageHash
+    ) external returns (bytes memory signature);
+
+    function getAddress(bytes32 walletId)
+        external view returns (address);
+}
+
+contract AutonomousAgent {
+    IWalletPrecompile constant WALLET =
+        IWalletPrecompile(0x000000000000000000000000000000000000080A);
+
+    bytes32 public agentWalletId;
+    address public agentAddress;
+    address public owner;
+    uint256 public totalTrades;
+
+    event WalletCreated(address agentAddr);
+    event TradeSigned(bytes32 indexed tradeHash, bytes signature);
+    event FundsReceived(uint256 amount);
+
+    constructor() {
+        owner = msg.sender;
+    }
+
+    // Buat wallet khusus untuk agent ini
+    function initAgentWallet() external {
+        require(msg.sender == owner);
+        bytes32 seed = keccak256(abi.encodePacked(
+            address(this), block.timestamp
+        ));
+        (address addr, bytes32 wid) = WALLET.createWallet(seed);
+        agentWalletId = wid;
+        agentAddress = addr;
+        emit WalletCreated(addr);
+    }
+
+    // Agent tanda tangani pesan/transaksi secara otonom
+    function signTrade(
+        address tokenIn,
+        address tokenOut,
+        uint256 amount
+    ) external returns (bytes memory signature) {
+        require(msg.sender == owner || msg.sender == address(this));
+        bytes32 tradeHash = keccak256(abi.encodePacked(
+            tokenIn, tokenOut, amount, block.timestamp
+        ));
+        signature = WALLET.signMessage(agentWalletId, tradeHash);
+        totalTrades++;
+        emit TradeSigned(tradeHash, signature);
+    }
+
+    // Contract bisa terima ETH
+    receive() external payable {
+        emit FundsReceived(msg.value);
+    }
+
+    function getAgentBalance() external view returns (uint256) {
+        return agentAddress.balance;
+    }
+}`,
+    explain:`**Wallet (0x080A)** memungkinkan smart contract memiliki wallet ETH miliknya sendiri — bukan EOA biasa, tapi wallet yang dikontrol sepenuhnya oleh contract.\n\n**Kenapa ini revolusioner?**\nNormally, smart contract tidak bisa inisiasi transaksi atau tanda tangani pesan. Dengan Wallet precompile, contract bisa:\n• Punya alamat ETH sendiri\n• Tanda tangani transaksi on-chain\n• Berinteraksi dengan protocol DeFi secara otonom\n• Kelola aset tanpa human intervention\n\n**Use case:**\n• Autonomous DeFi agent yang trade sendiri\n• Multi-sig yang dikelola AI\n• Agent dengan treasury sendiri\n• Bot yang bisa approve dan execute transaksi\n\n**Dikombinasikan dengan:** Scheduler (auto-trade), HTTP (price data), LLM (keputusan berdasarkan AI).`,
+    prompt:`Buat smart contract Ritual yang pakai Wallet precompile (0x080A) untuk membuat DeFi rebalancing agent:\n\n1. Create wallet on-chain untuk agent\n2. Agent punya target allocation: 60% ETH, 40% stablecoin\n3. Setiap jam (pakai Scheduler 0x0809), fetch harga ETH via HTTP (0x0801)\n4. Jika allocation menyimpang > 5%, agent sign dan execute rebalance trade\n5. Semua keputusan dan signature disimpan on-chain\n6. Emit event setiap rebalance\n7. Fungsi owner untuk set target allocation\n8. Emergency pause function\n\nGunakan Ritual SKILL.md untuk integrasi Wallet + Scheduler + HTTP.`
+  },
+];
+
+var pgActive = null;
+var pgActiveTab = 'code';
+
+function pgBuildList() {
+  var list = document.getElementById('pgList');
+  list.innerHTML = pgData.map(function(p, i) {
+    var badgeClass = p.type === 'sync' ? 'pg-badge-sync' : p.type === 'short' ? 'pg-badge-short' : 'pg-badge-long';
+    return '<div class="pg-item" id="pgitem'+i+'" onclick="pgSelect('+i+')">' +
+      '<div class="pg-item-addr">' + p.addr + '</div>' +
+      '<div class="pg-item-name">' + p.name + '</div>' +
+      '<span class="pg-item-badge ' + badgeClass + '">' + (p.type === 'sync' ? 'SYNC' : p.type === 'short' ? 'ASYNC' : 'LONG') + '</span>' +
+    '</div>';
+  }).join('');
+}
+
+function pgSelect(i) {
+  pgActive = i;
+  var p = pgData[i];
+  // Update active state
+  document.querySelectorAll('.pg-item').forEach(function(el) { el.classList.remove('active'); });
+  document.getElementById('pgitem'+i).classList.add('active');
+  // Update header
+  document.getElementById('pgPanelName').textContent = p.name;
+  document.getElementById('pgPanelDesc').textContent = p.desc;
+  var badge = document.getElementById('pgPanelBadge');
+  badge.style.display = 'inline-block';
+  badge.textContent = p.badge;
+  var badgeColors = {sync:'rgba(0,255,140,.12);color:#00FF8C', short:'rgba(0,229,204,.12);color:#00E5CC', long:'rgba(157,111,255,.12);color:#9D6FFF'};
+  var bc = badgeColors[p.type].split(';');
+  badge.style.background = bc[0].split(':')[1];
+  badge.style.color = bc[1].split(':')[1];
+  // Show copy btn & tabs
+  document.getElementById('pgCopyBtn').style.display = 'inline-block';
+  document.getElementById('pgTabs').style.display = 'flex';
+  // Reset to code tab
+  pgTab('code', document.querySelector('.pgtab'));
+}
+
+function pgTab(tab, btn) {
+  pgActiveTab = tab;
+  document.querySelectorAll('.pgtab').forEach(function(t) {
+    t.classList.remove('on');
+    t.style.borderBottomColor = 'transparent';
+    t.style.color = 'var(--soft)';
+  });
+  btn.classList.add('on');
+  // Show/hide panels
+  document.getElementById('pgCode').style.display = tab === 'code' ? 'block' : 'none';
+  document.getElementById('pgExplain').style.display = tab === 'explain' ? 'block' : 'none';
+  document.getElementById('pgPrompt').style.display = tab === 'prompt' ? 'block' : 'none';
+
+  if (pgActive === null) return;
+  var p = pgData[pgActive];
+
+  if (tab === 'code') {
+    var lines = p.code.split('\n');
+    document.getElementById('pgCode').innerHTML =
+      '<div class="pg-code-area">' +
+      lines.map(function(line, idx) {
+        return '<div class="pg-line"><span class="pg-ln">' + (idx+1) + '</span><span style="color:#A8B9D0;white-space:pre">' + escHtml(line) + '</span></div>';
+      }).join('') +
+      '</div>';
+  } else if (tab === 'explain') {
+    var html = p.explain
+      .replace(/\*\*(.+?)\*\*/g, '<strong style="color:var(--text)">$1</strong>')
+      .replace(/`(.+?)`/g, '<code style="font-family:var(--font-mono);font-size:11px;background:var(--surface);padding:1px 6px;border-radius:4px;color:var(--green)">$1</code>')
+      .replace(/\n/g, '<br>');
+    document.getElementById('pgExplain').innerHTML = html;
+  } else if (tab === 'prompt') {
+    document.getElementById('pgPromptText').textContent = p.prompt;
+  }
+}
+
+function escHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function pgCopy() {
+  if (pgActive === null) return;
+  var code = pgData[pgActive].code;
+  navigator.clipboard.writeText(code).then(function() {
+    var btn = document.getElementById('pgCopyBtn');
+    btn.textContent = 'COPIED!';
+    btn.style.background = 'var(--teal)';
+    setTimeout(function() { btn.textContent = 'COPY'; btn.style.background = 'var(--green)'; }, 2000);
   });
 }
 
-function skipToDemo() {
-  isSimulated = true;
-  document.getElementById('walletAddr').innerHTML = '<span style="color:var(--green);font-family:var(--font-mono);font-size:11px">0xDemo...1234 (Simulated)</span>';
-  document.getElementById('walletStatus').className = 'demo-wallet-status ws-connected';
-  document.getElementById('walletStatus').innerHTML = '<span data-lang="'+currentLang+'">CONNECTED</span>';
-  goToStep(1);
+function pgCopyPrompt() {
+  if (pgActive === null) return;
+  navigator.clipboard.writeText(pgData[pgActive].prompt).then(function() {
+    var btns = document.querySelectorAll('#pgPrompt button');
+    btns[0].textContent = 'Copied!';
+    setTimeout(function() { btns[0].textContent = 'Copy Prompt'; }, 2000);
+  });
 }
 
-async function connectWallet() {
-  var btn = document.getElementById('btnConnect');
-  if (typeof window.ethereum === 'undefined') {
-    btn.textContent = '← Install MetaMask first';
-    window.open('https://metamask.io/download', '_blank');
-    setTimeout(function() {
-      btn.disabled = false;
-      btn.innerHTML = '<span data-lang="en">Connect MetaMask</span><span data-lang="id">Hubungkan MetaMask</span><span data-lang="zh">连接 MetaMask</span><span data-lang="ja">MetaMaskを接続</span><span data-lang="es">Conectar MetaMask</span><span data-lang="fr">Connecter MetaMask</span>';
-      setLang(currentLang, document.getElementById('currentFlag').textContent);
-    }, 3000);
-    return;
-  }
-  try {
-    btn.innerHTML = '⟳ Connecting...';
-    btn.disabled = true;
-
-    // Request accounts
-    var accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-    var addr = accounts[0];
-
-    // Add Ritual Testnet network (ignore error if already added)
-    try {
-      await window.ethereum.request({
-        method: 'wallet_addEthereumChain',
-        params: [{
-          chainId: '0x7BB',
-          chainName: 'Ritual Testnet',
-          nativeCurrency: { name: 'Ritual', symbol: 'Ritual', decimals: 18 },
-          rpcUrls: ['https://rpc.ritualfoundation.org'],
-          blockExplorerUrls: ['https://explorer.ritualfoundation.org']
-        }]
-      });
-    } catch(addErr) { /* already added or user dismissed */ }
-
-    // Switch to Ritual chain
-    try {
-      await window.ethereum.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId: '0x7BB' }]
-      });
-    } catch(switchErr) {
-      // If switch fails, warn but continue — user might already be on it
-      console.warn('Chain switch warning:', switchErr);
-    }
-
-    // Verify we're on the right chain
-    var chainId = await window.ethereum.request({ method: 'eth_chainId' });
-    if (chainId !== '0x7bb' && chainId !== '0x7BB') {
-      throw new Error('Please switch to Ritual Testnet (Chain ID 1979) in MetaMask');
-    }
-
-    // Update UI
-    setWalletConnected(addr);
-    isSimulated = false;
-    web3Provider = window.ethereum;
-
-    // Listen for account/chain changes
-    window.ethereum.on('accountsChanged', function(accs) {
-      if (!accs.length) { disconnectWallet(); }
-      else { setWalletConnected(accs[0]); }
-    });
-    window.ethereum.on('chainChanged', function(id) {
-      if (id !== '0x7bb' && id !== '0x7BB') { disconnectWallet(); }
-    });
-
-    goToStep(1);
-  } catch(e) {
-    btn.disabled = false;
-    var errMsg = e.message || 'Connection failed';
-    if (e.code === 4001) errMsg = 'Connection rejected';
-    btn.innerHTML = '⚠ ' + errMsg.slice(0, 40) + (errMsg.length > 40 ? '…' : '') + ' — Retry';
-    setTimeout(function() {
-      btn.disabled = false;
-      btn.innerHTML = '<span data-lang="en">Connect MetaMask</span><span data-lang="id">Hubungkan MetaMask</span><span data-lang="zh">连接 MetaMask</span><span data-lang="ja">MetaMaskを接続</span><span data-lang="es">Conectar MetaMask</span><span data-lang="fr">Connecter MetaMask</span>';
-      setLang(currentLang, document.getElementById('currentFlag').textContent);
-    }, 4000);
-    console.error(e);
-  }
-}
-
-function setWalletConnected(addr) {
-  document.getElementById('walletAddr').innerHTML = '<span style="color:var(--green);font-family:var(--font-mono);font-size:11px">' + addr.slice(0,6) + '...' + addr.slice(-4) + '</span>';
-  document.getElementById('walletStatus').className = 'demo-wallet-status ws-connected';
-  document.getElementById('walletStatus').textContent = 'CONNECTED';
-  document.getElementById('btnDisconnect').style.display = 'inline-block';
-  document.getElementById('btnConnect').style.display = 'none';
-  // Show floating disconnect bar
-  document.getElementById('floatDisconnect').style.display = 'flex';
-  document.getElementById('floatAddr').textContent = addr.slice(0,6) + '...' + addr.slice(-4);
-}
-
-function disconnectWallet() {
-  isSimulated = false;
-  web3Provider = null;
-  document.getElementById('walletAddr').innerHTML = '<span data-lang="en">Not connected</span><span data-lang="id">Belum terhubung</span><span data-lang="zh">未连接</span><span data-lang="ja">未接続</span><span data-lang="es">No conectado</span><span data-lang="fr">Non connecté</span>';
-  document.getElementById('walletStatus').className = 'demo-wallet-status ws-disconnected';
-  document.getElementById('walletStatus').innerHTML = '<span data-lang="en">DISCONNECTED</span><span data-lang="id">TERPUTUS</span><span data-lang="zh">未连接</span><span data-lang="ja">未接続</span><span data-lang="es">DESCONECTADO</span><span data-lang="fr">DÉCONNECTÉ</span>';
-  document.getElementById('btnDisconnect').style.display = 'none';
-  document.getElementById('floatDisconnect').style.display = 'none';
-  var btn = document.getElementById('btnConnect');
-  btn.style.display = '';
-  btn.disabled = false;
-  btn.innerHTML = '<span data-lang="en">Connect MetaMask</span><span data-lang="id">Hubungkan MetaMask</span><span data-lang="zh">连接 MetaMask</span><span data-lang="ja">MetaMaskを接続</span><span data-lang="es">Conectar MetaMask</span><span data-lang="fr">Connecter MetaMask</span>';
-  goToStep(0);
-  setLang(currentLang, document.getElementById('currentFlag').textContent);
-}
-
-async function deployContract() {
-  var sel = document.getElementById('contractTemplate').value;
-  var contract = contracts[sel];
-  var btn = document.getElementById('btnDeploy');
-  btn.disabled = true;
-  btn.innerHTML = '⟳ Deploying...';
-
-  var log = document.getElementById('deployLog');
-
-  function addLog(text, cls) {
-    var line = document.createElement('div');
-    line.className = 't-line';
-    line.innerHTML = '<span class="t-prompt">▶</span><span class="t-text ' + (cls||'') + '">' + text + '</span>';
-    log.appendChild(line);
-    log.scrollTop = log.scrollHeight;
-  }
-
-  addLog('Compiling ' + contract.name + '...', '');
-  await sleep(600);
-  addLog('✓ Compilation successful', 't-success');
-  await sleep(400);
-  addLog('Connecting to RPC: rpc.ritualfoundation.org', '');
-  await sleep(500);
-
-  if (isSimulated) {
-    addLog('🔵 Running in simulation mode...', '');
-    await sleep(800);
-    addLog('Broadcasting transaction...', '');
-    await sleep(1200);
-    var fakeTx = '0x' + randomHex(64);
-    var fakeAddr = '0x' + randomHex(40);
-    var fakeBlock = Math.floor(Math.random() * 900000) + 100000;
-    var fakeGas = (Math.floor(Math.random() * 80000) + 120000).toLocaleString();
-    addLog('✓ Transaction broadcast!', 't-success');
-    await sleep(500);
-    addLog('⛏ Waiting for confirmation...', '');
-    await sleep(1200);
-    addLog('✓ Confirmed in block #' + fakeBlock + ' (SIMULATED)', 't-success');
-    showResult(fakeTx, fakeAddr, fakeBlock, fakeGas, true);
-  } else {
-    try {
-      var provider = window.ethereum;
-
-      // Verify still connected & on right chain
-      var accounts = await provider.request({ method: 'eth_accounts' });
-      if (!accounts || !accounts.length) throw new Error('Wallet disconnected. Please reconnect.');
-      var from = accounts[0];
-
-      var chainId = await provider.request({ method: 'eth_chainId' });
-      if (chainId !== '0x7bb' && chainId !== '0x7BB') {
-        addLog('⚠ Wrong network detected. Switching to Ritual...', 't-warn');
-        await provider.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x7BB' }] });
-        await sleep(500);
-      }
-
-      addLog('✓ Connected to Ritual Testnet', 't-success');
-      addLog('Deploying from: ' + from.slice(0,6) + '...' + from.slice(-4), '');
-
-      var txParams = { from: from, data: contract.bytecode };
-
-      // Estimate gas with buffer
-      try {
-        var gasEst = await provider.request({
-          method: 'eth_estimateGas',
-          params: [{ from: from, data: contract.bytecode }]
-        });
-        var gasWithBuffer = '0x' + Math.floor(parseInt(gasEst, 16) * 1.3).toString(16);
-        txParams.gas = gasWithBuffer;
-        addLog('Gas estimate: ' + parseInt(gasEst, 16).toLocaleString() + ' (+30% buffer)', '');
-      } catch(gasErr) {
-        addLog('⚠ Gas estimate failed — MetaMask will estimate', 't-warn');
-      }
-
-      addLog('📤 Sending transaction to MetaMask...', '');
-      var txHash = await provider.request({
-        method: 'eth_sendTransaction',
-        params: [txParams]
-      });
-
-      addLog('✓ TX submitted: ' + txHash.slice(0,10) + '...' + txHash.slice(-6), 't-success');
-      addLog('⛏ Waiting for confirmation (~350ms blocks)...', '');
-
-      // Poll for receipt
-      var receipt = null;
-      var maxAttempts = 60; // ~2 min timeout
-      for (var i = 0; i < maxAttempts; i++) {
-        await sleep(2000);
-        try {
-          receipt = await provider.request({
-            method: 'eth_getTransactionReceipt',
-            params: [txHash]
-          });
-        } catch(rErr) { /* rpc hiccup, continue */ }
-        if (receipt) break;
-        if (i % 5 === 4) addLog('Still waiting... (' + Math.round((i+1)*2) + 's)', '');
-      }
-
-      if (receipt) {
-        if (receipt.status === '0x0') {
-          addLog('✗ Transaction reverted on-chain', 't-error');
-          btn.disabled = false;
-          btn.innerHTML = '🚀 Try Again';
-          return;
-        }
-        var blockNum = parseInt(receipt.blockNumber, 16);
-        var gasUsed = parseInt(receipt.gasUsed, 16).toLocaleString();
-        addLog('✓ Confirmed in block #' + blockNum + ' 🎉', 't-success');
-        showResult(txHash, receipt.contractAddress, blockNum, gasUsed, false);
-      } else {
-        addLog('⚠ TX pending — check explorer for status', 't-warn');
-        addLog('TX: ' + txHash, '');
-        btn.disabled = false;
-        btn.innerHTML = '🚀 Retry';
-      }
-    } catch(e) {
-      var msg = e.message || 'Unknown error';
-      if (e.code === 4001) msg = 'User rejected transaction in MetaMask';
-      else if (e.code === -32603) msg = 'RPC error — check you have enough Ritual tokens';
-      else if (msg.includes('insufficient funds')) msg = 'Insufficient funds — get tokens from faucet.ritualfoundation.org';
-      addLog('✗ ' + msg, 't-error');
-      btn.disabled = false;
-      btn.innerHTML = '🚀 Try Again';
-    }
-  }
-}
-
-function showResult(txHash, contractAddr, block, gas, simulated) {
-  document.getElementById('txHash').textContent = txHash.slice(0,18) + '...' + txHash.slice(-6);
-  document.getElementById('contractAddr').textContent = contractAddr;
-  document.getElementById('txBlock').textContent = '#' + block;
-  document.getElementById('txGas').textContent = gas + ' gas' + (simulated ? ' (simulated)' : '');
-
-  var explorerBase = 'https://explorer.ritualfoundation.org';
-  var el = document.getElementById('explorerLink');
-  if (simulated) {
-    el.innerHTML = '<a href="' + explorerBase + '" target="_blank">explorer.ritualfoundation.org (demo) ↗</a>';
-  } else {
-    el.innerHTML = '<a href="' + explorerBase + '/tx/' + txHash + '" target="_blank">View TX on Explorer ↗</a>';
-  }
-  goToStep(3);
-}
-
-function resetDemo() {
-  goToStep(isSimulated ? 1 : 0);
-  document.getElementById('deployLog').innerHTML = '<div class="t-line"><span class="t-prompt">▶</span><span class="t-text"><span data-lang="en">Ready to deploy to Ritual Chain (1979)</span></span></div><div class="t-line"><span class="t-prompt">▶</span><span class="t-text">RPC: <span style="color:var(--teal)">https://rpc.ritualfoundation.org</span></span></div><div class="t-line"><span class="t-prompt">▶</span><span class="t-text">Click Deploy to broadcast transaction</span></div><div class="t-line"><span class="t-blink"></span></div>';
-  document.getElementById('btnDeploy').disabled = false;
-  document.getElementById('btnDeploy').innerHTML = '🚀 <span data-lang="en">Deploy Contract</span>';
-  // Re-apply lang
-  setLang(currentLang, document.getElementById('currentFlag').textContent);
-}
-
-function sleep(ms) { return new Promise(function(r) { setTimeout(r, ms); }); }
-function randomHex(len) {
-  var chars = '0123456789abcdef';
-  var out = '';
-  for (var i = 0; i < len; i++) out += chars[Math.floor(Math.random() * 16)];
-  return out;
-}
+pgBuildList();
 
 // ─── SCROLL REVEAL ───────────────────────────────────────────────
 var obs = new IntersectionObserver(function(entries) {
