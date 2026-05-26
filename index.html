@@ -708,7 +708,10 @@ a[data-lang].lang-active{display:inline-block}
           </div>
         </div>
       </div>
-      <div class="demo-badge">TESTNET · FREE</div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <div class="demo-badge">TESTNET · FREE</div>
+        <div style="font-family:var(--font-mono);font-size:9px;padding:4px 10px;border-radius:4px;background:rgba(255,173,0,.12);color:var(--amber);border:1px solid rgba(255,173,0,.25);letter-spacing:1px">⚠ SIMULATION — No real transaction</div>
+      </div>
     </div>
 
     <div class="demo-body">
@@ -1335,9 +1338,12 @@ var currentLang = 'en';
 
 function setLang(lang, flag) {
   currentLang = lang;
+  // Check if this language has translations; if not, fall back to 'en'
+  var hasTranslation = document.querySelector('[data-lang="'+lang+'"]') !== null;
+  var activeLang = hasTranslation ? lang : 'en';
   // Update all [data-lang] elements
   document.querySelectorAll('[data-lang]').forEach(function(el) {
-    el.classList.toggle('lang-active', el.getAttribute('data-lang') === lang);
+    el.classList.toggle('lang-active', el.getAttribute('data-lang') === activeLang);
   });
   // Update lang toggle UI
   document.getElementById('currentFlag').textContent = flag;
